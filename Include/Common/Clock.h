@@ -15,20 +15,12 @@ namespace Engine
 			typedef std::chrono::time_point<high_res_clock>				time_point;
 			typedef std::chrono::milliseconds							milliseconds;
 			typedef std::chrono::nanoseconds							nanoseconds;
-			typedef std::chrono::duration<double, milliseconds>			milli_duration;
+			typedef std::chrono::duration<double, std::milli>			milli_duration;
 
 			using std::chrono::duration_cast;
 
 			const unsigned int SECOND = 1000;
 
-			/*
-				typedef std::chrono::steady_clock							steady_clock;
-				typedef std::chrono::high_resolution_clock					high_res_clock;
-				typedef std::chrono::time_point<high_res_clock>				time_point;
-				typedef std::chrono::milliseconds							milliseconds;
-				typedef std::chrono::nanoseconds							nanoseconds;
-				typedef std::chrono::duration<long long, std::nano>			nano_duration;
-			*/
 			class Clock
 			{
 			public:
@@ -58,7 +50,7 @@ namespace Engine
 			static milliseconds AsMilliseconds(const double timeInMilliseconds)
 			{
 				milliseconds durationInMilliseconds = duration_cast<milliseconds>(
-					std::chrono::duration<double, std::milli>(timeInMilliseconds)
+					milli_duration(timeInMilliseconds)
 				);
 
 				return durationInMilliseconds;
