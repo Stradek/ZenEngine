@@ -32,6 +32,10 @@ jobs:
     - name: Build Editor
       # Build your program with the given configuration
       run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target=Editor
+      
+    - name: Build Game
+      # Build your program with the given configuration
+      run: cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}} --target=Game
 
 # No testing for now
 #     - name: Test
