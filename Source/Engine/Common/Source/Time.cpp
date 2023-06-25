@@ -26,15 +26,12 @@ namespace Engine::Common::Time
 	static nanoseconds AsNanoseconds(milliseconds durationInMilliseconds)
 	{
 		nanoseconds durationInNanoseconds = durationInMilliseconds;
-
 		return durationInNanoseconds;
 	}
 
 	static nanoseconds AsNanoseconds(const double timeInMilliseconds)
 	{
-		nanoseconds durationInNanoseconds = duration_cast<nanoseconds>(
-			std::chrono::duration<double, std::milli>(timeInMilliseconds)
-		);
+		nanoseconds durationInNanoseconds = AsMilliseconds(timeInMilliseconds);
 
 		return durationInNanoseconds;
 	}
@@ -47,7 +44,6 @@ namespace Engine::Common::Time
 	static const long long MillisecondsToUInt(const double timeInMilliseconds)
 	{
 		nanoseconds durationInNanoseconds = AsNanoseconds(timeInMilliseconds);
-
 		return durationInNanoseconds.count();
 	}
 }
