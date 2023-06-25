@@ -1,7 +1,9 @@
-#pragma once
+/*
+	Copyright (c) 2023 Piotr Stradowski. All rights reserved.
+	Software distributed under the permissive MIT License.
+*/
 
-#include <Common/Clock.h>
-#include <Core/ISystem.h>
+#pragma once
 
 namespace Engine 
 {

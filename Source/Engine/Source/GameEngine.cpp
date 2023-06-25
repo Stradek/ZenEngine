@@ -5,6 +5,9 @@
 
 #include <Engine/GameEngine.h>
 
+#include <Common/Time.h>
+#include <Common/Clock.h>
+
 #include <stdio.h>
 
 namespace Engine
