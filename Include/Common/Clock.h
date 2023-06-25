@@ -15,8 +15,8 @@ namespace Engine::Common::Time
 		Clock();
 		~Clock();
 
-		const nanoseconds GetDuration();
-		const double GetDurationAsDouble();
+		uint32 GetDuration();
+		double GetDurationAsDouble();
 
 		void Start();
 		void Stop();

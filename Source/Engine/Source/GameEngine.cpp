@@ -26,26 +26,26 @@ namespace Engine
 
 	Common::Time::Clock m_currentOperationClock;
 
-	const unsigned int m_targetEngineUpdatesPerSecond	= 20;
-	const unsigned int m_targetFramesPerSecond			= 60;
-	const double m_targetEngineUpdateTime				= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetEngineUpdatesPerSecond;
-	const double m_targetRenderFrameTime				= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetFramesPerSecond;
+	const uint m_targetEngineUpdatesPerSecond			= 20;
+	const uint m_targetFramesPerSecond					= 60;
+	const uint32 m_targetEngineUpdateTime				= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetEngineUpdatesPerSecond);
+	const uint32 m_targetRenderFrameTime				= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetFramesPerSecond);
 
-	unsigned int m_engineUpdatesThisSecondCounter	= 0;
-	unsigned int m_renderedFramesThisSecondCounter	= 0;
+	uint m_engineUpdatesThisSecondCounter	= 0;
+	uint m_renderedFramesThisSecondCounter	= 0;
 
-	unsigned int m_engineUpdatesLastSecondCounter	= 0;
-	unsigned int m_renderedFramesLastSecondCounter	= 0;
+	uint m_engineUpdatesLastSecondCounter	= 0;
+	uint m_renderedFramesLastSecondCounter	= 0;
 
-	double m_lastEngineUpdateDuration	= 0;
-	double m_lastRenderedFrameDuration	= 0;
+	uint32 m_lastEngineUpdateDuration	= 0;
+	uint32 m_lastRenderedFrameDuration	= 0;
 
 	double m_deltaTime = 0;
 
 	EngineBootingSequenceState m_engineBootingState = NotStarted;
 
 	// TODO: replace this later with event system
-	unsigned int m_debugUpdateQueue = 0;
+	uint m_debugUpdateQueue = 0;
 
 	EngineBootingSequenceState GetBootingSequenceState()
 	{
@@ -140,7 +140,10 @@ namespace Engine
 
 		if (m_debugUpdateQueue > 0)
 		{
-			printf("[FPS: %d] Game ms: %f; Render ms: %f; Previous CPU Tick(DeltaTime) ms: %f\n", m_renderedFramesLastSecondCounter, m_lastEngineUpdateDuration, m_lastRenderedFrameDuration, m_deltaTime);
+			double lastEngineUpdateDuration = Common::Time::UInt32ToDouble(m_lastEngineUpdateDuration);
+			double lastRenderedFrameDuration = Common::Time::UInt32ToDouble(m_lastRenderedFrameDuration);
+
+			printf("[FPS: %d] Game ms: %f; Render ms: %f; Previous CPU Tick(DeltaTime) ms: %f\n", m_renderedFramesLastSecondCounter, lastEngineUpdateDuration, lastRenderedFrameDuration, m_deltaTime);
 			printf("          Game Ticks per Second: %d; Render Updates per Second: %d\n", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
 
 			--m_debugUpdateQueue;
@@ -149,7 +152,7 @@ namespace Engine
 		/* END UPDATE */
 
 		m_currentOperationClock.Stop();
-		m_lastEngineUpdateDuration = m_currentOperationClock.GetDurationAsDouble();
+		m_lastEngineUpdateDuration = m_currentOperationClock.GetDuration();
 
 		++m_engineUpdatesThisSecondCounter;
 	}
@@ -165,7 +168,7 @@ namespace Engine
 		/* END RENDER */
 
 		m_currentOperationClock.Stop();
-		m_lastRenderedFrameDuration = m_currentOperationClock.GetDurationAsDouble();
+		m_lastRenderedFrameDuration = m_currentOperationClock.GetDuration();
 
 		++m_renderedFramesThisSecondCounter;
 	}
@@ -191,20 +194,20 @@ namespace Engine
 		{
 			m_engineTickClock.Start();
 
-			if (m_engineUpdateClock.GetDurationAsDouble() >= m_targetEngineUpdateTime)
+			if (m_engineUpdateClock.GetDuration() >= m_targetEngineUpdateTime)
 			{
 				Update(m_deltaTime);
 
 				m_engineUpdateClock.Reset();
 			}
 
-			if (m_renderFrameClock.GetDurationAsDouble() >= m_targetRenderFrameTime)
+			if (m_renderFrameClock.GetDuration() >= m_targetRenderFrameTime)
 			{
 				Render();
 				m_renderFrameClock.Reset();
 			}
 
-			if (m_engineOneSecondClock.GetDurationAsDouble() >= Common::Time::SECOND_IN_MILLISECONDS)
+			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::Time::SECOND_TO_NANOSECOND_RATIO)
 			{
 				ClearEngineCounters();
 				m_debugUpdateQueue++;

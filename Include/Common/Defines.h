@@ -6,6 +6,17 @@
 #pragma once
 
 /*
+    Data Types
+*/
+
+typedef unsigned int uint;
+
+typedef std::uint8_t uint8;
+typedef std::uint16_t uint16_t;
+typedef std::uint32_t uint32;
+typedef std::uint64_t uint64;
+
+/*
     Configuration
 */
 

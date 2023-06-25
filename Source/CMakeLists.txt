@@ -15,12 +15,12 @@ add_subdirectory(Game)
 
 set(PRECOMPILED_HEADERS 
     "${CMAKE_SOURCE_DIR}/Include/Precompiled.h"
+    "${CMAKE_SOURCE_DIR}/Include/Common/Common.h"
 )
 
 target_precompile_headers(Engine
     PRIVATE 
     "${PRECOMPILED_HEADERS}"
-    "${CMAKE_SOURCE_DIR}/Include/Common/Common.h"
 )
 
 target_precompile_headers(Editor

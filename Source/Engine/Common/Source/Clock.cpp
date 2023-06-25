@@ -12,13 +12,13 @@ namespace Engine::Common::Time
 	Clock::Clock() {}
 	Clock::~Clock() {}
 
-	const nanoseconds Clock::GetDuration()
+	uint32 Clock::GetDuration()
 	{
 		if (m_startTime == time_point::min())
 		{
 			__debugbreak();
 			// TODO: assert()
-			return nanoseconds::min();
+			return 0;
 		}
 
 		time_point startTimePoint = m_startTime;
@@ -33,15 +33,13 @@ namespace Engine::Common::Time
 		}
 
 		auto clockDuration = duration_cast<nanoseconds>(endTimePoint - startTimePoint);
-		return clockDuration;
+		return NanosecondsToUInt32(clockDuration);
 	}
 
-	const double Clock::GetDurationAsDouble()
+	double Clock::GetDurationAsDouble()
 	{
-		nanoseconds duration = GetDuration();
-		const double durationAsDouble = millisecond_duration_from_double(duration).count();
-
-		return durationAsDouble;
+		auto duration = GetDuration();
+		return UInt32ToDouble(duration);
 	}
 
 	void Clock::Start()

@@ -5,6 +5,7 @@
 #pragma once
 
 // math
+#include <ratio>
 #include <cmath>
 
 // strings

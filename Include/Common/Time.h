@@ -7,22 +7,29 @@
 
 #include <Common/TimeTypes.h>
 
+/*
+	NOTE:
+	Seconds are used as a default value for double.
+	Nanoseconds are used as a default value for engine computations.
+	UInt32 is raw representation of Nanoseconds.
+*/
+
 namespace Engine::Common::Time
 {
-	// TODO: 
-	// I should probably move every millisecond
-	// reference except strings to nanoseconds implementation
-	// but still return milliseconds as strings
+	extern const uint32 ONE_SECOND;
+	extern const uint32 SECOND_TO_NANOSECOND_RATIO;
+	extern const uint32 MILLISECOND_TO_NANOSECOND_RATIO;
+	extern const double NANOSECOND_TO_SECOND_RATIO;
+	extern const double NANOSECOND_TO_MILLISECOND_RATIO;
 
-	// second as milliseconds. 
-	const unsigned int SECOND_IN_MILLISECONDS = 1000;
+	extern time_point GetCurrentTime();
 
-	static time_point GetCurrentTime();
+	extern double NanosecondsToDouble(const nanoseconds durationInNanoseconds);
+	extern double UInt32ToDouble(const uint32 durationInNanoseconds);
 
-	static milliseconds AsMilliseconds(const double timeInMilliseconds);
-	static nanoseconds AsNanoseconds(milliseconds durationInMilliseconds);
-	static nanoseconds AsNanoseconds(const double timeInMilliseconds);
-
-	static const long long DurationToUInt(nanoseconds duration);
-	static const long long MillisecondsToUInt(const double timeInMilliseconds);
+	extern nanoseconds DoubleToNanoseconds(const double durationInSeconds);
+	extern nanoseconds UInt32ToNanoseconds(const uint32 durationInNanoseconds);
+	
+	extern uint32 DoubleToUInt32(const double durationInSeconds);
+	extern uint32 NanosecondsToUInt32(const nanoseconds durationInNanoseconds);
 }
