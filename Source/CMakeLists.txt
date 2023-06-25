@@ -20,6 +20,7 @@ set(PRECOMPILED_HEADERS
 target_precompile_headers(Engine
     PRIVATE 
     "${PRECOMPILED_HEADERS}"
+    "${CMAKE_SOURCE_DIR}/Include/Common/Common.h"
 )
 
 target_precompile_headers(Editor
