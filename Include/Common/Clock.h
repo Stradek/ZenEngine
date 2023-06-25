@@ -80,12 +80,12 @@ namespace Engine
 				return durationInNanoseconds;
 			}
 
-			static unsigned int DurationToUInt(nanoseconds duration)
+			static const long long DurationToUInt(nanoseconds duration)
 			{
 				return duration.count();
 			}
 
-			static unsigned int MillisecondsToUInt(const double timeInMilliseconds)
+			static const long long MillisecondsToUInt(const double timeInMilliseconds)
 			{
 				nanoseconds durationInNanoseconds = AsNanoseconds(timeInMilliseconds);
 
