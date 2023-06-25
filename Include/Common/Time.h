@@ -9,7 +9,13 @@
 
 namespace Engine::Common::Time
 {
-	const unsigned int SECOND = 1000;
+	// TODO: 
+	// I should probably move every millisecond
+	// reference except strings to nanoseconds implementation
+	// but still return milliseconds as strings
+
+	// second as milliseconds. 
+	const unsigned int SECOND_IN_MILLISECONDS = 1000;
 
 	static time_point GetCurrentTime();
 

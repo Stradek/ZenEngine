@@ -28,8 +28,8 @@ namespace Engine
 
 	const unsigned int m_targetEngineUpdatesPerSecond	= 20;
 	const unsigned int m_targetFramesPerSecond			= 60;
-	const double m_targetEngineUpdateFrequency			= (double) Common::Time::SECOND / m_targetEngineUpdatesPerSecond;
-	const double m_targetRenderFrameFrequency			= (double) Common::Time::SECOND / m_targetFramesPerSecond;
+	const double m_targetEngineUpdateFrequency			= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetEngineUpdatesPerSecond;
+	const double m_targetRenderFrameFrequency			= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetFramesPerSecond;
 
 	unsigned int m_engineUpdatesThisSecondCounter	= 0;
 	unsigned int m_renderedFramesThisSecondCounter	= 0;
@@ -202,7 +202,7 @@ namespace Engine
 				m_renderFrameClock.Reset();
 			}
 
-			if (m_engineOneSecondClock.GetDurationAsDouble() >= Common::Time::SECOND)
+			if (m_engineOneSecondClock.GetDurationAsDouble() >= Common::Time::SECOND_IN_MILLISECONDS)
 			{
 				ClearEngineCounters();
 				m_debugUpdateQueue++;
