@@ -40,7 +40,7 @@ namespace Engine::Common::Time
 	const double Clock::GetDurationAsDouble()
 	{
 		nanoseconds duration = GetDuration();
-		const double durationAsDouble = millisecond_duration(duration).count();
+		const double durationAsDouble = millisecond_duration_from_double(duration).count();
 
 		return durationAsDouble;
 	}

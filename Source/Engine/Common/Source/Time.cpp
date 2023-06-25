@@ -17,7 +17,7 @@ namespace Engine::Common::Time
 	static milliseconds AsMilliseconds(const double timeInMilliseconds)
 	{
 		milliseconds durationInMilliseconds = duration_cast<milliseconds>(
-			millisecond_duration(timeInMilliseconds)
+			millisecond_duration_from_double(timeInMilliseconds)
 		);
 
 		return durationInMilliseconds;

@@ -12,5 +12,5 @@ namespace Engine::Common::Time
 	typedef std::chrono::milliseconds							milliseconds;
 	typedef std::chrono::nanoseconds							nanoseconds;
 
-	typedef std::chrono::duration<double, std::milli>			millisecond_duration;
+	typedef std::chrono::duration<double, std::milli>			millisecond_duration_from_double;
 }
