@@ -31,8 +31,8 @@ namespace Engine
 
 	const unsigned int m_targetEngineUpdatesPerSecond	= 20;
 	const unsigned int m_targetFramesPerSecond			= 60;
-	const double m_targetEngineUpdateFrequency			= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetEngineUpdatesPerSecond;
-	const double m_targetRenderFrameFrequency			= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetFramesPerSecond;
+	const double m_targetEngineUpdateTime				= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetEngineUpdatesPerSecond;
+	const double m_targetRenderFrameTime				= (double) Common::Time::SECOND_IN_MILLISECONDS / m_targetFramesPerSecond;
 
 	unsigned int m_engineUpdatesThisSecondCounter	= 0;
 	unsigned int m_renderedFramesThisSecondCounter	= 0;
@@ -57,13 +57,15 @@ namespace Engine
 
 	void SetBootingSequenceState(EngineBootingSequenceState bootingState)
 	{
+		// assert(m_engineBootingState != bootingState)
+
 		m_engineBootingState = bootingState;
 	}
 
 	void SetNextBootingSquenceState()
 	{
 		EngineBootingSequenceState currentBootingSequenceState = GetBootingSequenceState();
-		if (currentBootingSequenceState < EngineBootingSequenceState::Finished)
+		if (currentBootingSequenceState < EngineBootingSequenceState::Finished) // change to assert(currentBootingSequenceState < EngineBootingSequenceState::Finished)
 		{
 			EngineBootingSequenceState nextBootingSequenceState = static_cast<EngineBootingSequenceState>(currentBootingSequenceState + 1);
 			SetBootingSequenceState(nextBootingSequenceState);
@@ -98,6 +100,7 @@ namespace Engine
 				SetNextBootingSquenceState();
 				break;
 			case EngineBootingSequenceState::RunningFirstEngineUpdate:
+				m_engineTickClock.Start(); // should I move it to Init? should I replace it with const number?
 				m_deltaTime = m_engineTickClock.GetDurationAsDouble();
 				Update(m_deltaTime);
 
@@ -124,14 +127,12 @@ namespace Engine
 
 	void Init()
 	{
-		m_engineTickClock.Start();
-
-		m_engineUpdateClock.Start();
-		m_renderFrameClock.Start();
+		return;
 	}
 
 	void Destroy()
 	{
+		return;
 	}
 
 	void Update(double deltaTime)
@@ -142,7 +143,7 @@ namespace Engine
 
 		if (m_debugUpdateQueue > 0)
 		{
-			printf("[FPS: %d] Game ms: %f; Render ms: %f; CPU Tick ms: %f\n", m_renderedFramesLastSecondCounter, m_lastEngineUpdateDuration, m_lastRenderedFrameDuration, m_deltaTime);
+			printf("[FPS: %d] Game ms: %f; Render ms: %f; Previous CPU Tick(DeltaTime) ms: %f\n", m_renderedFramesLastSecondCounter, m_lastEngineUpdateDuration, m_lastRenderedFrameDuration, m_deltaTime);
 			printf("          Game Ticks per Second: %d; Render Updates per Second: %d\n", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
 
 			--m_debugUpdateQueue;
@@ -183,23 +184,24 @@ namespace Engine
 
 	void Run()
 	{
-		if (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
+		// while here just to be safe as see all booting issues before starting engine ticks
+		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
 		{
 			RunBootingSequence();
 		}
 
-		while (true)
+		while (true) // need to create good mechanism for breaking from this while when getting event or anything
 		{
 			m_engineTickClock.Start();
 
-			if (m_engineUpdateClock.GetDurationAsDouble() >= m_targetEngineUpdateFrequency)
+			if (m_engineUpdateClock.GetDurationAsDouble() >= m_targetEngineUpdateTime)
 			{
 				Update(m_deltaTime);
 
 				m_engineUpdateClock.Reset();
 			}
 
-			if (m_renderFrameClock.GetDurationAsDouble() >= m_targetRenderFrameFrequency)
+			if (m_renderFrameClock.GetDurationAsDouble() >= m_targetRenderFrameTime)
 			{
 				Render();
 				m_renderFrameClock.Reset();

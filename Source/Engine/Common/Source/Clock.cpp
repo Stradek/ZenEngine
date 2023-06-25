@@ -9,7 +9,6 @@ using std::chrono::duration_cast;
 
 namespace Engine::Common::Time
 {
-
 	Clock::Clock() {}
 	Clock::~Clock() {}
 
