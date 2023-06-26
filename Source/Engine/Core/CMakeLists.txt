@@ -10,10 +10,17 @@ include_guard(GLOBAL)
 #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(INCLUDE_DIR ${CMAKE_SOURCE_DIR}/Include/Core)
+set(CORE_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Core)
+
+set(CORE_INCLUDE_DIR ${CORE_INCLUDE_DIR} PARENT_SCOPE)
 
 get_source_files(CORE_SOURCE_FILES 0 ${SOURCE_DIR})
-get_header_files(CORE_HEADER_FILES 1 ${INCLUDE_DIR})
+get_header_files(CORE_HEADER_FILES 0 ${CORE_INCLUDE_DIR})
+
+set(CORE_FILES 
+    "${CORE_SOURCE_FILES}"
+    "${CORE_HEADER_FILES}"
+)
 
 #
 # Library
@@ -21,15 +28,19 @@ get_header_files(CORE_HEADER_FILES 1 ${INCLUDE_DIR})
 
 add_library(Core
     STATIC
-    "${CORE_SOURCE_FILES}"
-    "${CORE_HEADER_FILES}"
+    "${CORE_FILES}"
 )
 
 set_property(TARGET Core PROPERTY FOLDER "Engine")
 target_include_directories(Core PUBLIC
-    "${PROJECT_SOURCE_DIR}/Include"
-    "${PROJECT_SOURCE_DIR}/Source/Engine"
+    ${CORE_INCLUDE_DIR}
 )
 
-# Use the retrieved precompiled headers for the child target
-target_precompile_headers(Core REUSE_FROM Engine)
+#
+# Dependencies
+#
+
+#
+# Precompiled Headers
+#
+

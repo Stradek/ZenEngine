@@ -13,6 +13,8 @@ cmake_policy(VERSION 3.6)
 include("Build/CMakeShared.cmake")
 
 project(DX12EngineTest)
+
+# Setting up custom properties and functions from "CMakeShared.cmake" file
 custom_cmake_setup()
 
 #
@@ -20,13 +22,3 @@ custom_cmake_setup()
 #
 
 add_subdirectory(Source)
-
-#
-# Environment
-#
-
-set(CMAKE_BINARY_DIR                "${CMAKE_SOURCE_DIR}/Binaries")
-
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}")
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  "${CMAKE_BINARY_DIR}")

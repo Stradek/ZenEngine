@@ -3,7 +3,7 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include <Engine/GameEngine.h>
+#include <GameEngine.h>
 
 #include <stdio.h>
 

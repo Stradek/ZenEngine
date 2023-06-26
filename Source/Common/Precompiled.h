@@ -2,22 +2,26 @@
 	Copyright (c) 2023 Piotr Stradowski. All rights reserved.
 	Software distributed under the permissive MIT License.
 */
+
 #pragma once
+
+/*
+	STD Precompiled Headers
+*/
 
 // math
 #include <ratio>
-#include <cmath>
-
-// strings
-#include <string>
 
 // time 
 #include <ctime>
 #include <chrono>
 
-// memory
-#include <memory>
+/*
+	Common Precompiled Headers
+*/
 
-// multithreading
-#include <thread>
-#include <mutex>
+#include <Defines.h>
+
+#include <TimeTypes.h>
+#include <CommonTime.h>
+#include <Clock.h>

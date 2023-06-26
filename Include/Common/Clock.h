@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <Common/TimeTypes.h>
+#include <TimeTypes.h>
 
 namespace Engine::Common::Time
 {
@@ -23,7 +23,7 @@ namespace Engine::Common::Time
 		void Reset();
 
 	private:
-		time_point m_startTime = time_point::min();
+		time_point m_startTime = time_point::min(); // move initialization to cpp file
 		time_point m_endTime;
 
 		bool m_isRunning = false;

@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <Common/TimeTypes.h>
+#include <TimeTypes.h>
 
 /*
 	NOTE:

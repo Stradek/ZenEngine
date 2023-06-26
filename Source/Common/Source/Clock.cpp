@@ -3,7 +3,7 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include <Common/Clock.h>
+#include <Clock.h>
 
 using std::chrono::duration_cast;
 

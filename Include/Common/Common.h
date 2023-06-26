@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include <Common/Defines.h>
+#include <Defines.h>
 
-#include <Common/Time.h>
-#include <Common/Clock.h>
+#include <Clock.h>
+#include <CommonTime.h>
+#include <TimeTypes.h>
