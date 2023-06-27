@@ -29,4 +29,4 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/Binaries)
 # Sources
 #
 
-add_subdirectory(Source)
+add_subdirectory(Development)

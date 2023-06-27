@@ -6,18 +6,6 @@
 include_guard(GLOBAL)
 
 #
-# Targets Configuration
-#
-
-# TODO: Fix that, so It won't generate in Build directory
-set(LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/Binaries)
-set(ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/Binaries)
-set(RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/Binaries)
-
-set(MAIN_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/Include)
-set(MAIN_ENGINE_INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine)
-
-#
 # Sources
 #
 
