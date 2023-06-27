@@ -26,10 +26,10 @@ namespace Engine
 
 	Common::Time::Clock m_currentOperationClock;
 
-	const uint m_targetEngineUpdatesPerSecond			= 20;
-	const uint m_targetFramesPerSecond					= 60;
-	const uint32 m_targetEngineUpdateTime				= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetEngineUpdatesPerSecond);
-	const uint32 m_targetRenderFrameTime				= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetFramesPerSecond);
+	const uint m_targetEngineUpdatesPerSecond	= 20;
+	const uint m_targetFramesPerSecond			= 60;
+	const uint32 m_targetEngineUpdateTime		= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetEngineUpdatesPerSecond);
+	const uint32 m_targetRenderFrameTime		= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetFramesPerSecond);
 
 	uint m_engineUpdatesThisSecondCounter	= 0;
 	uint m_renderedFramesThisSecondCounter	= 0;
@@ -68,7 +68,6 @@ namespace Engine
 			SetBootingSequenceState(nextBootingSequenceState);
 		}
 	}
-
 
 	void FinishBootingSequence()
 	{
