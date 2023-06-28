@@ -20,8 +20,4 @@
 	Common Precompiled Headers
 */
 
-#include <Defines.h>
-
-#include <TimeTypes.h>
-#include <CommonTime.h>
-#include <Clock.h>
+#include <Common.h>

@@ -32,7 +32,7 @@ add_library(Common
     "${COMMON_FILES}"
 )
 
-set_property(TARGET Common PROPERTY FOLDER "")
+set_property(TARGET Common PROPERTY FOLDER "Common")
 target_include_directories(Common PRIVATE
     ${COMMON_INCLUDE_DIR}
 )

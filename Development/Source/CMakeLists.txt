@@ -11,6 +11,7 @@ include_guard(GLOBAL)
 
 add_subdirectory(Common)
 
+# link and include Common in following targets
 link_libraries(Common)
 include_directories(${COMMON_INCLUDE_DIR})
 
