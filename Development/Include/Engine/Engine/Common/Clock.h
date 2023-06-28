@@ -5,6 +5,7 @@
 
 #pragma once
 
+#include <Defines.h>
 #include <TimeTypes.h>
 
 namespace Engine::Common::Time

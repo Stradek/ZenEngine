@@ -15,9 +15,3 @@
 // time 
 #include <ctime>
 #include <chrono>
-
-/*
-	Common Precompiled Headers
-*/
-
-#include <Common.h>

@@ -41,6 +41,9 @@ target_include_directories(Engine PUBLIC
 # Dependencies
 #
 
+add_subdirectory("Common")
+target_link_libraries(Engine PUBLIC Common)
+
 add_subdirectory("Core")
 target_link_libraries(Engine PUBLIC Core)
 

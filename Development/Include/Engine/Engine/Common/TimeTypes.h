@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Defines.h>
+
 namespace Engine::Common::Time
 {
 	typedef std::chrono::high_resolution_clock					high_res_clock;

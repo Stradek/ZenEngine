@@ -9,15 +9,10 @@ include_guard(GLOBAL)
 # Sources
 #
 
-add_subdirectory(Common)
-
-# link and include Common in following targets
-link_libraries(Common)
-include_directories(${COMMON_INCLUDE_DIR})
-
 add_subdirectory(Engine)
 add_subdirectory(Editor)
 add_subdirectory(Game)
+
 
 #
 # Precompiled Headers
