@@ -7,6 +7,3 @@ Build/CMake-*/
 
 # Compilation output directory
 Binaries/*
-
-# External libraries
-Engine/External/

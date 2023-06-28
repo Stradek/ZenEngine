@@ -3,12 +3,9 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include <spdlog/spdlog.h>
+#pragma once
 
 namespace Engine::Core
 {
-	void test_spdlog()
-	{
-		spdlog::info("Hello world!");
-	}
+	void test_spdlog();
 }

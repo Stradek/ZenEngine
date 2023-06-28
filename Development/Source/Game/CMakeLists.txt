@@ -42,7 +42,7 @@ add_executable(Game
 )
 
 set_property(TARGET Game PROPERTY FOLDER "Game")
-target_include_directories(Game PUBLIC
+target_include_directories(Game PRIVATE
     ${GAME_INCLUDE_DIR}
 )
 
@@ -50,7 +50,8 @@ target_include_directories(Game PUBLIC
 # Dependencies
 #
 
-target_link_libraries(Game PUBLIC Engine)
-target_include_directories(Game PUBLIC
+# Engine
+target_link_libraries(Game PRIVATE Engine)
+target_include_directories(Game PRIVATE
     ${MAIN_ENGINE_INCLUDE_DIR}
 )

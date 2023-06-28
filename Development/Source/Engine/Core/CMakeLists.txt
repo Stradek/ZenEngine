@@ -40,7 +40,18 @@ target_include_directories(Core PUBLIC
 # Dependencies
 #
 
+# spdlog library
+add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)
+
+set_property(TARGET spdlog PROPERTY FOLDER "Dependencies")
+
+target_link_libraries(Core PUBLIC spdlog)
+target_include_directories(Core PUBLIC
+    ${SPDLOG_ROOT}/include
+)
+
 #
 # Precompiled Headers
 #
 
+target_precompile_headers(Core REUSE_FROM Engine)

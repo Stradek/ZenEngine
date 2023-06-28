@@ -5,6 +5,8 @@
 
 #include <GameEngine.h>
 
+#include <Core/Core.h>
+
 #include <stdio.h>
 
 namespace Engine
@@ -113,22 +115,22 @@ namespace Engine
 
 	void InitDependencies()
 	{
-		return;
+		
 	}
 
 	void PreInit()
 	{
-		return;
+		
 	}
 
 	void Init()
 	{
-		return;
+		
 	}
 
 	void Destroy()
 	{
-		return;
+		
 	}
 
 	void Update(double deltaTime)
