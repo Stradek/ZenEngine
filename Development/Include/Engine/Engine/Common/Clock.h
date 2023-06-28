@@ -5,8 +5,8 @@
 
 #pragma once
 
-#include <Defines.h>
-#include <TimeTypes.h>
+#include "Defines.h"
+#include "CommonTime.h"
 
 namespace Engine::Common::Time
 {
@@ -24,7 +24,7 @@ namespace Engine::Common::Time
 		void Reset();
 
 	private:
-		time_point m_startTime = time_point::min(); // move initialization to cpp file
+		time_point m_startTime;
 		time_point m_endTime;
 
 		bool m_isRunning = false;

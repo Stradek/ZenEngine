@@ -4,12 +4,13 @@
 */
 
 #include <Clock.h>
+#include <CommonTime.h>
 
 using std::chrono::duration_cast;
 
 namespace Engine::Common::Time
 {
-	Clock::Clock() {}
+	Clock::Clock() : m_startTime(time_point::min()) {}
 	Clock::~Clock() {}
 
 	uint32 Clock::GetDuration()

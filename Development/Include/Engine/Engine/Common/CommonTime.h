@@ -5,7 +5,8 @@
 
 #pragma once
 
-#include <TimeTypes.h>
+#include "TimeTypes.h"
+#include "Defines.h"
 
 /*
 	NOTE:
