@@ -1,6 +1,12 @@
 # DX12EngineTest
 This game engine is still work in progress. Name of this software still haven't been determined and will change in the future.
 
+# Project Current Goals
+1. Game Genre: I want to develop a platformer game with FPS-like movement mechanics.
+2. Game Mechanics: I want to implement core mechanics such as jumping, running with a default Quake-like speed, collecting points, and having moving platforms that maintain the player's relative position while standing on them.
+3. Level Design: I need to create levels that primarily have a level-like layout, without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical components, with a simplified layout and clear path indicators.
+4. Game Engine Components: I need to work on implementing a camera system, collision detection and response, physics and movement mechanics, user interface, testing and debugging, performance optimization, documentation, and version control.
+
 # Repositiory Directory Structure
 * Binaries/ - Build artifacts(files like .lib, .pdb) and executable(.exe)
 * Build/ - CMake related artifacts(in .\CMake-* directory), shared CMake configuration and functions(CMakeShared.cmake) and CMake related batch scripts.
