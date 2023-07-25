@@ -21,9 +21,9 @@ if %ERRORLEVEL% EQU 1 (
     goto Error_CMakeNotInstalled
 )
 
-echo ---- Generating CMake project...
-set archArg=-A %arch%
+echo ---- Generating CMake project for Visual Studio 2022...
 
+set archArg=-A %arch%
 cmake.exe -G "Visual Studio 17" %archArg% "../%inputDir%"
 
 if %ERRORLEVEL% NEQ 0 (
