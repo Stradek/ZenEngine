@@ -30,8 +30,8 @@ namespace Engine
 
 	const uint m_targetEngineUpdatesPerSecond	= 20;
 	const uint m_targetFramesPerSecond			= 60;
-	const uint32 m_targetEngineUpdateTime		= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetEngineUpdatesPerSecond);
-	const uint32 m_targetRenderFrameTime		= static_cast<uint32>(Common::Time::SECOND_TO_NANOSECOND_RATIO / m_targetFramesPerSecond);
+	const uint32 m_targetEngineUpdateTime		= static_cast<uint32>(Common::Time::NANOSECONDS_IN_SECOND / m_targetEngineUpdatesPerSecond);
+	const uint32 m_targetRenderFrameTime		= static_cast<uint32>(Common::Time::NANOSECONDS_IN_SECOND / m_targetFramesPerSecond);
 
 	uint m_engineUpdatesThisSecondCounter	= 0;
 	uint m_renderedFramesThisSecondCounter	= 0;
@@ -208,7 +208,7 @@ namespace Engine
 				m_renderFrameClock.Reset();
 			}
 
-			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::Time::SECOND_TO_NANOSECOND_RATIO)
+			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::Time::NANOSECONDS_IN_SECOND)
 			{
 				ClearEngineCounters();
 				m_debugUpdateQueue++;

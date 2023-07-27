@@ -18,10 +18,10 @@
 namespace Engine::Common::Time
 {
 	extern const uint32 ONE_SECOND;
-	extern const uint32 SECOND_TO_NANOSECOND_RATIO;
-	extern const uint32 MILLISECOND_TO_NANOSECOND_RATIO;
-	extern const double NANOSECOND_TO_SECOND_RATIO;
-	extern const double NANOSECOND_TO_MILLISECOND_RATIO;
+	extern const uint32 NANOSECONDS_IN_SECOND;
+	extern const uint32 NANOSECONDS_IN_MILISECOND;
+	extern const double SECONDS_IN_NANOSECOND;
+	extern const double MILISECONDS_IN_NANOSECOND;
 
 	extern time_point GetCurrentTime();
 

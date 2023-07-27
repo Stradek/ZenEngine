@@ -26,21 +26,21 @@ namespace Engine::Common::Time
 {
 	const uint32 ONE_SECOND = 1;
 
-	const uint32 SECOND_TO_NANOSECOND_RATIO = static_cast<uint32>(
+	const uint32 NANOSECONDS_IN_SECOND = static_cast<uint32>(
 		nanoseconds(seconds(1)).count()
 	);
 
-	const uint32 MILLISECOND_TO_NANOSECOND_RATIO = static_cast<uint32>(
+	const uint32 NANOSECONDS_IN_MILISECOND = static_cast<uint32>(
 		nanoseconds(milliseconds(1)).count()
 	);
 
 
-	const double NANOSECOND_TO_SECOND_RATIO = static_cast<double>(
-		(double) nanoseconds(1).count() / SECOND_TO_NANOSECOND_RATIO
+	const double SECONDS_IN_NANOSECOND = static_cast<double>(
+		(double) nanoseconds(1).count() / NANOSECONDS_IN_SECOND
 	);
 
-	extern const double NANOSECOND_TO_MILLISECOND_RATIO = static_cast<double>(
-		(double) nanoseconds(1).count() / MILLISECOND_TO_NANOSECOND_RATIO
+	extern const double MILISECONDS_IN_NANOSECOND = static_cast<double>(
+		(double) nanoseconds(1).count() / NANOSECONDS_IN_MILISECOND
 	);
 
 
@@ -63,7 +63,7 @@ namespace Engine::Common::Time
 	double UInt32ToDouble(const uint32 durationInNanoseconds)
 	{
 		const double durationInSeconds = static_cast<double>(
-			durationInNanoseconds * NANOSECOND_TO_SECOND_RATIO
+			durationInNanoseconds * SECONDS_IN_NANOSECOND
 		);
 
 		return durationInSeconds;
