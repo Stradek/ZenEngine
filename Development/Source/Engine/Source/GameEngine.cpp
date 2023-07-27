@@ -15,7 +15,6 @@ namespace Engine
 	{
 		NotStarted,
 		Initializing,
-		RunningFirstEngineUpdate,
 		FinishingBootingSequence,
 		Finished,
 	};
@@ -94,13 +93,6 @@ namespace Engine
 				InitDependencies();
 				PreInit();
 				Init();
-
-				SetNextBootingSquenceState();
-				break;
-			case EngineBootingSequenceState::RunningFirstEngineUpdate:
-				m_engineTickClock.Start(); // should I move it to Init? should I replace it with const number?
-				m_deltaTime = m_engineTickClock.GetDurationAsDouble();
-				Update(m_deltaTime);
 
 				SetNextBootingSquenceState();
 				break;
@@ -185,7 +177,7 @@ namespace Engine
 
 	void Run()
 	{
-		// while here just to be safe as see all booting issues before starting engine ticks
+		// while here just to be safe and see all booting issues before starting main loop
 		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
 		{
 			RunBootingSequence();
