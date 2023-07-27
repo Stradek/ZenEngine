@@ -19,13 +19,14 @@ namespace Engine
 		Finished,
 	};
 
-	Common::Time::Clock m_engineTickClock;
-	Common::Time::Clock m_engineOneSecondClock;
+	Common::Time::Clock m_engineMainLoopClock;
 
 	Common::Time::Clock m_engineUpdateClock;
-	Common::Time::Clock m_renderFrameClock;
+	Common::Time::Clock m_engineRenderFrameClock;
 
 	Common::Time::Clock m_currentOperationClock;
+
+	Common::Time::Clock m_engineOneSecondClock;
 
 	const uint m_targetEngineUpdatesPerSecond	= 20;
 	const uint m_targetFramesPerSecond			= 60;
@@ -72,11 +73,11 @@ namespace Engine
 
 	void FinishBootingSequence()
 	{
-		m_engineTickClock.Start();
+		m_engineMainLoopClock.Start();
 		m_engineOneSecondClock.Start();
 
 		m_engineUpdateClock.Start();
-		m_renderFrameClock.Start();
+		m_engineRenderFrameClock.Start();
 
 		ClearEngineCounters();
 	}
@@ -185,7 +186,7 @@ namespace Engine
 
 		while (true) // need to create good mechanism for breaking from this while when getting event or anything
 		{
-			m_engineTickClock.Start();
+			m_engineMainLoopClock.Start();
 
 			if (m_engineUpdateClock.GetDuration() >= m_targetEngineUpdateTime)
 			{
@@ -194,10 +195,10 @@ namespace Engine
 				m_engineUpdateClock.Reset();
 			}
 
-			if (m_renderFrameClock.GetDuration() >= m_targetRenderFrameTime)
+			if (m_engineRenderFrameClock.GetDuration() >= m_targetRenderFrameTime)
 			{
 				Render();
-				m_renderFrameClock.Reset();
+				m_engineRenderFrameClock.Reset();
 			}
 
 			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::Time::SECOND_TO_NANOSECOND_RATIO)
@@ -208,9 +209,9 @@ namespace Engine
 				m_engineOneSecondClock.Reset();
 			}
 
-			m_deltaTime = m_engineTickClock.GetDurationAsDouble();
+			m_deltaTime = m_engineMainLoopClock.GetDurationAsDouble();
 
-			m_engineTickClock.Reset();
+			m_engineMainLoopClock.Reset();
 		}
 	}
 }
