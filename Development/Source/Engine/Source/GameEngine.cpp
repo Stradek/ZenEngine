@@ -115,7 +115,8 @@ namespace Engine
 	{
 		Core::Log::Init();
 
-		ENGINE_LOG("Hello world!");
+		ENGINE_LOG("Hello engine!");
+		GAME_LOG("Hello game!");
 	}
 
 	void Init()
