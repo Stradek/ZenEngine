@@ -5,6 +5,7 @@
 
 #include "GameEngine.h"
 
+#include <IEngineApplication.h>
 #include <Core/Log.h>
 
 #include <stdio.h>
@@ -176,8 +177,8 @@ namespace Engine
 		m_renderedFramesThisSecondCounter = 0;
 	}
 
-	void Run()
-	{
+	void Run(IEngineApplication* gameInstance)
+{
 		// while here just to be safe and see all booting issues before starting main loop
 		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
 		{

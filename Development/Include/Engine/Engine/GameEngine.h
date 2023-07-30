@@ -5,6 +5,8 @@
 
 #pragma once
 
+class IEngineApplication;
+
 namespace Engine 
 {
 	void RunBootingSequence();
@@ -19,7 +21,7 @@ namespace Engine
 
 	void ClearEngineCounters();
 
-	void Run();
+	void Run(IEngineApplication* gameInstance);
 
 	void Destroy();
 }

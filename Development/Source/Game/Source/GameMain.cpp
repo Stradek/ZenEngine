@@ -5,17 +5,10 @@
 
 #include <Game.h>
 
-void Game::Init()
-{
-	
-}
+#include <Engine/GameEngine.h>
 
-void Game::Update()
+int main(int argc, char* argv[])
 {
-	
-}
-
-void Game::Close()
-{
-	
+	Game gameInstance = Game();
+	Engine::Run(&gameInstance);
 }
