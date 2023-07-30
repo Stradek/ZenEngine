@@ -17,6 +17,7 @@ namespace Engine::Core
 {
 	// need to replace this constant data later with some kind of config file for engine and it's subsystems
 	const std::filesystem::path logDirectoryPath = "logs/";
+	const inline std::string defaultLoggingPattern = "[%H:%M:%S] > %v";
 
 	std::shared_ptr<spdlog::logger> Log::s_engineLogger;
 	std::shared_ptr<spdlog::logger> Log::s_gameLogger;
@@ -25,7 +26,7 @@ namespace Engine::Core
 	{
 		auto outputSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 		outputSink->set_level(spdlog::level::debug);
-		outputSink->set_pattern("[%H:%M:%S] > %v");
+		outputSink->set_pattern(defaultLoggingPattern);
 
 		auto logFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(coreLogFilePath.string(), false);
 		logFileSink->set_level(spdlog::level::trace);
@@ -38,7 +39,7 @@ namespace Engine::Core
 	{
 		auto outputSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
 		outputSink->set_level(spdlog::level::info);
-		outputSink->set_pattern("[:%H:%M:%S] %v");
+		outputSink->set_pattern(defaultLoggingPattern);
 
 		auto logFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(gameLogFilePath.string(), false);
 		logFileSink->set_level(spdlog::level::debug);
@@ -49,7 +50,7 @@ namespace Engine::Core
 
 	void Log::Init()
 	{
-		const Common::DateTime::Date currentDate {Common::DateTime::GetCurrentDate()};
+		const Common::DateTime::Date currentDate = Common::DateTime::GetCurrentDate();
 		const Common::DateTime::Time currentTime = Common::DateTime::GetCurrentTime();
 
 		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hour, currentTime.minute, currentTime.second);
