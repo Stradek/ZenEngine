@@ -11,12 +11,13 @@ namespace Engine::Common::DateTime
 	{
 		auto now = std::chrono::system_clock::now();
 		std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
-		std::unique_ptr<std::tm> timeStruct = std::make_unique<std::tm>(*std::localtime(&timeNow));
+		struct tm timeInfo;
+		localtime_s(&timeInfo, &timeNow);
 
 		Date date;
-		date.year = timeStruct->tm_year + 1900; // Years since 1900
-		date.month = timeStruct->tm_mon + 1; // Months are represented as 0-11
-		date.day = timeStruct->tm_mday;
+		date.year = timeInfo.tm_year + 1900; // Years since 1900
+		date.month = timeInfo.tm_mon + 1; // Months are represented as 0-11
+		date.day = timeInfo.tm_mday;
 
 		return date;
 	}

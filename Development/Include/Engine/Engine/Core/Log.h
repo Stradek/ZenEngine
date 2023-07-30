@@ -54,7 +54,7 @@ namespace Engine::Core
 
 #define ENGINE_STATIC_ASSERT(expression)			static_assert(expression)
 
-#define ENGINE_ASSERT(expression, msg)				if(!((bool) expression))														\
+#define ENGINE_ASSERT(expression, msg)				if(!((bool) (expression)))														\
 													{																				\
 														std::string assertMsg = "ASSERT: {}, file {}, line {}, Message: ";			\
 														assertMsg += msg;															\
@@ -62,7 +62,7 @@ namespace Engine::Core
 														std::string(#expression), std::string(__FILE__), (unsigned)(__LINE__));		\
 													}
 
-#define ENGINE_FATAL_ASSERT(expression, msg)		if(!((bool) expression))														\
+#define ENGINE_FATAL_ASSERT(expression, msg)		if(!((bool) (expression)))														\
 													{																				\
 														std::string assertMsg = "FATAL ASSERT: {}, file {}, line {}, Message: ";	\
 														assertMsg += msg;															\

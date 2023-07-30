@@ -47,10 +47,11 @@ namespace Engine::Common::DateTime
 	Time GetCurrentTime()
 	{
 		system_time_point now = system_clock::now();
-		time_t systemTime = std::chrono::system_clock::to_time_t(now);
-		std::unique_ptr<std::tm> timeStruct = std::make_unique<std::tm>(*std::localtime(&systemTime));
+		time_t timeNow = std::chrono::system_clock::to_time_t(now);
+		struct tm timeInfo;
+		localtime_s(&timeInfo, &timeNow);
 
-		Time currentTime{ timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec };
+		Time currentTime {timeInfo.tm_hour, timeInfo.tm_min, timeInfo.tm_sec};
 
 		return currentTime;
 	}
