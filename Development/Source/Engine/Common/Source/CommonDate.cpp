@@ -11,7 +11,6 @@ namespace Engine::Common::DateTime
 	{
 		auto now = std::chrono::system_clock::now();
 		std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
-
 		std::unique_ptr<std::tm> timeStruct = std::make_unique<std::tm>(*std::localtime(&timeNow));
 
 		Date date;

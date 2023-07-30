@@ -48,10 +48,10 @@ namespace Engine::Common::DateTime
 	{
 		system_time_point now = system_clock::now();
 		time_t systemTime = std::chrono::system_clock::to_time_t(now);
-
 		std::unique_ptr<std::tm> timeStruct = std::make_unique<std::tm>(*std::localtime(&systemTime));
+
 		Time currentTime{ timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec };
-		
+
 		return currentTime;
 	}
 
@@ -114,5 +114,4 @@ namespace Engine::Common::DateTime
 		const auto duration = durationInNanoseconds.count();
 		return static_cast<uint32>(duration);
 	}
-
 }

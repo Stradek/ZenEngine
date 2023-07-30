@@ -21,7 +21,7 @@ namespace Engine::Core
 	const std::filesystem::path engineLogDirectoryPath = logDirectoryPath / "engine";
 	const std::filesystem::path gameLogDirectoryPath = logDirectoryPath / "game";
 
-	const inline std::string defaultLoggingPattern = "[%n - %H:%M:%S] > %v";
+	const std::string defaultLoggingPattern = "[%n - %H:%M:%S] > %v";
 
 	std::shared_ptr<spdlog::logger> Log::s_engineLogger;
 	std::shared_ptr<spdlog::logger> Log::s_gameLogger;
