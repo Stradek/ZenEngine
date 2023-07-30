@@ -115,7 +115,7 @@ namespace Engine
 	{
 		Core::Log::Init();
 
-		CORE_LOG("Hello world!");
+		ENGINE_LOG("Hello world!");
 	}
 
 	void Init()
@@ -139,8 +139,8 @@ namespace Engine
 			double lastEngineUpdateDuration = Common::DateTime::UInt32ToDouble(m_lastEngineUpdateDuration);
 			double lastRenderedFrameDuration = Common::DateTime::UInt32ToDouble(m_lastRenderedFrameDuration);
 
-			CORE_LOG("[FPS: {}] Game ms: {:.3f}; Render ms: {:.3f}; Previous CPU Tick(DeltaTime) ms: {:.3f}", m_renderedFramesLastSecondCounter, lastEngineUpdateDuration, lastRenderedFrameDuration, deltaTime);
-			CORE_LOG("          Game Ticks per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
+			ENGINE_LOG("[FPS: {}] Game ms: {:.3f}; Render ms: {:.3f}; Previous CPU Tick(DeltaTime) ms: {:.3f}", m_renderedFramesLastSecondCounter, lastEngineUpdateDuration, lastRenderedFrameDuration, deltaTime);
+			ENGINE_LOG("          Game Ticks per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
 
 			--m_debugUpdateQueue;
 		}

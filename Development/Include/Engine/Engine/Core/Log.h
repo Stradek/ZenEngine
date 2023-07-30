@@ -28,8 +28,8 @@ namespace Engine::Core
 	};
 }
 
-#define CORE_TRACE(...)		::Engine::Core::Log::GetEngineLogger()->trace(__VA_ARGS__)
-#define CORE_LOG(...)		::Engine::Core::Log::GetEngineLogger()->info(__VA_ARGS__)
-#define CORE_WARN(...)		::Engine::Core::Log::GetEngineLogger()->warn(__VA_ARGS__)
-#define CORE_ERROR(...)		::Engine::Core::Log::GetEngineLogger()->error(__VA_ARGS__)
-#define CORE_CRITICAL(...)	::Engine::Core::Log::GetEngineLogger()->critical(__VA_ARGS__)
+#define ENGINE_TRACE(...)		::Engine::Core::Log::GetEngineLogger()->trace(__VA_ARGS__)
+#define ENGINE_LOG(...)		::Engine::Core::Log::GetEngineLogger()->info(__VA_ARGS__)
+#define ENGINE_WARN(...)		::Engine::Core::Log::GetEngineLogger()->warn(__VA_ARGS__)
+#define ENGINE_ERROR(...)		::Engine::Core::Log::GetEngineLogger()->error(__VA_ARGS__)
+#define ENGINE_CRITICAL(...)	::Engine::Core::Log::GetEngineLogger()->critical(__VA_ARGS__)
