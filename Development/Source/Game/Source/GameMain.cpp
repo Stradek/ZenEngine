@@ -9,6 +9,6 @@
 
 int main(int argc, char* argv[])
 {
-	Game gameInstance = Game();
-	Engine::Run(&gameInstance);
+	std::unique_ptr<Game> gameInstance = std::make_unique<Game>();
+	Engine::GameEngine::Run(std::move(gameInstance));
 }

@@ -5,17 +5,16 @@
 
 #include <Game.h>
 
+#include <Engine/Core/Log.h>
+
 void Game::Init()
 {
-	
 }
 
 void Game::Update()
 {
-	
 }
 
 void Game::Close()
 {
-	
 }

@@ -50,7 +50,7 @@ namespace Engine::Common::DateTime
 	double UInt32ToDouble(const uint32 durationInNanoseconds)
 	{
 		const double durationInSeconds = static_cast<double>(
-			durationInNanoseconds * SECONDS_IN_NANOSECOND
+			durationInNanoseconds * NANOSECOND_TO_SECONDS
 		);
 
 		return durationInSeconds;

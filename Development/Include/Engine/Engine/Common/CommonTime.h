@@ -25,17 +25,17 @@ namespace Engine::Common::DateTime
 	};
 
 	static constexpr uint32 ONE_SECOND = 1;
-	static constexpr uint32 NANOSECONDS_IN_SECOND = static_cast<uint32>(
+	static constexpr uint32 SECOND_TO_NANOSECONDS = static_cast<uint32>(
 		nanoseconds(seconds(1)).count()
 	);
-	static constexpr uint32 NANOSECONDS_IN_MILISECOND = static_cast<uint32>(
+	static constexpr uint32 MILISECOND_TO_NANOSECONDS = static_cast<uint32>(
 		nanoseconds(milliseconds(1)).count()
 	);
-	static constexpr double SECONDS_IN_NANOSECOND = static_cast<double>(
-		(double)nanoseconds(1).count() / NANOSECONDS_IN_SECOND
+	static constexpr double NANOSECOND_TO_SECONDS = static_cast<double>(
+		(double)nanoseconds(1).count() / SECOND_TO_NANOSECONDS
 	);
-	static constexpr double MILISECONDS_IN_NANOSECOND = static_cast<double>(
-		(double)nanoseconds(1).count() / NANOSECONDS_IN_MILISECOND
+	static constexpr double NANOSECOND_TO_MILISECONDS = static_cast<double>(
+		(double)nanoseconds(1).count() / MILISECOND_TO_NANOSECONDS
 	);
 
 	extern Time GetCurrentTime(); 

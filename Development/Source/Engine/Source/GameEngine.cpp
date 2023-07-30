@@ -8,71 +8,44 @@
 #include <IEngineApplication.h>
 #include <Core/Log.h>
 
-#include <stdio.h>
-
 namespace Engine
 {
-	enum EngineBootingSequenceState
+
+	void GameEngine::Run(std::unique_ptr<IEngineApplication> appInstance)
 	{
-		NotStarted,
-		Initializing,
-		FinishingBootingSequence,
-		Finished,
-	};
+		GameEngine gameEngineInstance = GameEngine(std::move(appInstance));
+		gameEngineInstance.EngineRun();
+	}
 
-	Common::DateTime::Clock m_engineMainLoopClock;
+	GameEngine::GameEngine(std::unique_ptr<IEngineApplication> appInstance) :
+		m_appInstance(std::move(appInstance))
+	{
+		
+	}
 
-	Common::DateTime::Clock m_engineUpdateClock;
-	Common::DateTime::Clock m_engineRenderFrameClock;
-
-	Common::DateTime::Clock m_currentOperationClock;
-
-	Common::DateTime::Clock m_engineOneSecondClock;
-
-	const uint m_targetEngineUpdatesPerSecond	= 20;
-	const uint m_targetFramesPerSecond			= 60;
-	const uint32 m_targetEngineUpdateTime		= static_cast<uint32>(Common::DateTime::NANOSECONDS_IN_SECOND / m_targetEngineUpdatesPerSecond);
-	const uint32 m_targetRenderFrameTime		= static_cast<uint32>(Common::DateTime::NANOSECONDS_IN_SECOND / m_targetFramesPerSecond);
-
-	uint m_engineUpdatesThisSecondCounter	= 0;
-	uint m_renderedFramesThisSecondCounter	= 0;
-
-	uint m_engineUpdatesLastSecondCounter	= 0;
-	uint m_renderedFramesLastSecondCounter	= 0;
-
-	uint32 m_lastEngineUpdateDuration	= 0;
-	uint32 m_lastRenderedFrameDuration	= 0;
-
-	double m_deltaTime = 0;
-
-	EngineBootingSequenceState m_engineBootingState = NotStarted;
-
-	// TODO: replace this later with event system
-	uint m_debugUpdateQueue = 0;
-
-	EngineBootingSequenceState GetBootingSequenceState()
+	GameEngine::EngineBootingSequenceState GameEngine::GetBootingSequenceState()
 	{
 		return m_engineBootingState;
 	}
 
-	void SetBootingSequenceState(EngineBootingSequenceState bootingState)
+	void GameEngine::SetBootingSequenceState(EngineBootingSequenceState bootingState)
 	{
-		ENGINE_ASSERT(m_engineBootingState != bootingState, "Booting sequence setting the same state as current state.");
+		ENGINE_ASSERT(m_engineBootingState != bootingState, "Engine booting state is already set to the same value.");
 
 		m_engineBootingState = bootingState;
 	}
 
-	void SetNextBootingSquenceState()
+	void GameEngine::SetNextBootingSquenceState()
 	{
 		EngineBootingSequenceState currentBootingSequenceState = GetBootingSequenceState();
-		if (currentBootingSequenceState < EngineBootingSequenceState::Finished) // change to assert(currentBootingSequenceState < EngineBootingSequenceState::Finished)
-		{
-			EngineBootingSequenceState nextBootingSequenceState = static_cast<EngineBootingSequenceState>(currentBootingSequenceState + 1);
-			SetBootingSequenceState(nextBootingSequenceState);
-		}
+
+		ENGINE_FATAL_ASSERT(currentBootingSequenceState < EngineBootingSequenceState::Finished, "Can't set next booting state as there is none after Finished.");
+			
+		EngineBootingSequenceState nextBootingSequenceState = static_cast<EngineBootingSequenceState>(currentBootingSequenceState + 1);
+		SetBootingSequenceState(nextBootingSequenceState);
 	}
 
-	void FinishBootingSequence()
+	void GameEngine::FinishBootingSequence()
 	{
 		m_engineMainLoopClock.Start();
 		m_engineOneSecondClock.Start();
@@ -83,7 +56,7 @@ namespace Engine
 		ClearEngineCounters();
 	}
 
-	void RunBootingSequence()
+	void GameEngine::RunBootingSequence()
 	{
 		SetBootingSequenceState(EngineBootingSequenceState::Initializing);
 
@@ -98,7 +71,7 @@ namespace Engine
 
 				SetNextBootingSquenceState();
 				break;
-			case EngineBootingSequenceState::FinishingBootingSequence:
+			case EngineBootingSequenceState::Finalizing:
 				FinishBootingSequence();
 
 				SetBootingSequenceState(EngineBootingSequenceState::Finished);
@@ -107,42 +80,46 @@ namespace Engine
 		}
 	}
 
-	void InitDependencies()
+	void GameEngine::InitDependencies()
 	{
 		
 	}
 
-	void PreInit()
-	{
-		Core::Log::Init();
-	}
-
-	void Init()
+	void GameEngine::PreInit()
 	{
 		
 	}
 
-	void Destroy()
+	void GameEngine::Init()
 	{
-		
+		m_appInstance->Init();
 	}
 
-	void Update(double deltaTime)
+	void GameEngine::Close()
+	{
+		m_appInstance->Close();
+	}
+
+	void GameEngine::Update()
 	{
 		m_currentOperationClock.Start();
 
 		/* START UPDATE */
 
+
 		if (m_debugUpdateQueue > 0)
 		{
-			double lastEngineUpdateDuration = Common::DateTime::UInt32ToDouble(m_lastEngineUpdateDuration);
-			double lastRenderedFrameDuration = Common::DateTime::UInt32ToDouble(m_lastRenderedFrameDuration);
+			double lastEngineUpdateDuration		= m_lastEngineUpdateDuration	* Common::DateTime::NANOSECOND_TO_MILISECONDS;
+			double lastRenderedFrameDuration	= m_lastRenderedFrameDuration	* Common::DateTime::NANOSECOND_TO_MILISECONDS;
+			double deltaTime					= m_deltaTime					* Common::DateTime::NANOSECOND_TO_MILISECONDS;
 
-			ENGINE_LOG("[FPS: {}] Game ms: {:.3f}; Render ms: {:.3f}; Previous CPU Tick(DeltaTime) ms: {:.3f}", m_renderedFramesLastSecondCounter, lastEngineUpdateDuration, lastRenderedFrameDuration, deltaTime);
-			ENGINE_LOG("          Game Ticks per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
+			ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; Previous Render Update (DeltaTime) ms: {:.4f}", m_renderedFramesLastSecondCounter, lastEngineUpdateDuration, lastRenderedFrameDuration, deltaTime);
+			ENGINE_LOG("          Game Updates per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
 
 			--m_debugUpdateQueue;
 		}
+
+		m_appInstance->Update();
 
 		/* END UPDATE */
 
@@ -152,7 +129,7 @@ namespace Engine
 		++m_engineUpdatesThisSecondCounter;
 	}
 
-	void Render()
+	void GameEngine::Render()
 	{
 		m_currentOperationClock.Start();
 
@@ -168,7 +145,7 @@ namespace Engine
 		++m_renderedFramesThisSecondCounter;
 	}
 
-	void ClearEngineCounters()
+	void GameEngine::ClearEngineCounters()
 	{
 		m_engineUpdatesLastSecondCounter = m_engineUpdatesThisSecondCounter;
 		m_renderedFramesLastSecondCounter = m_renderedFramesThisSecondCounter;
@@ -177,21 +154,23 @@ namespace Engine
 		m_renderedFramesThisSecondCounter = 0;
 	}
 
-	void Run(IEngineApplication* gameInstance)
-{
+	void GameEngine::EngineRun()
+	{
+		Core::Log::Init();
+
 		// while here just to be safe and see all booting issues before starting main loop
 		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
 		{
 			RunBootingSequence();
 		}
 
-		while (true) // need to create good mechanism for breaking from this while when getting event or anything
+		while (true) // need to implement good mechanism for breaking from this while when getting event or anything
 		{
 			m_engineMainLoopClock.Start();
 
 			if (m_engineUpdateClock.GetDuration() >= m_targetEngineUpdateTime)
 			{
-				Update(m_deltaTime);
+				Update();
 
 				m_engineUpdateClock.Reset();
 			}
@@ -200,17 +179,17 @@ namespace Engine
 			{
 				Render();
 				m_engineRenderFrameClock.Reset();
+
+				m_deltaTime = m_engineMainLoopClock.GetDuration();
 			}
 
-			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::DateTime::NANOSECONDS_IN_SECOND)
+			if (m_engineOneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
 			{
 				ClearEngineCounters();
 				m_debugUpdateQueue++;
 
 				m_engineOneSecondClock.Reset();
 			}
-
-			m_deltaTime = m_engineMainLoopClock.GetDurationAsDouble();
 
 			m_engineMainLoopClock.Reset();
 		}
