@@ -14,11 +14,6 @@ echo ---- Removing build directory...
 
 rd /s /q %buildDir%
 
-if %ERRORLEVEL% NEQ 0 (
-    pause
-    exit
-)
-
 pause
 exit
 
