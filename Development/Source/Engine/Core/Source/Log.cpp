@@ -34,7 +34,7 @@ namespace Engine::Core
 		std::shared_ptr<SinkType> sink = nullptr;
 		if constexpr(std::is_base_of_v<file_sink, SinkType>)
 		{
-			assert(!sinkFilePath.empty());
+			ENGINE_FATAL_ASSERT(!sinkFilePath.empty(), "Sink file path is empty");
 
 			sink = std::make_shared<SinkType>(sinkFilePath.string(), false);
 		}

@@ -40,14 +40,35 @@ namespace Engine::Core
 	};
 }
 
-#define ENGINE_TRACE(...)		::Engine::Core::Log::GetEngineLogger()->trace(__VA_ARGS__)
-#define ENGINE_LOG(...)			::Engine::Core::Log::GetEngineLogger()->info(__VA_ARGS__)
-#define ENGINE_WARN(...)		::Engine::Core::Log::GetEngineLogger()->warn(__VA_ARGS__)
-#define ENGINE_ERROR(...)		::Engine::Core::Log::GetEngineLogger()->error(__VA_ARGS__)
-#define ENGINE_CRITICAL(...)	::Engine::Core::Log::GetEngineLogger()->critical(__VA_ARGS__)
+#define ENGINE_TRACE(...)							::Engine::Core::Log::GetEngineLogger()->trace(__VA_ARGS__)
+#define ENGINE_LOG(...)								::Engine::Core::Log::GetEngineLogger()->info(__VA_ARGS__)
+#define ENGINE_WARN(...)							::Engine::Core::Log::GetEngineLogger()->warn(__VA_ARGS__)
+#define ENGINE_ERROR(...)							::Engine::Core::Log::GetEngineLogger()->error(__VA_ARGS__)
+#define ENGINE_CRITICAL(...)						::Engine::Core::Log::GetEngineLogger()->critical(__VA_ARGS__)
 
-#define GAME_TRACE(...)			::Engine::Core::Log::GetGameLogger()->trace(__VA_ARGS__)
-#define GAME_LOG(...)			::Engine::Core::Log::GetGameLogger()->info(__VA_ARGS__)
-#define GAME_WARN(...)			::Engine::Core::Log::GetGameLogger()->warn(__VA_ARGS__)
-#define GAME_ERROR(...)			::Engine::Core::Log::GetGameLogger()->error(__VA_ARGS__)
-#define GAME_CRITICAL(...)		::Engine::Core::Log::GetGameLogger()->critical(__VA_ARGS__)
+#define GAME_TRACE(...)								::Engine::Core::Log::GetGameLogger()->trace(__VA_ARGS__)
+#define GAME_LOG(...)								::Engine::Core::Log::GetGameLogger()->info(__VA_ARGS__)
+#define GAME_WARN(...)								::Engine::Core::Log::GetGameLogger()->warn(__VA_ARGS__)
+#define GAME_ERROR(...)								::Engine::Core::Log::GetGameLogger()->error(__VA_ARGS__)
+#define GAME_CRITICAL(...)							::Engine::Core::Log::GetGameLogger()->critical(__VA_ARGS__)
+
+#define ENGINE_DEBUG_BREAK()						__debugbreak()
+
+#define ENGINE_STATIC_ASSERT(expression)			static_assert(expression)
+
+#define ENGINE_ASSERT(expression, msg)				if(!((bool) expression))														\
+													{																				\
+														std::string assertMsg = "ASSERT: {}, file {}, line {}, Message: ";			\
+														assertMsg += msg;															\
+														ENGINE_WARN(assertMsg,														\
+														std::string(#expression), std::string(__FILE__), (unsigned)(__LINE__));		\
+													}
+
+#define ENGINE_FATAL_ASSERT(expression, msg)		if(!((bool) expression))														\
+													{																				\
+														std::string assertMsg = "FATAL ASSERT: {}, file {}, line {}, Message: ";	\
+														assertMsg += msg;															\
+														ENGINE_WARN(assertMsg,														\
+														std::string(#expression), std::string(__FILE__), (unsigned)(__LINE__));		\
+														abort();																	\
+													}
