@@ -50,15 +50,15 @@ namespace Engine::Core
 	void Log::Init()
 	{
 		const Common::DateTime::Date currentDate {Common::DateTime::GetCurrentDate()};
-		Common::DateTime::Time currentTime = Common::DateTime::GetCurrentTime();
+		const Common::DateTime::Time currentTime = Common::DateTime::GetCurrentTime();
 
 		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hour, currentTime.minute, currentTime.second);
 
 		const std::string engineLogFilename = fmt::format("engine-{}.log", datetimeString);
-		const std::filesystem::path engineLogPath = logDirectoryPath / engineLogFilename;
+		const std::filesystem::path engineLogPath = logDirectoryPath / "engine" / engineLogFilename;
 
-
-		const std::filesystem::path gameLogPath = logDirectoryPath / "game.log";
+		const std::string gameLogFilename = fmt::format("game-{}.log", datetimeString);
+		const std::filesystem::path gameLogPath = logDirectoryPath / "game" / gameLogFilename;
 
 		InitEngineLogger(engineLogPath);
 		InitGameLogger(gameLogPath);
