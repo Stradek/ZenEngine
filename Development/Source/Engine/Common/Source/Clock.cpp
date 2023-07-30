@@ -8,7 +8,7 @@
 
 using std::chrono::duration_cast;
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
 	Clock::Clock() : m_startTime(time_point::min()) {}
 	Clock::~Clock() {}

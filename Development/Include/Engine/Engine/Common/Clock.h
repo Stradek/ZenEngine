@@ -8,7 +8,7 @@
 #include "Defines.h"
 #include "CommonTime.h"
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
 	class Clock
 	{

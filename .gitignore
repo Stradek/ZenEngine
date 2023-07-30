@@ -7,3 +7,6 @@ Build/CMake-*/
 
 # Compilation output directory
 Binaries/*
+
+# Engine and Game runtime generated
+logs/

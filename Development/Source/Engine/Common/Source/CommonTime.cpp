@@ -22,7 +22,7 @@ using std::chrono::duration_cast;
 	UInt32 is raw representation of Nanoseconds.
 */
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
 	const uint32 ONE_SECOND = 1;
 
@@ -44,9 +44,15 @@ namespace Engine::Common::Time
 	);
 
 
-	time_point GetCurrentTime()
-{
-		return high_res_clock::now();
+	Time GetCurrentTime()
+	{
+		system_time_point now = system_clock::now();
+		time_t systemTime = std::chrono::system_clock::to_time_t(now);
+
+		std::unique_ptr<std::tm> timeStruct = std::make_unique<std::tm>(*std::localtime(&systemTime));
+		Time currentTime{ timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec };
+		
+		return currentTime;
 	}
 
 	/*
@@ -108,4 +114,5 @@ namespace Engine::Common::Time
 		const auto duration = durationInNanoseconds.count();
 		return static_cast<uint32>(duration);
 	}
+
 }

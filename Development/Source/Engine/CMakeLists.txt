@@ -42,9 +42,6 @@ target_include_directories(Engine PUBLIC
 #
 
 add_subdirectory("Common")
-target_link_libraries(Engine PUBLIC Common)
-
 add_subdirectory("Core")
-target_link_libraries(Engine PUBLIC Core)
 
-target_precompile_headers(Core REUSE_FROM Engine)
+target_link_libraries(Engine PUBLIC Core Common)

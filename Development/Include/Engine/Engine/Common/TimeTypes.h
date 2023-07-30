@@ -7,10 +7,14 @@
 
 #include "Defines.h"
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
 	typedef std::chrono::high_resolution_clock					high_res_clock;
+	typedef std::chrono::system_clock							system_clock;
+
 	typedef std::chrono::time_point<high_res_clock>				time_point;
+	typedef std::chrono::time_point<system_clock>				system_time_point;
+
 	typedef std::chrono::seconds								seconds;
 	typedef std::chrono::milliseconds							milliseconds;
 	typedef std::chrono::nanoseconds							nanoseconds;
