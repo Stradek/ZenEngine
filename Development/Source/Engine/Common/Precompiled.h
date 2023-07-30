@@ -9,6 +9,9 @@
 	STD Precompiled Headers
 */
 
+// debug
+#include <cassert>
+
 // math
 #include <ratio>
 

@@ -8,9 +8,10 @@
 #include <Common/CommonDate.h>
 #include <Common/TimeTypes.h>
 
+#include <spdlog/sinks/sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/fwd.h>
 #include <spdlog/sinks/basic_file_sink.h>
+#include <spdlog/fwd.h>
 #include <fmt/core.h>
 
 namespace Engine::Core
@@ -25,29 +26,56 @@ namespace Engine::Core
 	std::shared_ptr<spdlog::logger> Log::s_engineLogger;
 	std::shared_ptr<spdlog::logger> Log::s_gameLogger;
 
-	void Log::InitEngineLogger(const std::filesystem::path coreLogFilePath)
+	template<class SinkType>
+	std::shared_ptr<SinkType> Log::CreateSink(const spdlog::level::level_enum level, const std::string pattern, const std::filesystem::path sinkFilePath)
 	{
-		auto outputSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		outputSink->set_level(spdlog::level::debug);
-		outputSink->set_pattern(defaultLoggingPattern);
+		static_assert(std::is_base_of_v<spdlog::sinks::sink, SinkType>);
 
-		auto logFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(coreLogFilePath.string(), false);
-		logFileSink->set_level(spdlog::level::trace);
+		std::shared_ptr<SinkType> sink = nullptr;
+		if constexpr(std::is_base_of_v<file_sink, SinkType>)
+		{
+			assert(!sinkFilePath.empty());
 
-		s_engineLogger = std::make_shared<spdlog::logger>(spdlog::logger("EngineLogger", { outputSink, logFileSink }));
+			sink = std::make_shared<SinkType>(sinkFilePath.string(), false);
+		}
+		else
+		{
+			sink = std::make_shared<SinkType>();
+		}
+
+		sink->set_level(level);
+		sink->set_pattern(pattern);
+
+		return sink;
+	}
+
+	std::shared_ptr<Log::output_sink> Log::CreateOutputSink(const spdlog::level::level_enum level)
+	{
+		auto outputSink = CreateSink<output_sink>(level, defaultLoggingPattern);
+		return outputSink;
+	}
+
+	std::shared_ptr<Log::file_sink> Log::CreateFileSink(const spdlog::level::level_enum level, const std::filesystem::path sinkFilePath)
+	{
+		auto fileSink = CreateSink<file_sink>(spdlog::level::trace, defaultLoggingPattern, sinkFilePath);
+		return fileSink;
+	}
+
+	void Log::InitEngineLogger(const std::filesystem::path engineLogFilePath)
+	{
+		const auto outputSink	= CreateOutputSink(spdlog::level::debug);
+		const auto fileSink		= CreateFileSink(spdlog::level::debug, engineLogFilePath);
+
+		s_engineLogger = std::make_shared<spdlog::logger>(spdlog::logger("EngineLogger", { outputSink, fileSink }));
 		s_engineLogger->set_level(spdlog::level::trace);
 	}
 
 	void Log::InitGameLogger(const std::filesystem::path gameLogFilePath)
 	{
-		auto outputSink = std::make_shared<spdlog::sinks::stdout_color_sink_mt>();
-		outputSink->set_level(spdlog::level::info);
-		outputSink->set_pattern(defaultLoggingPattern);
+		const auto outputSink = CreateOutputSink(spdlog::level::info);
+		const auto fileSink = CreateFileSink(spdlog::level::debug, gameLogFilePath);
 
-		auto logFileSink = std::make_shared<spdlog::sinks::basic_file_sink_mt>(gameLogFilePath.string(), false);
-		logFileSink->set_level(spdlog::level::debug);
-
-		s_gameLogger = std::make_shared<spdlog::logger>(spdlog::logger("GameLogger", {outputSink, logFileSink}));
+		s_gameLogger = std::make_shared<spdlog::logger>(spdlog::logger("GameLogger", {outputSink, fileSink}));
 		s_gameLogger->set_level(spdlog::level::debug);
 	}
 
@@ -67,4 +95,5 @@ namespace Engine::Core
 		InitEngineLogger(engineLogPath);
 		InitGameLogger(gameLogPath);
 	}
+
 }

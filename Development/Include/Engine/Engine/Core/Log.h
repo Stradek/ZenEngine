@@ -8,6 +8,8 @@
 #include <spdlog/logger.h>
 
 #include <filesystem>
+#include <spdlog/sinks/stdout_color_sinks.h>
+#include <spdlog/sinks/basic_file_sink.h>
 
 namespace Engine::Core
 {
@@ -19,6 +21,16 @@ namespace Engine::Core
 		inline static std::shared_ptr<spdlog::logger>& Log::GetGameLogger() { return s_gameLogger; }
 
 	private:
+		typedef spdlog::sinks::stdout_color_sink_mt output_sink;
+		typedef spdlog::sinks::basic_file_sink_mt file_sink;
+
+	private:
+		template<class SinkType> 
+		static std::shared_ptr<SinkType>	CreateSink(const spdlog::level::level_enum level, const std::string pattern, const std::filesystem::path fileSinkPath = "");
+
+		static std::shared_ptr<output_sink>	CreateOutputSink(const spdlog::level::level_enum level);
+		static std::shared_ptr<file_sink>	CreateFileSink(const spdlog::level::level_enum level, const std::filesystem::path fileSinkPath);
+
 		static void InitEngineLogger(const std::filesystem::path coreLogPath);
 		static void InitGameLogger(const std::filesystem::path gameLogPath);
 
