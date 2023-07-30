@@ -17,6 +17,9 @@ namespace Engine::Core
 {
 	// need to replace this constant data later with some kind of config file for engine and it's subsystems
 	const std::filesystem::path logDirectoryPath = "logs/";
+	const std::filesystem::path engineLogDirectoryPath = logDirectoryPath / "engine";
+	const std::filesystem::path gameLogDirectoryPath = logDirectoryPath / "game";
+
 	const inline std::string defaultLoggingPattern = "[%H:%M:%S] > %v";
 
 	std::shared_ptr<spdlog::logger> Log::s_engineLogger;
@@ -56,10 +59,10 @@ namespace Engine::Core
 		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hour, currentTime.minute, currentTime.second);
 
 		const std::string engineLogFilename = fmt::format("engine-{}.log", datetimeString);
-		const std::filesystem::path engineLogPath = logDirectoryPath / "engine" / engineLogFilename;
+		const std::filesystem::path engineLogPath = engineLogDirectoryPath / engineLogFilename;
 
 		const std::string gameLogFilename = fmt::format("game-{}.log", datetimeString);
-		const std::filesystem::path gameLogPath = logDirectoryPath / "game" / gameLogFilename;
+		const std::filesystem::path gameLogPath = gameLogDirectoryPath / gameLogFilename;
 
 		InitEngineLogger(engineLogPath);
 		InitGameLogger(gameLogPath);
