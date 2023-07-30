@@ -15,15 +15,22 @@
 	UInt32 is raw representation of Nanoseconds.
 */
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
+	struct Time
+	{
+		int hour;
+		int minute;
+		int second;
+	};
+
 	extern const uint32 ONE_SECOND;
 	extern const uint32 NANOSECONDS_IN_SECOND;
 	extern const uint32 NANOSECONDS_IN_MILISECOND;
 	extern const double SECONDS_IN_NANOSECOND;
 	extern const double MILISECONDS_IN_NANOSECOND;
 
-	extern time_point GetCurrentTime();
+	extern Time GetCurrentTime(); 
 
 	extern double NanosecondsToDouble(const nanoseconds durationInNanoseconds);
 	extern double UInt32ToDouble(const uint32 durationInNanoseconds);

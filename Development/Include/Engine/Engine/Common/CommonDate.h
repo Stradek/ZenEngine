@@ -5,7 +5,14 @@
 
 #pragma once
 
-namespace Engine::Core
+namespace Engine::Common::DateTime
 {
-	void test_spdlog();
+	struct Date
+	{
+		int year;
+		int month;
+		int day;
+	};
+
+	extern Date GetCurrentDate();
 }
