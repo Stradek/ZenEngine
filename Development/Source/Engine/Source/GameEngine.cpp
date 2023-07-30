@@ -95,11 +95,6 @@ namespace Engine
 		m_appInstance->Init();
 	}
 
-	void GameEngine::Close()
-	{
-		m_appInstance->Close();
-	}
-
 	void GameEngine::Update()
 	{
 		m_currentOperationClock.Start();
@@ -193,5 +188,10 @@ namespace Engine
 
 			m_engineMainLoopClock.Reset();
 		}
+	}
+
+	GameEngine::~GameEngine()
+	{
+		m_appInstance->Close();
 	}
 }

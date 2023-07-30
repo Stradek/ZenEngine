@@ -15,7 +15,8 @@ namespace Engine
 		static void Run(std::unique_ptr<IEngineApplication> appInstance);
 
 	private:
-		GameEngine(std::unique_ptr<IEngineApplication>  appInstance);
+		GameEngine(std::unique_ptr<IEngineApplication> appInstance);
+		~GameEngine();
 
 		enum EngineBootingSequenceState
 		{
@@ -70,7 +71,5 @@ namespace Engine
 		void Render();
 
 		void ClearEngineCounters();
-
-		void Close();
 	};
 }
