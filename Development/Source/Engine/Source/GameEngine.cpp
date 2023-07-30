@@ -56,7 +56,7 @@ namespace Engine
 
 	void SetBootingSequenceState(EngineBootingSequenceState bootingState)
 	{
-		// assert(m_engineBootingState != bootingState)
+		ENGINE_ASSERT(m_engineBootingState != bootingState, "Booting sequence setting the same state as current state.");
 
 		m_engineBootingState = bootingState;
 	}
