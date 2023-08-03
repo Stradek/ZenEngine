@@ -30,7 +30,7 @@ jobs:
         pip install --upgrade pip
         pip install -r ./gpt-code-review-py/requirements.txt
     - name: Execute AI Code Review script
-      run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id $PR_NUMBER --repo_url $REPO_URL --output output.txt
+      run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id ${{ env.PR_NUMBER }} --repo_url ${{ env.REPO_URL }} --output output.txt
     - name: Comment on PR with output from AI Code Review script
       shell: pwsh
       run: |
