@@ -2,7 +2,7 @@ name: AI Code Review
 
 on:
   pull_request:
-    types: [opened, edited]
+    types: [opened, edited, synchronize]
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,6 +28,9 @@ jobs:
       run: |
         pip install --upgrade pip
         pip install -r ./gpt-code-review-py/requirements.txt
+    - name: Authenticate with GitHub CLI
+      shell: pwsh
+      run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
     - name: Execute AI Code Review script
       run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id $PR_NUMBER --repo_url $REPO_URL --output output.txt
     - name: Comment on PR with output from AI Code Review script
