@@ -12,11 +12,7 @@ jobs:
     generate_code_review:
       runs_on: windows-latest
       steps:
-      - env:
-         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-         OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
-         PR_NUMBER: ${{ github.event.number }}
-         REPO_URL: ${{ github.event.repository.html_url }}
+      - 
       - name: Checkout AI Code Review repository
         uses: actions/checkout@v2
         with:
@@ -31,9 +27,14 @@ jobs:
           pip install --upgrade pip
           pip install -r ./gpt-code-review-py/requirements.txt
       - name: Execute AI Code Review script
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          REPO_URL: ${{ github.event.repository.html_url }}
         run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id $PR_NUMBER --repo_url $REPO_URL --output output.txt
       - name: Comment on PR with output from AI Code Review script
         run: |
           $BODY = Get-Content -Path ./gpt-code-review-py/output.txt
-          gh pr comment $PR_NUMBER --body "$BODY"
+          gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
         shell: pwsh
