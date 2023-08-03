@@ -87,6 +87,8 @@ namespace Engine
 		TestArtificialIntelligence();
 		// This is crutial for AAA games
 		DisableGameCrashesAndBugs();
+
+		AddAdditionalMagic();
 	}
 
 	void GameEngine::PreInit()
