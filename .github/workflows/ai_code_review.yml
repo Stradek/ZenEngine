@@ -38,4 +38,4 @@ jobs:
       shell: pwsh
       run: |
         $BODY = Get-Content -Path ./gpt-code-review-py/output.txt
-        gh pr comment ${{ env.PR_NUMBER }} --body "$BODY" --repo ${{ github.repository_owner }}/${{ github.repository }}
+        gh pr comment ${{ env.PR_NUMBER }} --body "$BODY" --repo ${{ github.repository }}
