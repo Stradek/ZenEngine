@@ -34,5 +34,6 @@ jobs:
         run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id $PR_NUMBER --repo_url $REPO_URL --output output.txt
       - name: Comment on PR with output from AI Code Review script
         run: |
-        content=$(./gpt-code-review-py/output.txt)
-        gh pr comment $PR_NUMBER --body "$content"
+          $BODY = Get-Content -Path ./gpt-code-review-py/output.txt
+          gh pr comment $PR_NUMBER --body "$BODY"
+        shell: pwsh
