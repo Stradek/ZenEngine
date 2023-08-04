@@ -6,7 +6,6 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
   PR_NUMBER: ${{ github.event.pull_request.number }}
   REPO_URL: ${{ github.event.repository.html_url }}
 
@@ -16,13 +15,13 @@ jobs:
     
     steps:
     - name: Checkout AI Code Review repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
       with:
         repository: Stradek/gpt-code-review-py
         token: ${{ secrets.MY_PERSONAL_ACCESS_TOKEN }}
         path: ./gpt-code-review-py
     - name: Set up Python
-      uses: actions/setup-python@v2
+      uses: actions/setup-python@v3
       with:
         python-version: 3.11
     - name: Install dependencies
@@ -30,9 +29,12 @@ jobs:
         pip install --upgrade pip
         pip install -r ./gpt-code-review-py/requirements.txt
     - name: Execute AI Code Review script
-      run: python ./gpt-code-review-py/src/gpt-code-review-py/main.py --pr_id $PR_NUMBER --repo_url $REPO_URL --output output.txt
+      env:
+        OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      run: |
+        cd ./gpt-code-review-py/
+        python ./src/gpt-code-review-py/main.py --pr_id ${{ env.PR_NUMBER }} --repo_url ${{ env.REPO_URL }} --output output.txt
     - name: Comment on PR with output from AI Code Review script
       shell: pwsh
       run: |
-        $BODY = Get-Content -Path ./gpt-code-review-py/output.txt
-        gh pr comment ${{ github.event.pull_request.number }} --body "$BODY"
+        gh pr review ${{ env.PR_NUMBER }} --body-file ./gpt-code-review-py/output.txt --repo ${{ github.repository }} --comment
