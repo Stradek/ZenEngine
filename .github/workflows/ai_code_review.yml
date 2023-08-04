@@ -37,4 +37,5 @@ jobs:
     - name: Comment on PR with output from AI Code Review script
       shell: pwsh
       run: |
-        gh pr review ${{ env.PR_NUMBER }} --body-file ./gpt-code-review-py/output.txt --repo ${{ github.repository }} --comment
+        $BODY = Get-Content -Path ./gpt-code-review-py/output.txt
+        gh pr comment ${{ env.PR_NUMBER }} --body "$BODY" --repo ${{ github.repository }}
