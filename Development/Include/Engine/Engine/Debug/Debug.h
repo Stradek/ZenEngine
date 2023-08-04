@@ -5,8 +5,10 @@
 
 #pragma once
 
-#include "Defines.h"
-#include "CommonTime.h"
-#include "CommonDate.h"
-#include "TimeTypes.h"
-#include "Clock.h"
+namespace Engine::Debug
+{
+	namespace Performance
+	{
+		// this is the place to integrate tracy
+	}
+}

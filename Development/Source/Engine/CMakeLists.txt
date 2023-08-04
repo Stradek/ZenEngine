@@ -43,5 +43,6 @@ target_include_directories(Engine PUBLIC
 
 add_subdirectory("Common")
 add_subdirectory("Core")
+add_subdirectory("Debug")
 
 target_link_libraries(Engine PUBLIC Core Common)

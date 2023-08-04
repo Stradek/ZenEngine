@@ -28,29 +28,26 @@ namespace Engine
 
 		std::unique_ptr<IEngineApplication> m_appInstance;
 
-		Common::DateTime::Clock m_engineMainLoopClock;
-		Common::DateTime::Clock m_engineUpdateClock;
-		Common::DateTime::Clock m_engineRenderFrameClock;
+		Common::DateTime::Clock m_mainLoopClock;
+		Common::DateTime::Clock m_timeSinceUpdateClock;
+		Common::DateTime::Clock m_timeSinceRenderFrameClock;
 
-		Common::DateTime::Clock m_currentOperationClock;
-		Common::DateTime::Clock m_engineOneSecondClock;
+		Common::DateTime::Clock m_oneSecondClock;
 
 		EngineBootingSequenceState m_engineBootingState = NotStarted;
 
-		static constexpr uint m_targetEngineUpdatesPerSecond	= 20;
+		static constexpr uint m_targetUpdatesPerSecond			= 20;
 		static constexpr uint m_targetFramesPerSecond			= 60;
-		static constexpr uint32 m_targetEngineUpdateTime		= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetEngineUpdatesPerSecond);
-		static constexpr uint32 m_targetRenderFrameTime			= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetFramesPerSecond);
+		static constexpr uint32 m_targetUpdateFrequency			= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
+		static constexpr uint32 m_targetRenderFrameFrequency	= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetFramesPerSecond);
 
-		uint32 m_deltaTime	= m_targetRenderFrameTime;
+		uint32 m_deltaTime	= m_targetRenderFrameFrequency;
 
-		uint m_engineUpdatesThisSecondCounter	= 0;
+		uint m_currentSecondUpdatesCount		= 0;
 		uint m_engineUpdatesLastSecondCounter	= 0;
-		uint32 m_lastEngineUpdateDuration		= 0;
 
-		uint m_renderedFramesThisSecondCounter	= 0;
+		uint m_currentSecondRenderFramesCount	= 0;
 		uint m_renderedFramesLastSecondCounter	= 0;
-		uint32 m_lastRenderedFrameDuration		= 0;
 
 		uint m_debugUpdateQueue = 0;
 

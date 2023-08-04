@@ -5,9 +5,6 @@
 
 #include "Log.h"
 
-#include <Common/CommonDate.h>
-#include <Common/TimeTypes.h>
-
 #include <spdlog/sinks/sink.h>
 #include <spdlog/sinks/stdout_color_sinks.h>
 #include <spdlog/sinks/basic_file_sink.h>
@@ -34,7 +31,7 @@ namespace Engine::Core
 		std::shared_ptr<SinkType> sink = nullptr;
 		if constexpr(std::is_base_of_v<file_sink, SinkType>)
 		{
-			ENGINE_FATAL_ASSERT(!sinkFilePath.empty(), "Sink file path is empty");
+			assert(!sinkFilePath.empty(), "Sink file path is empty");
 
 			sink = std::make_shared<SinkType>(sinkFilePath.string(), false);
 		}

@@ -36,3 +36,4 @@
 */
 
 #include <Common/Common.h>
+#include <Core/Log.h>

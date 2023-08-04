@@ -16,12 +16,18 @@ namespace Engine::Common::DateTime
 		Clock();
 		~Clock();
 
+		bool IsRunning();
+
 		uint32 GetDuration();
 		double GetDurationAsDouble();
 
 		void Start();
 		void Stop();
 		void Reset();
+
+
+		uint32 GetStartTime();
+		uint32 GetEndTime();
 
 	private:
 		time_point m_startTime;
