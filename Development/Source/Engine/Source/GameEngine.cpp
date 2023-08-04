@@ -82,11 +82,7 @@ namespace Engine
 
 	void GameEngine::InitDependencies()
 	{
-		InitializePhysicsEngine();
-		InitializeGraphicsEngine();
-		TestArtificialIntelligence();
-		// This is crutial for AAA games
-		DisableGameCrashesAndBugs();
+		
 	}
 
 	void GameEngine::PreInit()
