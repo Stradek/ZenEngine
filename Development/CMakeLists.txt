@@ -17,8 +17,18 @@ set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External)
 set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog)
 set(FMT_ROOT ${EXTERNAL_DIR}/fmt)
 
+set(TRACY_ROOT ${EXTERNAL_DIR}/tracy)
+set(TRACY_HEADERS ${TRACY_ROOT}/public)
+
+#
+# Programs
+#
+
+add_subdirectory(Programs/TracyProfilerTool)
+
 #
 # Sources
 #
 
 add_subdirectory(Source)
+

@@ -65,7 +65,7 @@ namespace Engine
 		void Init();
 
 		void Update();
-		void Render();
+		void RenderFrame();
 
 		void ClearEngineCounters();
 	};

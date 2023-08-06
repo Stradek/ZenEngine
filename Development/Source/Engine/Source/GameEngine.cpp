@@ -8,9 +8,10 @@
 #include <IEngineApplication.h>
 #include <Debug/Debug.h>
 
+#include <tracy/Tracy.hpp>
+
 namespace Engine
 {
-
 	void GameEngine::Run(std::unique_ptr<IEngineApplication> appInstance)
 	{
 		GameEngine engineInstance = GameEngine(std::move(appInstance));
@@ -101,7 +102,7 @@ namespace Engine
 
 	void GameEngine::Update()
 	{
-		/* START UPDATE */
+		FrameMarkStart(sl_Engine_Update);
 
 		if (m_debugUpdateQueue > 0)
 		{
@@ -115,18 +116,18 @@ namespace Engine
 
 		m_appInstance->Update();
 
-		/* END UPDATE */
 		++m_currentSecondUpdatesCount;
+		FrameMarkEnd(sl_Engine_Update);
 	}
 
-	void GameEngine::Render()
+	void GameEngine::RenderFrame()
 	{
-		/* START RENDER */
+		FrameMarkStart(sl_Engine_RenderFrame);
 
 
 
-		/* END RENDER */
 		++m_currentSecondRenderFramesCount;
+		FrameMarkEnd(sl_Engine_RenderFrame);
 	}
 
 	void GameEngine::EngineRun()
@@ -153,7 +154,8 @@ namespace Engine
 			{
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
-				Render();
+				RenderFrame();
+				FrameMark;
 				m_timeSinceRenderFrameClock.Reset();
 			}
 

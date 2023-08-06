@@ -10,12 +10,7 @@ include_guard(GLOBAL)
 #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(CORE_INCLUDE_DIR 
-    ${ENGINE_INCLUDE_DIR}/Core
-    
-    # Dependencies
-    ${ENGINE_INCLUDE_DIR}
-)
+set(CORE_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Core)
 
 set(CORE_INCLUDE_DIR ${CORE_INCLUDE_DIR} PARENT_SCOPE)
 
@@ -39,6 +34,9 @@ add_library(Core
 set_property(TARGET Core PROPERTY FOLDER "Engine")
 target_include_directories(Core PUBLIC
     ${CORE_INCLUDE_DIR}
+        
+    # Dependencies
+    ${ENGINE_INCLUDE_DIR}
 )
 
 #
