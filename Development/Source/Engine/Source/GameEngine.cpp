@@ -104,6 +104,14 @@ namespace Engine
 	{
 		FrameMarkStart(sl_Engine_Update);
 
+		if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
+		{
+			ClearEngineCounters();
+			m_debugUpdateQueue++;
+
+			m_oneSecondClock.Reset();
+		}
+
 		if (m_debugUpdateQueue > 0)
 		{
 			double deltaTime = m_deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
@@ -157,13 +165,6 @@ namespace Engine
 				m_timeSinceRenderFrameClock.Reset();
 			}
 
-			if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
-			{
-				ClearEngineCounters();
-				m_debugUpdateQueue++;
-
-				m_oneSecondClock.Reset();
-			}
 
 		}
 	}
