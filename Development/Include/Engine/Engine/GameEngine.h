@@ -34,10 +34,10 @@ namespace Engine
 
 		EngineBootingSequenceState m_engineBootingState = NotStarted;
 
-		static constexpr uint m_targetUpdatesPerSecond			= 20;
-		static constexpr uint m_targetFramesPerSecond			= 60;
-		static constexpr uint32 m_targetUpdateFrequency			= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
-		static constexpr uint32 m_targetRenderFrameFrequency	= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetFramesPerSecond);
+		const uint m_targetUpdatesPerSecond			= 20;
+		const uint m_targetFramesPerSecond			= 60;
+		const uint32 m_targetUpdateFrequency		= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
+		const uint32 m_targetRenderFrameFrequency	= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetFramesPerSecond);
 
 		uint32 m_deltaTime	= m_targetRenderFrameFrequency;
 
