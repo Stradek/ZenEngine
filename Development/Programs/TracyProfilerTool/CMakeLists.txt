@@ -51,8 +51,8 @@ endif()
 
 set(TRACY_PROFILER_TOOL_INCLUDE_DIR 
     ${TRACY_ROOT}/imgui
-    ${TRACY_ROOT}/vcpkg_installed/x64-windows-static/include
-    ${TRACY_ROOT}/vcpkg_installed/x64-windows-static/include/capstone
+    ${TRACY_DEPENDENCIES_HEADERS}
+    ${TRACY_DEPENDENCIES_HEADERS}/capstone
 )
 
 set(TRACY_SOURCE_FILES
@@ -310,7 +310,7 @@ set(TRACY_HEADER_FILES
 #
 
 link_directories(
-    ${TRACY_ROOT}/vcpkg_installed/x64-windows-static/debug/lib
+    ${TRACY_DEPENDENCIES_ROOT}/debug/lib
 )
 
 add_executable(TracyProfilerTool WIN32
