@@ -21,11 +21,11 @@ typedef std::uint64_t uint64;
 */
 
 #if defined(CMAKE_CONFIG_DEBUG)
-    #define CONFIG_DEBUG "Debug"
-    #define CONFIG_CURRENT CONFIG_DEBUG
+    #define CONFIG_DEBUG 
+    #define CONFIG_CURRENT "Debug"
 #elif defined(CMAKE_CONFIG_RELEASE)
-    #define CONFIG_RELEASE "Release"
-    #define CONFIG_CURRENT CONFIG_RELEASE
+    #define CONFIG_RELEASE 
+    #define CONFIG_CURRENT "Release"
 #else
     #error Unknown configuration!
 #endif

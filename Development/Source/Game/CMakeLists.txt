@@ -29,8 +29,8 @@ get_source_files(GAME_SOURCE_FILES 1 ${SOURCE_DIR})
 get_header_files(GAME_HEADER_FILES 1 ${GAME_INCLUDE_DIR})
 
 set(GAME_FILES 
-    "${GAME_SOURCE_FILES}"
-    "${GAME_HEADER_FILES}"
+    ${GAME_SOURCE_FILES}
+    ${GAME_HEADER_FILES}
 )
 
 #
@@ -50,8 +50,11 @@ target_include_directories(Game PRIVATE
 # Dependencies
 #
 
-# Engine
+# Engine dependency
 target_link_libraries(Game PRIVATE Engine)
 target_include_directories(Game PRIVATE
     ${MAIN_ENGINE_INCLUDE_DIR}
 )
+
+# Tracy dependency
+target_link_libraries(Game PRIVATE TracyProfilerClient)

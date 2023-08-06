@@ -10,12 +10,7 @@ include_guard(GLOBAL)
 #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(DEBUG_INCLUDE_DIR 
-    ${ENGINE_INCLUDE_DIR}/Debug
-    
-    # Dependencies
-    ${ENGINE_INCLUDE_DIR}
-)
+set(DEBUG_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Debug)
 
 set(DEBUG_INCLUDE_DIR ${DEBUG_INCLUDE_DIR} PARENT_SCOPE)
 
@@ -39,6 +34,9 @@ add_library(Debug
 set_property(TARGET Debug PROPERTY FOLDER "Engine")
 target_include_directories(Debug PUBLIC
     ${DEBUG_INCLUDE_DIR}
+        
+    # Dependencies
+    ${ENGINE_INCLUDE_DIR}
 )
 
 #

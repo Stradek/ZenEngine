@@ -3,11 +3,7 @@
 	Software distributed under the permissive MIT License.
 */
 
-#pragma once
-
-#include "Defines.h"
-#include "CommonTime.h"
-#include "CommonDate.h"
-#include "TimeTypes.h"
-#include "Clock.h"
 #include "TracingFunctionNames.h"
+
+const char* const sl_Engine_Update = "Engine_Update";
+const char* const sl_Engine_RenderFrame = "Engine_RenderFrame";

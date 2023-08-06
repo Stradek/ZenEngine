@@ -10,6 +10,10 @@ function(custom_cmake_setup)
     # Options
     #
 
+    # !!!Important Note!!!
+    # 
+    # Do not use (/ZI) as it is needed to be disabled for Tracy support 
+
     # Specify required C++ standard version.
     set(CMAKE_CXX_STANDARD 17 PARENT_SCOPE)
     set(CMAKE_CXX_STANDARD_REQUIRED ON PARENT_SCOPE)

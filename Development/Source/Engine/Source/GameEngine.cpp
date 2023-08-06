@@ -8,9 +8,10 @@
 #include <IEngineApplication.h>
 #include <Debug/Debug.h>
 
+#include <tracy/Tracy.hpp>
+
 namespace Engine
 {
-
 	void GameEngine::Run(std::unique_ptr<IEngineApplication> appInstance)
 	{
 		GameEngine engineInstance = GameEngine(std::move(appInstance));
@@ -101,7 +102,15 @@ namespace Engine
 
 	void GameEngine::Update()
 	{
-		/* START UPDATE */
+		FrameMarkStart(sl_Engine_Update);
+
+		if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
+		{
+			ClearEngineCounters();
+			m_debugUpdateQueue++;
+
+			m_oneSecondClock.Reset();
+		}
 
 		if (m_debugUpdateQueue > 0)
 		{
@@ -115,18 +124,18 @@ namespace Engine
 
 		m_appInstance->Update();
 
-		/* END UPDATE */
 		++m_currentSecondUpdatesCount;
+		FrameMarkEnd(sl_Engine_Update);
 	}
 
-	void GameEngine::Render()
+	void GameEngine::RenderFrame()
 	{
-		/* START RENDER */
+		FrameMarkStart(sl_Engine_RenderFrame);
 
 
 
-		/* END RENDER */
 		++m_currentSecondRenderFramesCount;
+		FrameMarkEnd(sl_Engine_RenderFrame);
 	}
 
 	void GameEngine::EngineRun()
@@ -141,8 +150,6 @@ namespace Engine
 
 		while (true) // need to implement good mechanism for breaking from this while when getting event or anything
 		{
-			m_mainLoopClock.Start();
-
 			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency || !m_timeSinceUpdateClock.IsRunning())
 			{
 				Update();
@@ -153,19 +160,12 @@ namespace Engine
 			{
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
-				Render();
+				RenderFrame();
+				FrameMark;
 				m_timeSinceRenderFrameClock.Reset();
 			}
 
-			if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
-			{
-				ClearEngineCounters();
-				m_debugUpdateQueue++;
 
-				m_oneSecondClock.Reset();
-			}
-
-			m_mainLoopClock.Reset();
 		}
 	}
 

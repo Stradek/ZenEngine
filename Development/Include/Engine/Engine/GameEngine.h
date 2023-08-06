@@ -28,10 +28,8 @@ namespace Engine
 
 		std::unique_ptr<IEngineApplication> m_appInstance;
 
-		Common::DateTime::Clock m_mainLoopClock;
 		Common::DateTime::Clock m_timeSinceUpdateClock;
 		Common::DateTime::Clock m_timeSinceRenderFrameClock;
-
 		Common::DateTime::Clock m_oneSecondClock;
 
 		EngineBootingSequenceState m_engineBootingState = NotStarted;
@@ -65,7 +63,7 @@ namespace Engine
 		void Init();
 
 		void Update();
-		void Render();
+		void RenderFrame();
 
 		void ClearEngineCounters();
 	};
