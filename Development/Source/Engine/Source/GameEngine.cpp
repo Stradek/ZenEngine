@@ -142,8 +142,6 @@ namespace Engine
 
 		while (true) // need to implement good mechanism for breaking from this while when getting event or anything
 		{
-			m_mainLoopClock.Start();
-
 			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency || !m_timeSinceUpdateClock.IsRunning())
 			{
 				Update();
@@ -167,7 +165,6 @@ namespace Engine
 				m_oneSecondClock.Reset();
 			}
 
-			m_mainLoopClock.Reset();
 		}
 	}
 
