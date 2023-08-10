@@ -36,6 +36,13 @@ namespace Engine::Common::DateTime
 		return currentTime;
 	}
 
+	extern time_t GetCurrentTimeRaw()
+	{
+		system_time_point now = system_clock::now();
+		time_t timeNow = std::chrono::system_clock::to_time_t(now);
+		return timeNow;
+	}
+
 	/*
 		To Double
 	*/

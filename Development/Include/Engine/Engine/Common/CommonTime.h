@@ -38,7 +38,8 @@ namespace Engine::Common::DateTime
 		(double)nanoseconds(1).count() / MILISECOND_TO_NANOSECONDS
 	);
 
-	extern Time GetCurrentTime(); 
+	extern Time GetCurrentTime();
+	extern time_t GetCurrentTimeRaw();
 
 	extern double NanosecondsToDouble(const nanoseconds durationInNanoseconds);
 	extern double UInt32ToDouble(const uint32 durationInNanoseconds);
