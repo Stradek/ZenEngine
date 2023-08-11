@@ -50,19 +50,14 @@ namespace Engine
 		uint m_currentSecondRenderFramesCount	= 0;
 		uint m_renderedFramesLastSecondCounter	= 0;
 
+#ifdef _DEBUG
 		uint m_debugUpdateQueue = 0;
 
 		Debug::DebugManager m_debugManager;
 		Debug::Performance::NameToRawTime m_profiledFunctionNameToAvgDuration;
+#endif
 
 		void EngineRun();
-
-		EngineBootingSequenceState GetBootingSequenceState();
-		void SetBootingSequenceState(EngineBootingSequenceState bootingState);
-		void SetNextBootingSquenceState();
-		void FinishBootingSequence();
-
-		void RunBootingSequence();
 
 		void StartUp();
 
@@ -86,5 +81,10 @@ namespace Engine
 	m_debugManager.GetPerformanceProfiler().FrameProfilingEnd(name);	\
 	FrameMarkEnd(name);												\
 }
+
+#else
+
+#define ENGINE_FRAME_MARK_START(x)
+#define ENGINE_FRAME_MARK_END(x)
 
 #endif
