@@ -55,9 +55,7 @@ namespace Engine
 			switch (GetBootingSequenceState())
 			{
 			case EngineBootingSequenceState::Initializing:
-				InitDependencies();
-				PreInit();
-				Init();
+				StartUp();
 
 				SetNextBootingSquenceState();
 				break;
@@ -70,19 +68,12 @@ namespace Engine
 		}
 	}
 
-	void GameEngine::InitDependencies()
+	void GameEngine::StartUp()
 	{
-		
-	}
+		m_debugManager.StartUp();
 
-	void GameEngine::PreInit()
-	{
-		
-	}
 
-	void GameEngine::Init()
-	{
-		m_appInstance->Init();
+		m_appInstance->StartUp();
 	}
 
 	void GameEngine::FinishBootingSequence()
@@ -102,7 +93,24 @@ namespace Engine
 
 	void GameEngine::Update()
 	{
-		FrameMarkStart(sl_Engine_Update);
+		ENGINE_FRAME_MARK_START(sl_Engine_Update);
+
+		if (m_debugUpdateQueue > 0)
+		{
+			m_profiledFunctionNameToAvgDuration = m_debugManager.GetPerformanceProfiler().GetAvgFrameProfilingData();
+			double deltaTime = m_deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
+			
+			time_t engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
+			time_t engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
+
+			double engineUpdateTime = Common::DateTime::UInt32ToDouble(engineUpdateTimeRaw);
+			double engineRenderFrameTime = Common::DateTime::UInt32ToDouble(engineRenderFrameTimeRaw);
+
+			ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; DeltaTime ms: {:.4f}", m_renderedFramesLastSecondCounter, engineUpdateTime, engineRenderFrameTime, deltaTime);
+			ENGINE_LOG("          Game Updates per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
+
+			--m_debugUpdateQueue;
+		}
 
 		if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
 		{
@@ -112,30 +120,20 @@ namespace Engine
 			m_oneSecondClock.Reset();
 		}
 
-		if (m_debugUpdateQueue > 0)
-		{
-			double deltaTime = m_deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
-
-			ENGINE_LOG("[FPS: {}] Game Update ms: [WIP]; Render ms: [WIP]; Previous Render Update (DeltaTime) ms: {:.4f}", m_renderedFramesLastSecondCounter, deltaTime);
-			ENGINE_LOG("          Game Updates per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
-
-			--m_debugUpdateQueue;
-		}
-
 		m_appInstance->Update();
 
 		++m_currentSecondUpdatesCount;
-		FrameMarkEnd(sl_Engine_Update);
+		ENGINE_FRAME_MARK_END(sl_Engine_Update);
 	}
 
 	void GameEngine::RenderFrame()
 	{
-		FrameMarkStart(sl_Engine_RenderFrame);
+		ENGINE_FRAME_MARK_START(sl_Engine_RenderFrame);
 
 
 
 		++m_currentSecondRenderFramesCount;
-		FrameMarkEnd(sl_Engine_RenderFrame);
+		ENGINE_FRAME_MARK_END(sl_Engine_RenderFrame);
 	}
 
 	void GameEngine::EngineRun()
@@ -164,13 +162,16 @@ namespace Engine
 				FrameMark;
 				m_timeSinceRenderFrameClock.Reset();
 			}
-
-
 		}
+	}
+
+	void GameEngine::ShutDown()
+	{
+		m_appInstance->ShutDown();
 	}
 
 	GameEngine::~GameEngine()
 	{
-		m_appInstance->Close();
+		ShutDown();
 	}
 }
