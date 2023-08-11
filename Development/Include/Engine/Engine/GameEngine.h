@@ -5,6 +5,9 @@
 
 #pragma once
 
+#include <Debug/Debug.h>
+
+class ISystem;
 class IEngineApplication;
 
 namespace Engine 
@@ -49,6 +52,9 @@ namespace Engine
 
 		uint m_debugUpdateQueue = 0;
 
+		Debug::DebugManager m_debugManager;
+		Debug::Performance::NameToRawTime m_profiledFunctionNameToAvgDuration;
+
 		void EngineRun();
 
 		EngineBootingSequenceState GetBootingSequenceState();
@@ -58,13 +64,27 @@ namespace Engine
 
 		void RunBootingSequence();
 
-		void InitDependencies();
-		void PreInit();
-		void Init();
+		void StartUp();
 
 		void Update();
 		void RenderFrame();
 
+		void ShutDown();
+
 		void ClearEngineCounters();
 	};
 }
+
+#ifdef _DEBUG
+
+#define ENGINE_FRAME_MARK_START(name) {										\
+	m_debugManager.GetPerformanceProfiler().FrameProfilingStart(name);	\
+	FrameMarkStart(name);												\
+}
+
+#define ENGINE_FRAME_MARK_END(name) {										\
+	m_debugManager.GetPerformanceProfiler().FrameProfilingEnd(name);	\
+	FrameMarkEnd(name);												\
+}
+
+#endif

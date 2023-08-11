@@ -7,7 +7,7 @@
 
 #include <Engine/Core/Log.h>
 
-void Game::Init()
+void Game::StartUp()
 {
 }
 
@@ -15,6 +15,6 @@ void Game::Update()
 {
 }
 
-void Game::Close()
+void Game::ShutDown()
 {
 }
