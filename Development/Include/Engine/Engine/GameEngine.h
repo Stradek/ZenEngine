@@ -25,21 +25,11 @@ namespace Engine
 		GameEngine(std::unique_ptr<IEngineApplication> appInstance);
 		~GameEngine();
 
-		enum EngineBootingSequenceState
-		{
-			NotStarted,
-			Initializing,
-			Finalizing,
-			Finished,
-		};
-
 		std::unique_ptr<IEngineApplication> m_appInstance;
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
 		Common::DateTime::Clock m_timeSinceRenderFrameClock;
 		Common::DateTime::Clock m_oneSecondClock;
-
-		EngineBootingSequenceState m_engineBootingState = NotStarted;
 
 		const uint m_targetUpdatesPerSecond			= 20;
 		const uint m_targetFramesPerSecond			= 60;
