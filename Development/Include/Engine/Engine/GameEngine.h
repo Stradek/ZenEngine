@@ -5,7 +5,11 @@
 
 #pragma once
 
+#ifdef _DEBUG
+
 #include <Debug/Debug.h>
+
+#endif
 
 class ISystem;
 class IEngineApplication;

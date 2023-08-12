@@ -6,9 +6,13 @@
 #include "GameEngine.h"
 
 #include <IEngineApplication.h>
+
+
+#ifdef _DEBUG
 #include <Debug/Debug.h>
 
 #include <tracy/Tracy.hpp>
+#endif
 
 namespace Engine
 {
@@ -115,7 +119,11 @@ namespace Engine
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
 				RenderFrame();
+
+#ifdef _DEBUG
 				FrameMark;
+#endif
+				
 				m_timeSinceRenderFrameClock.Reset();
 			}
 		}
@@ -125,7 +133,7 @@ namespace Engine
 	{
 		m_appInstance->ShutDown();
 
-#if _DEBUG
+#ifdef _DEBUG
 		m_debugManager.ShutDown();
 #endif
 	}
