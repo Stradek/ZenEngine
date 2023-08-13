@@ -10,7 +10,7 @@
 class Game : public IEngineApplication
 {
 public:
-	void Init() override;
-	void Update() override;
-	void Close() override;
+	void StartUp() override;
+	void Update(const uint32 deltaTime) override;
+	void ShutDown() override;
 };

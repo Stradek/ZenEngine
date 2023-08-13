@@ -6,9 +6,13 @@
 #include "GameEngine.h"
 
 #include <IEngineApplication.h>
+
+
+#ifdef _DEBUG
 #include <Debug/Debug.h>
 
 #include <tracy/Tracy.hpp>
+#endif
 
 namespace Engine
 {
@@ -16,161 +20,90 @@ namespace Engine
 	{
 		GameEngine engineInstance = GameEngine(std::move(appInstance));
 		engineInstance.EngineRun();
+
+		engineInstance.ShutDown();
 	}
 
 	GameEngine::GameEngine(std::unique_ptr<IEngineApplication> appInstance) :
-		m_appInstance(std::move(appInstance))
+		m_appInstance(std::move(appInstance)),
+		m_targetUpdatesPerSecond(20), m_targetUpdateFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond)),
+		m_targetLockedFramesPerSecond(60), m_targetRenderFrameFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetLockedFramesPerSecond))
 	{
-		
+		Core::Log::Init();
+
+		StartUp();
 	}
 
-	GameEngine::EngineBootingSequenceState GameEngine::GetBootingSequenceState()
+	void GameEngine::StartUp()
 	{
-		return m_engineBootingState;
+#ifdef _DEBUG
+		m_debugManager.StartUp();
+#endif
+
+		m_appInstance->StartUp();
 	}
 
-	void GameEngine::SetBootingSequenceState(EngineBootingSequenceState bootingState)
+	void GameEngine::Update(const uint32 deltaTime)
 	{
-		ENGINE_ASSERT(m_engineBootingState != bootingState, "Engine booting state is already set to the same value.");
+		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
-		m_engineBootingState = bootingState;
-	}
+#ifdef _DEBUG
+		m_debugManager.Update(deltaTime);
+#endif
 
-	void GameEngine::SetNextBootingSquenceState()
-	{
-		EngineBootingSequenceState currentBootingSequenceState = GetBootingSequenceState();
+		m_appInstance->Update(deltaTime);
 
-		ENGINE_FATAL_ASSERT(currentBootingSequenceState < EngineBootingSequenceState::Finished, "Can't set next booting state as there is none after Finished state.");
-			
-		EngineBootingSequenceState nextBootingSequenceState = static_cast<EngineBootingSequenceState>(currentBootingSequenceState + 1);
-		SetBootingSequenceState(nextBootingSequenceState);
-	}
-
-	void GameEngine::RunBootingSequence()
-	{
-		SetBootingSequenceState(EngineBootingSequenceState::Initializing);
-
-		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
-		{
-			switch (GetBootingSequenceState())
-			{
-			case EngineBootingSequenceState::Initializing:
-				InitDependencies();
-				PreInit();
-				Init();
-
-				SetNextBootingSquenceState();
-				break;
-			case EngineBootingSequenceState::Finalizing:
-				FinishBootingSequence();
-
-				SetBootingSequenceState(EngineBootingSequenceState::Finished);
-				break;
-			}
-		}
-	}
-
-	void GameEngine::InitDependencies()
-	{
-		
-	}
-
-	void GameEngine::PreInit()
-	{
-		
-	}
-
-	void GameEngine::Init()
-	{
-		m_appInstance->Init();
-	}
-
-	void GameEngine::FinishBootingSequence()
-	{
-		ClearEngineCounters();
-		m_oneSecondClock.Start();
-	}
-
-	void GameEngine::ClearEngineCounters()
-	{
-		m_engineUpdatesLastSecondCounter = m_currentSecondUpdatesCount;
-		m_renderedFramesLastSecondCounter = m_currentSecondRenderFramesCount;
-
-		m_currentSecondUpdatesCount = 0;
-		m_currentSecondRenderFramesCount = 0;
-	}
-
-	void GameEngine::Update()
-	{
-		FrameMarkStart(sl_Engine_Update);
-
-		if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
-		{
-			ClearEngineCounters();
-			m_debugUpdateQueue++;
-
-			m_oneSecondClock.Reset();
-		}
-
-		if (m_debugUpdateQueue > 0)
-		{
-			double deltaTime = m_deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
-
-			ENGINE_LOG("[FPS: {}] Game Update ms: [WIP]; Render ms: [WIP]; Previous Render Update (DeltaTime) ms: {:.4f}", m_renderedFramesLastSecondCounter, deltaTime);
-			ENGINE_LOG("          Game Updates per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
-
-			--m_debugUpdateQueue;
-		}
-
-		m_appInstance->Update();
-
-		++m_currentSecondUpdatesCount;
-		FrameMarkEnd(sl_Engine_Update);
+		ENGINE_FRAME_MARK_END(sl_Engine_Update);
 	}
 
 	void GameEngine::RenderFrame()
 	{
-		FrameMarkStart(sl_Engine_RenderFrame);
+		ENGINE_FRAME_MARK_START(sl_Engine_RenderFrame);
 
-
-
-		++m_currentSecondRenderFramesCount;
-		FrameMarkEnd(sl_Engine_RenderFrame);
+		ENGINE_FRAME_MARK_END(sl_Engine_RenderFrame);
 	}
 
 	void GameEngine::EngineRun()
 	{
-		Core::Log::Init();
+		m_timeSinceUpdateClock.Start();
+		m_timeSinceRenderFrameClock.Start();
 
-		// while here just to be safe and see all booting issues before starting main loop
-		while (GetBootingSequenceState() != EngineBootingSequenceState::Finished)
+		for (;;)
 		{
-			RunBootingSequence();
-		}
-
-		while (true) // need to implement good mechanism for breaking from this while when getting event or anything
-		{
-			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency || !m_timeSinceUpdateClock.IsRunning())
+			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency)
 			{
-				Update();
+				Update(m_deltaTime);
+#ifdef _DEBUG
+				m_debugManager.AddToUpdateCounter();
+#endif
 				m_timeSinceUpdateClock.Reset();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration() >= m_targetRenderFrameFrequency || !m_timeSinceRenderFrameClock.IsRunning())
+			if (m_timeSinceRenderFrameClock.GetDuration() >= m_targetRenderFrameFrequency)
 			{
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
 				RenderFrame();
+#ifdef _DEBUG
+				m_debugManager.AddToRenderFrameCounter();
 				FrameMark;
+#endif
+				
 				m_timeSinceRenderFrameClock.Reset();
 			}
-
-
 		}
+	}
+
+	void GameEngine::ShutDown()
+	{
+		m_appInstance->ShutDown();
+
+#ifdef _DEBUG
+		m_debugManager.ShutDown();
+#endif
 	}
 
 	GameEngine::~GameEngine()
 	{
-		m_appInstance->Close();
 	}
 }

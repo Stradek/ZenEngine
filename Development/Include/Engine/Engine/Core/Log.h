@@ -60,6 +60,7 @@ namespace Engine::Core
 														assertMsg += msg;															\
 														ENGINE_WARN(assertMsg,														\
 														std::string(#expression), std::string(__FILE__), (unsigned)(__LINE__));		\
+														ENGINE_DEBUG_BREAK();														\
 													}
 
 #define ENGINE_FATAL_ASSERT(expression, msg)		if(!((bool) (expression)))														\
@@ -68,5 +69,6 @@ namespace Engine::Core
 														assertMsg += msg;															\
 														ENGINE_WARN(assertMsg,														\
 														std::string(#expression), std::string(__FILE__), (unsigned)(__LINE__));		\
+														ENGINE_DEBUG_BREAK();														\
 														abort();																	\
 													}

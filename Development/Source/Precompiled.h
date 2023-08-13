@@ -12,6 +12,8 @@
 // math
 #include <ratio>
 #include <cmath>
+#include <algorithm>
+#include <numeric>
 
 // strings
 #include <string>

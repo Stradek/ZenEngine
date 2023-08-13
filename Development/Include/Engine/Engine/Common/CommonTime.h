@@ -17,14 +17,35 @@
 
 namespace Engine::Common::DateTime
 {
-	struct Time
+	struct TimeDetails
 	{
-		int hour;
-		int minute;
-		int second;
+		uint hours;
+		uint minutes;
+		uint seconds;
+		uint miliseconds;
+		uint nanoseconds;
 	};
 
-	static constexpr uint32 ONE_SECOND = 1;
+	class Time
+	{
+	public:
+		Time(uint32 rawTime) : m_rawTime(rawTime) {}
+
+		TimeDetails GetTime() const;
+		uint32 GetTimeRaw() const;
+
+	private:
+		uint32 m_rawTime;
+	};
+
+	static constexpr uint32 HOUR_TO_NANOSECONDS = static_cast<uint32>(
+		nanoseconds(hours(1)).count()
+	);
+
+	static constexpr uint32 MINUTE_TO_NANOSECONDS = static_cast<uint32>(
+		nanoseconds(minutes(1)).count()
+	);
+
 	static constexpr uint32 SECOND_TO_NANOSECONDS = static_cast<uint32>(
 		nanoseconds(seconds(1)).count()
 	);
@@ -38,7 +59,10 @@ namespace Engine::Common::DateTime
 		(double)nanoseconds(1).count() / MILISECOND_TO_NANOSECONDS
 	);
 
-	extern Time GetCurrentTime(); 
+	extern Time GetCurrentTime();
+	extern uint32 GetCurrentTimeRaw();
+
+	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime);
 
 	extern double NanosecondsToDouble(const nanoseconds durationInNanoseconds);
 	extern double UInt32ToDouble(const uint32 durationInNanoseconds);

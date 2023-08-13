@@ -5,6 +5,13 @@
 
 #pragma once
 
+#ifdef _DEBUG
+
+#include <Debug/Debug.h>
+
+#endif
+
+class ISystem;
 class IEngineApplication;
 
 namespace Engine 
@@ -18,53 +25,49 @@ namespace Engine
 		GameEngine(std::unique_ptr<IEngineApplication> appInstance);
 		~GameEngine();
 
-		enum EngineBootingSequenceState
-		{
-			NotStarted,
-			Initializing,
-			Finalizing,
-			Finished,
-		};
-
 		std::unique_ptr<IEngineApplication> m_appInstance;
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
 		Common::DateTime::Clock m_timeSinceRenderFrameClock;
-		Common::DateTime::Clock m_oneSecondClock;
 
-		EngineBootingSequenceState m_engineBootingState = NotStarted;
-
-		const uint m_targetUpdatesPerSecond			= 20;
-		const uint m_targetFramesPerSecond			= 60;
-		const uint32 m_targetUpdateFrequency		= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
-		const uint32 m_targetRenderFrameFrequency	= static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetFramesPerSecond);
+		const uint m_targetUpdatesPerSecond;
+		const uint32 m_targetUpdateFrequency;
+		
+		const uint m_targetLockedFramesPerSecond;
+		uint32 m_targetRenderFrameFrequency;
 
 		uint32 m_deltaTime	= m_targetRenderFrameFrequency;
 
-		uint m_currentSecondUpdatesCount		= 0;
-		uint m_engineUpdatesLastSecondCounter	= 0;
-
-		uint m_currentSecondRenderFramesCount	= 0;
-		uint m_renderedFramesLastSecondCounter	= 0;
-
-		uint m_debugUpdateQueue = 0;
+#ifdef _DEBUG
+		Debug::DebugManager m_debugManager;
+#endif
 
 		void EngineRun();
 
-		EngineBootingSequenceState GetBootingSequenceState();
-		void SetBootingSequenceState(EngineBootingSequenceState bootingState);
-		void SetNextBootingSquenceState();
-		void FinishBootingSequence();
+		void StartUp();
 
-		void RunBootingSequence();
-
-		void InitDependencies();
-		void PreInit();
-		void Init();
-
-		void Update();
+		void Update(const uint32 deltaTime);
 		void RenderFrame();
 
-		void ClearEngineCounters();
+		void ShutDown();
 	};
 }
+
+#ifdef _DEBUG
+
+#define ENGINE_FRAME_MARK_START(name) {										\
+	m_debugManager.GetPerformanceProfiler().FrameProfilingStart(name);	\
+	FrameMarkStart(name);												\
+}
+
+#define ENGINE_FRAME_MARK_END(name) {										\
+	m_debugManager.GetPerformanceProfiler().FrameProfilingEnd(name);	\
+	FrameMarkEnd(name);												\
+}
+
+#else
+
+#define ENGINE_FRAME_MARK_START(x)
+#define ENGINE_FRAME_MARK_END(x)
+
+#endif

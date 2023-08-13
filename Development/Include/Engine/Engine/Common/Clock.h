@@ -30,8 +30,8 @@ namespace Engine::Common::DateTime
 		uint32 GetEndTime();
 
 	private:
-		time_point m_startTime;
-		time_point m_endTime;
+		uint32 m_startTime;
+		uint32 m_endTime;
 
 		bool m_isRunning = false;
 	};
