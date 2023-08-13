@@ -25,12 +25,13 @@ namespace Engine
 	}
 
 	GameEngine::GameEngine(std::unique_ptr<IEngineApplication> appInstance) :
-		m_appInstance(std::move(appInstance))
+		m_appInstance(std::move(appInstance)),
+		m_targetUpdatesPerSecond(20), m_targetUpdateFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond)),
+		m_targetLockedFramesPerSecond(60), m_targetRenderFrameFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetLockedFramesPerSecond))
 	{
 		Core::Log::Init();
 
 		StartUp();
-
 	}
 
 	void GameEngine::StartUp()
@@ -58,7 +59,6 @@ namespace Engine
 	void GameEngine::RenderFrame()
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_RenderFrame);
-
 
 		ENGINE_FRAME_MARK_END(sl_Engine_RenderFrame);
 	}
