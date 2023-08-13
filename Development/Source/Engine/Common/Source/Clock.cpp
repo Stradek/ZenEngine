@@ -6,13 +6,14 @@
 #include <Clock.h>
 #include <CommonTime.h>
 
+#include <assert.h>
+
 using std::chrono::duration_cast;
 
 namespace Engine::Common::DateTime
 {
-	Clock::Clock() : m_startTime(time_point::min()) {}
+	Clock::Clock() : m_startTime(0), m_endTime(0), m_isRunning(false) {}
 	Clock::~Clock() {}
-
 
 	bool Clock::IsRunning()
 	{
@@ -21,25 +22,21 @@ namespace Engine::Common::DateTime
 
 	uint32 Clock::GetDuration()
 	{
-		if (m_startTime == time_point::min())
-		{
-			// this is bad :c
-			return 0;
-		}
-
-		time_point startTimePoint = m_startTime;
-		time_point endTimePoint;
+		assert(m_startTime != 0);
+		
+		uint32 endTime;
 		if (m_isRunning)
 		{
-			endTimePoint = high_res_clock::now();
+			endTime = DateTime::GetCurrentTimeRaw();
 		}
 		else
 		{
-			endTimePoint = m_endTime;
+			assert(m_endTime != 0);
+			endTime = m_endTime;
 		}
 
-		auto clockDuration = duration_cast<nanoseconds>(endTimePoint - startTimePoint);
-		return NanosecondsToUInt32(clockDuration);
+		uint32 clockDuration = endTime - m_startTime;
+		return clockDuration;
 	}
 
 	double Clock::GetDurationAsDouble()
@@ -50,28 +47,28 @@ namespace Engine::Common::DateTime
 
 	void Clock::Start()
 	{
-		m_startTime = high_res_clock::now();
+		m_startTime = DateTime::GetCurrentTimeRaw();
 		m_isRunning = true;
 	}
 	void Clock::Stop()
 	{
-		m_endTime = high_res_clock::now();
+		m_endTime = DateTime::GetCurrentTimeRaw();
 		m_isRunning = false;
 	}
 
 	void Clock::Reset()
 	{
 		if(!m_isRunning) m_isRunning = true;
-		m_startTime = high_res_clock::now();
+		m_startTime = DateTime::GetCurrentTimeRaw();
 	}
 
 	uint32 Clock::GetStartTime()
 	{
-		return m_startTime.time_since_epoch().count();
+		return m_startTime;
 	}
 
 	uint32 Clock::GetEndTime()
 	{
-		return m_endTime.time_since_epoch().count();
+		return m_endTime;
 	}
 }

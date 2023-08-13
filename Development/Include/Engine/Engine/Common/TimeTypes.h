@@ -15,6 +15,8 @@ namespace Engine::Common::DateTime
 	typedef std::chrono::time_point<high_res_clock>				time_point;
 	typedef std::chrono::time_point<system_clock>				system_time_point;
 
+	typedef std::chrono::hours									hours;
+	typedef std::chrono::minutes								minutes;
 	typedef std::chrono::seconds								seconds;
 	typedef std::chrono::milliseconds							milliseconds;
 	typedef std::chrono::nanoseconds							nanoseconds;

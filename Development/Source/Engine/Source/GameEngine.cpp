@@ -39,46 +39,19 @@ namespace Engine
 		m_debugManager.StartUp();
 #endif
 
-
 		m_appInstance->StartUp();
 	}
 
-	void GameEngine::Update()
+	void GameEngine::Update(const uint32 deltaTime)
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
 #ifdef _DEBUG
-		if (m_debugUpdateQueue > 0)
-		{
-			m_profiledFunctionNameToAvgDuration = m_debugManager.GetPerformanceProfiler().GetAvgFrameProfilingData();
-			double deltaTime = m_deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
-			
-			time_t engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
-			time_t engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
-
-			double engineUpdateTime = Common::DateTime::UInt32ToDouble(engineUpdateTimeRaw);
-			double engineRenderFrameTime = Common::DateTime::UInt32ToDouble(engineRenderFrameTimeRaw);
-
-			ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; DeltaTime ms: {:.4f}", m_renderedFramesLastSecondCounter, engineUpdateTime, engineRenderFrameTime, deltaTime);
-			ENGINE_LOG("          Game Updates per Second: {}; Render Updates per Second: {}", m_engineUpdatesLastSecondCounter, m_renderedFramesLastSecondCounter);
-
-			--m_debugUpdateQueue;
-		}
+		m_debugManager.Update(deltaTime);
 #endif
 
-		if (m_oneSecondClock.GetDuration() >= Engine::Common::DateTime::SECOND_TO_NANOSECONDS)
-		{
-#ifdef _DEBUG
-			ClearEngineCounters();
-			m_debugUpdateQueue++;
-#endif
+		m_appInstance->Update(deltaTime);
 
-			m_oneSecondClock.Reset();
-		}
-
-		m_appInstance->Update();
-
-		++m_currentSecondUpdatesCount;
 		ENGINE_FRAME_MARK_END(sl_Engine_Update);
 	}
 
@@ -87,40 +60,32 @@ namespace Engine
 		ENGINE_FRAME_MARK_START(sl_Engine_RenderFrame);
 
 
-
-		++m_currentSecondRenderFramesCount;
 		ENGINE_FRAME_MARK_END(sl_Engine_RenderFrame);
-	}
-
-	void GameEngine::ClearEngineCounters()
-	{
-		m_engineUpdatesLastSecondCounter = m_currentSecondUpdatesCount;
-		m_renderedFramesLastSecondCounter = m_currentSecondRenderFramesCount;
-
-		m_currentSecondUpdatesCount = 0;
-		m_currentSecondRenderFramesCount = 0;
 	}
 
 	void GameEngine::EngineRun()
 	{
-		ClearEngineCounters();
-		m_oneSecondClock.Start();
+		m_timeSinceUpdateClock.Start();
+		m_timeSinceRenderFrameClock.Start();
 
 		for (;;)
 		{
-			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency || !m_timeSinceUpdateClock.IsRunning())
+			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency)
 			{
-				Update();
+				Update(m_deltaTime);
+#ifdef _DEBUG
+				m_debugManager.AddToUpdateCounter();
+#endif
 				m_timeSinceUpdateClock.Reset();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration() >= m_targetRenderFrameFrequency || !m_timeSinceRenderFrameClock.IsRunning())
+			if (m_timeSinceRenderFrameClock.GetDuration() >= m_targetRenderFrameFrequency)
 			{
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
 				RenderFrame();
-
 #ifdef _DEBUG
+				m_debugManager.AddToRenderFrameCounter();
 				FrameMark;
 #endif
 				

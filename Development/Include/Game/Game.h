@@ -11,6 +11,6 @@ class Game : public IEngineApplication
 {
 public:
 	void StartUp() override;
-	void Update() override;
+	void Update(const uint32 deltaTime) override;
 	void ShutDown() override;
 };

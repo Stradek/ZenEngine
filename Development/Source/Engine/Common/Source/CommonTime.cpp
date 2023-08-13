@@ -24,23 +24,61 @@ using std::chrono::duration_cast;
 
 namespace Engine::Common::DateTime
 {
+	TimeDetails Time::GetTime() const
+	{
+		const uint32 rawTime = GetTimeRaw();
+		const TimeDetails timeDetails = RawTimeToTimeDetails(rawTime);
+
+		return timeDetails;
+	}
+
+	uint32 Time::GetTimeRaw() const
+	{
+		return m_rawTime;
+	};
+
+
 	Time GetCurrentTime()
 	{
-		system_time_point now = system_clock::now();
-		time_t timeNow = std::chrono::system_clock::to_time_t(now);
-		struct tm timeInfo;
-		localtime_s(&timeInfo, &timeNow);
+		uint32 rawTime = GetCurrentTimeRaw();
 
-		Time currentTime {timeInfo.tm_hour, timeInfo.tm_min, timeInfo.tm_sec};
-
+		Time currentTime = Time(rawTime);
 		return currentTime;
 	}
 
-	extern time_t GetCurrentTimeRaw()
+	extern uint32 GetCurrentTimeRaw()
 	{
-		system_time_point now = system_clock::now();
-		time_t timeNow = std::chrono::system_clock::to_time_t(now);
-		return timeNow;
+		uint32 rawTimeNow = high_res_clock::now().time_since_epoch().count();
+		return rawTimeNow;
+	}
+
+
+	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime)
+	{
+		uint32 rawTimeToMove = const_cast<uint32&>(rawTime);
+		TimeDetails timeDetails;
+
+		uint hoursInRawTime = floor(rawTimeToMove / HOUR_TO_NANOSECONDS);
+		rawTimeToMove -= hoursInRawTime * HOUR_TO_NANOSECONDS;
+
+		uint minutesInRawTime = floor(rawTimeToMove / MINUTE_TO_NANOSECONDS);
+		rawTimeToMove -= minutesInRawTime * MINUTE_TO_NANOSECONDS;
+
+		uint secondsInRawTime = floor(rawTimeToMove / SECOND_TO_NANOSECONDS);
+		rawTimeToMove -= secondsInRawTime * SECOND_TO_NANOSECONDS;
+
+		uint milisecondsInRawTime = floor(rawTimeToMove / MILISECOND_TO_NANOSECONDS);
+		rawTimeToMove -= milisecondsInRawTime * MILISECOND_TO_NANOSECONDS;
+
+		uint nanosecondsInRawTime = rawTimeToMove;
+
+		timeDetails.hours = hoursInRawTime;
+		timeDetails.minutes = minutesInRawTime;
+		timeDetails.seconds = secondsInRawTime;
+		timeDetails.miliseconds = milisecondsInRawTime;
+		timeDetails.nanoseconds = nanosecondsInRawTime;
+
+		return timeDetails;
 	}
 
 	/*

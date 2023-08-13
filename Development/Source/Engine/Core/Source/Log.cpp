@@ -79,9 +79,9 @@ namespace Engine::Core
 	void Log::Init()
 	{
 		const Common::DateTime::Date currentDate = Common::DateTime::GetCurrentDate();
-		const Common::DateTime::Time currentTime = Common::DateTime::GetCurrentTime();
+		const Common::DateTime::TimeDetails currentTime = Common::DateTime::GetCurrentTime().GetTime();
 
-		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hour, currentTime.minute, currentTime.second);
+		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hours, currentTime.minutes, currentTime.seconds);
 
 		const std::string engineLogFilename = fmt::format("engine-{}.log", datetimeString);
 		const std::filesystem::path engineLogPath = engineLogDirectoryPath / engineLogFilename;

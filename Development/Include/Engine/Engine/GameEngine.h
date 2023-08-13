@@ -29,7 +29,6 @@ namespace Engine
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
 		Common::DateTime::Clock m_timeSinceRenderFrameClock;
-		Common::DateTime::Clock m_oneSecondClock;
 
 		const uint m_targetUpdatesPerSecond			= 20;
 		const uint m_targetFramesPerSecond			= 60;
@@ -38,29 +37,18 @@ namespace Engine
 
 		uint32 m_deltaTime	= m_targetRenderFrameFrequency;
 
-		uint m_currentSecondUpdatesCount		= 0;
-		uint m_engineUpdatesLastSecondCounter	= 0;
-
-		uint m_currentSecondRenderFramesCount	= 0;
-		uint m_renderedFramesLastSecondCounter	= 0;
-
 #ifdef _DEBUG
-		uint m_debugUpdateQueue = 0;
-
 		Debug::DebugManager m_debugManager;
-		Debug::Performance::NameToRawTime m_profiledFunctionNameToAvgDuration;
 #endif
 
 		void EngineRun();
 
 		void StartUp();
 
-		void Update();
+		void Update(const uint32 deltaTime);
 		void RenderFrame();
 
 		void ShutDown();
-
-		void ClearEngineCounters();
 	};
 }
 
