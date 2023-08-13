@@ -29,16 +29,14 @@ namespace Engine::Debug
 			uint32 endTime;
 			uint32 duration;
 		};
-
 		static constexpr size_t s_frameDataBufferSize = 256;
-		
 		typedef Core::Memory::CircularBuffer<FrameData, s_frameDataBufferSize> FrameDataCircularBuffer;
-		typedef std::vector<FrameData> FrameDataBuffer;
-
 		typedef std::unordered_map<std::string, FrameDataCircularBuffer> NameToFrameDataCircularBuffer;
-		typedef std::unordered_map<std::string, FrameDataBuffer> NameToFrameDataBuffer;
-		typedef std::unordered_map<std::string, FrameData> NameToFrameData;
 
+		typedef std::vector<FrameData> FrameDataBuffer;
+		typedef std::unordered_map<std::string, FrameDataBuffer> NameToFrameDataBuffer;
+
+		typedef std::unordered_map<std::string, FrameData> NameToFrameData;
 		typedef std::unordered_map<std::string, uint32> NameToRawTime;
 
 		class PerformanceProfiler
