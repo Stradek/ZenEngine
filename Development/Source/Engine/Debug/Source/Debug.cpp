@@ -19,7 +19,7 @@ namespace Engine::Debug
 
 		void PerformanceProfiler::FrameProfilingStart(std::string functionName)
 		{
-			ENGINE_ASSERT(m_nameToStartFrameData.count(functionName) == 0, ("Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName))
+			ENGINE_ASSERT(m_nameToStartFrameData.count(functionName) == 0, "Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName)
 
 			uint32 timeNow = Common::DateTime::GetCurrentTimeRaw();
 			StartFrameData frameData{ timeNow, false };
