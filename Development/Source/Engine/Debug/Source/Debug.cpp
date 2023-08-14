@@ -3,6 +3,8 @@
 	Software distributed under the permissive MIT License.
 */
 
+#ifdef _DEBUG
+
 #include "Debug.h"
 
 #include <Core/Log.h>
@@ -153,3 +155,5 @@ namespace Engine::Debug
 	}
 
 }
+
+#endif // _DEBUG

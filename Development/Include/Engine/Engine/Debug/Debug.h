@@ -5,6 +5,8 @@
 
 #pragma once
 
+#ifdef _DEBUG
+
 #include <Core/ISystem.h>
 #include <Core/Memory.h>
 
@@ -86,3 +88,5 @@ namespace Engine::Debug
 		void DebugManager::ClearEngineCounters();
 	};
 }
+
+#endif // _DEBUG

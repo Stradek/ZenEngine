@@ -5,14 +5,14 @@
 
 #include "GameEngine.h"
 
-#include <IEngineApplication.h>
+#include "IEngineApplication.h"
 
+#include <Debug/DebugMacros.h>
 
 #ifdef _DEBUG
 #include <Debug/Debug.h>
-
 #include <tracy/Tracy.hpp>
-#endif
+#endif // _DEBUG
 
 namespace Engine
 {
@@ -25,9 +25,7 @@ namespace Engine
 	}
 
 	GameEngine::GameEngine(std::unique_ptr<IEngineApplication> appInstance) :
-		m_appInstance(std::move(appInstance)),
-		m_targetUpdatesPerSecond(20), m_targetUpdateFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond)),
-		m_targetLockedFramesPerSecond(60), m_targetRenderFrameFrequency(static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetLockedFramesPerSecond))
+		m_appInstance(std::move(appInstance))
 	{
 		Core::Log::Init();
 
@@ -70,7 +68,7 @@ namespace Engine
 
 		for (;;)
 		{
-			if (m_timeSinceUpdateClock.GetDuration() >= m_targetUpdateFrequency)
+			if (m_timeSinceUpdateClock.GetDuration() >= Core::Config::m_targetUpdateFrequency)
 			{
 				Update(m_deltaTime);
 #ifdef _DEBUG
@@ -79,7 +77,7 @@ namespace Engine
 				m_timeSinceUpdateClock.Reset();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration() >= m_targetRenderFrameFrequency)
+			if (m_timeSinceRenderFrameClock.GetDuration() >= Core::Config::m_targetRenderFrameFrequency)
 			{
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 

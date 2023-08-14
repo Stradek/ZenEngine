@@ -5,11 +5,11 @@
 
 #pragma once
 
+#include <Core/Config.h>
+
 #ifdef _DEBUG
-
 #include <Debug/Debug.h>
-
-#endif
+#endif // _DEBUG
 
 class ISystem;
 class IEngineApplication;
@@ -29,18 +29,12 @@ namespace Engine
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
 		Common::DateTime::Clock m_timeSinceRenderFrameClock;
-
-		const uint m_targetUpdatesPerSecond;
-		const uint32 m_targetUpdateFrequency;
 		
-		const uint m_targetLockedFramesPerSecond;
-		uint32 m_targetRenderFrameFrequency;
-
-		uint32 m_deltaTime	= m_targetRenderFrameFrequency;
-
 #ifdef _DEBUG
 		Debug::DebugManager m_debugManager;
 #endif
+		
+		uint32 m_deltaTime	= Core::Config::m_targetRenderFrameFrequency;
 
 		void EngineRun();
 
@@ -52,22 +46,3 @@ namespace Engine
 		void ShutDown();
 	};
 }
-
-#ifdef _DEBUG
-
-#define ENGINE_FRAME_MARK_START(name) {										\
-	m_debugManager.GetPerformanceProfiler().FrameProfilingStart(name);	\
-	FrameMarkStart(name);												\
-}
-
-#define ENGINE_FRAME_MARK_END(name) {										\
-	m_debugManager.GetPerformanceProfiler().FrameProfilingEnd(name);	\
-	FrameMarkEnd(name);												\
-}
-
-#else
-
-#define ENGINE_FRAME_MARK_START(x)
-#define ENGINE_FRAME_MARK_END(x)
-
-#endif
