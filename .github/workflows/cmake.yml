@@ -2,9 +2,9 @@ name: CMake
 
 on:
   push:
-    branches: [ "master", "devel" ]
+    branches: [ "master", "develop" ]
   pull_request:
-    branches: [ "master", "devel" ]
+    branches: [ "master", "develop" ]
     
 jobs:
   build:
