@@ -1,11 +1,11 @@
-# DX12EngineTest
+# SDLEngineTest
 This game engine is still work in progress. Name of this software still haven't been determined and will change in the future.
 
 # Project Current Goals
-1. Game Genre: I want to develop a platformer game with FPS-like movement mechanics.
-2. Game Mechanics: I want to implement core mechanics such as jumping, running with a default Quake-like speed, collecting points, and having moving platforms that maintain the player's relative position while standing on them.
-3. Level Design: I need to create levels that primarily have a level-like layout, without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical components, with a simplified layout and clear path indicators.
-4. Game Engine Components: I need to work on implementing a camera system, collision detection and response, physics and movement mechanics, user interface, testing and debugging, performance optimization, documentation, and version control.
+1. Game Genre: I want to develop a simple platformer game.
+2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
+3. Level Design: I want to create levels without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in old days.
+4. Engine main goals: memory management with custom allocators and multithreaded job system.
 
 # Repositiory Directory Structure
 * Binaries/ - Build artifacts(files like .lib, .pdb) and executable(.exe)
@@ -19,14 +19,13 @@ This game engine is still work in progress. Name of this software still haven't 
 # Prerequisities
 1. Visual Studio 2022
 2. CMake (look for proper version in CMakeLists.txt)
-3. Windows SDK
 
 # Building
 1. $ git clone --recursive https://github.com/Stradek/DX12EngineTest.git
 2. $ cd .\DX12EngineTest\
 3. $ .\BuildSolution-VS2022.bat
 4. $ .\OpenSolution-VS2022.bat
-5. Build & Run solution
+5. Build & Run Game project
 6. Enjoy!
 
 # License
