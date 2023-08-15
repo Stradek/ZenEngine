@@ -12,6 +12,8 @@
 // math
 #include <ratio>
 #include <cmath>
+#include <algorithm>
+#include <numeric>
 
 // strings
 #include <string>
@@ -36,3 +38,4 @@
 */
 
 #include <Common/Common.h>
+#include <Core/Log.h>

@@ -1,0 +1,137 @@
+{
+  "$schema": "https://raw.githubusercontent.com/spdx/spdx-spec/v2.2.1/schemas/spdx-schema.json",
+  "spdxVersion": "SPDX-2.2",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "documentNamespace": "https://spdx.org/spdxdocs/capstone-x64-windows-static-5.0.0-rc2#2-8358dd10-d569-48cd-bfa2-75c43b39f108",
+  "name": "capstone:x64-windows-static@5.0.0-rc2#2 9d8cbdc7a60099e99c5c92fb405b64cb37ac76f7155365abe9698f5bcc8f5dfe",
+  "creationInfo": {
+    "creators": [
+      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+    ],
+    "created": "2023-08-04T22:41:28Z"
+  },
+  "relationships": [
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "GENERATES",
+      "relatedSpdxElement": "SPDXRef-binary"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-0"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-1"
+    },
+    {
+      "spdxElementId": "SPDXRef-port",
+      "relationshipType": "CONTAINS",
+      "relatedSpdxElement": "SPDXRef-file-2"
+    },
+    {
+      "spdxElementId": "SPDXRef-binary",
+      "relationshipType": "GENERATED_FROM",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-0",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-1",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "CONTAINED_BY",
+      "relatedSpdxElement": "SPDXRef-port"
+    },
+    {
+      "spdxElementId": "SPDXRef-file-2",
+      "relationshipType": "DEPENDENCY_MANIFEST_OF",
+      "relatedSpdxElement": "SPDXRef-port"
+    }
+  ],
+  "packages": [
+    {
+      "name": "capstone",
+      "SPDXID": "SPDXRef-port",
+      "versionInfo": "5.0.0-rc2#2",
+      "downloadLocation": "NOASSERTION",
+      "homepage": "https://github.com/capstone-engine/capstone",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "description": "Multi-architecture disassembly framework",
+      "comment": "This is the port (recipe) consumed by vcpkg."
+    },
+    {
+      "name": "capstone:x64-windows-static",
+      "SPDXID": "SPDXRef-binary",
+      "versionInfo": "9d8cbdc7a60099e99c5c92fb405b64cb37ac76f7155365abe9698f5bcc8f5dfe",
+      "downloadLocation": "NONE",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "comment": "This is a binary package built by vcpkg."
+    },
+    {
+      "SPDXID": "SPDXRef-resource-1",
+      "name": "capstone-engine/capstone",
+      "downloadLocation": "git+https://github.com/capstone-engine/capstone@000561b4f74dc15bda9af9544fe714efda7a6e13",
+      "licenseConcluded": "NOASSERTION",
+      "licenseDeclared": "NOASSERTION",
+      "copyrightText": "NOASSERTION",
+      "checksums": [
+        {
+          "algorithm": "SHA512",
+          "checksumValue": "66b09a7d2fda297836bbedaeece71dcfe39bdbd633d9b6ecb68ee2e5aa094b697226136ab172cdc4550e8b2ef1448d001c8ee4e0d456c6d277afe0b3d1aab5a1"
+        }
+      ]
+    }
+  ],
+  "files": [
+    {
+      "fileName": "./001-silence-windows-crt-secure-warnings.patch",
+      "SPDXID": "SPDXRef-file-0",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "77338b3ee7b9abb69def4be24a70bfdc777dd459c9171c0ad02ccec1f03a4a14"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./portfile.cmake",
+      "SPDXID": "SPDXRef-file-1",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "c12dbada3f521171463485570e3fd761e386d4611cc62f387b6c81a8bae2aa79"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    },
+    {
+      "fileName": "./vcpkg.json",
+      "SPDXID": "SPDXRef-file-2",
+      "checksums": [
+        {
+          "algorithm": "SHA256",
+          "checksumValue": "d9bafe968661ea3a5d840ee0c957678d52d04e391f663c18ef383bb299556055"
+        }
+      ],
+      "licenseConcluded": "NOASSERTION",
+      "copyrightText": "NOASSERTION"
+    }
+  ]
+}

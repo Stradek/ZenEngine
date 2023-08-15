@@ -39,7 +39,11 @@ target_include_directories(Editor PUBLIC
 # Dependencies
 #
 
+# Engine dependency
 target_link_libraries(Editor PUBLIC Engine)
 target_include_directories(Editor PUBLIC
      ${MAIN_ENGINE_INCLUDE_DIR}
 )
+
+# Tracy dependency
+target_link_libraries(Editor PUBLIC TracyProfilerClient)

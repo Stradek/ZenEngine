@@ -16,6 +16,8 @@ namespace Engine::Common::DateTime
 		Clock();
 		~Clock();
 
+		bool IsRunning();
+
 		uint32 GetDuration();
 		double GetDurationAsDouble();
 
@@ -23,9 +25,13 @@ namespace Engine::Common::DateTime
 		void Stop();
 		void Reset();
 
+
+		uint32 GetStartTime();
+		uint32 GetEndTime();
+
 	private:
-		time_point m_startTime;
-		time_point m_endTime;
+		uint32 m_startTime;
+		uint32 m_endTime;
 
 		bool m_isRunning = false;
 	};

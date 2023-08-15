@@ -4,3 +4,6 @@
 [submodule "Development/External/fmt"]
 	path = Development/External/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Development/External/tracy"]
+	path = Development/External/tracy
+	url = https://github.com/wolfpld/tracy
