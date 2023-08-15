@@ -22,31 +22,63 @@ using std::chrono::duration_cast;
 	UInt32 is raw representation of Nanoseconds.
 */
 
-namespace Engine::Common::Time
+namespace Engine::Common::DateTime
 {
-	const uint32 ONE_SECOND = 1;
+	TimeDetails Time::GetTime() const
+	{
+		const uint32 rawTime = GetTimeRaw();
+		const TimeDetails timeDetails = RawTimeToTimeDetails(rawTime);
 
-	const uint32 SECOND_TO_NANOSECOND_RATIO = static_cast<uint32>(
-		nanoseconds(seconds(1)).count()
-	);
+		return timeDetails;
+	}
 
-	const uint32 MILLISECOND_TO_NANOSECOND_RATIO = static_cast<uint32>(
-		nanoseconds(milliseconds(1)).count()
-	);
-
-
-	const double NANOSECOND_TO_SECOND_RATIO = static_cast<double>(
-		(double) nanoseconds(1).count() / SECOND_TO_NANOSECOND_RATIO
-	);
-
-	extern const double NANOSECOND_TO_MILLISECOND_RATIO = static_cast<double>(
-		(double) nanoseconds(1).count() / MILLISECOND_TO_NANOSECOND_RATIO
-	);
+	uint32 Time::GetTimeRaw() const
+	{
+		return m_rawTime;
+	};
 
 
-	time_point GetCurrentTime()
-{
-		return high_res_clock::now();
+	Time GetCurrentTime()
+	{
+		uint32 rawTime = GetCurrentTimeRaw();
+
+		Time currentTime = Time(rawTime);
+		return currentTime;
+	}
+
+	extern uint32 GetCurrentTimeRaw()
+	{
+		uint32 rawTimeNow = high_res_clock::now().time_since_epoch().count();
+		return rawTimeNow;
+	}
+
+
+	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime)
+	{
+		uint32 rawTimeToMove = const_cast<uint32&>(rawTime);
+		TimeDetails timeDetails;
+
+		uint hoursInRawTime = floor(rawTimeToMove / HOUR_TO_NANOSECONDS);
+		rawTimeToMove -= hoursInRawTime * HOUR_TO_NANOSECONDS;
+
+		uint minutesInRawTime = floor(rawTimeToMove / MINUTE_TO_NANOSECONDS);
+		rawTimeToMove -= minutesInRawTime * MINUTE_TO_NANOSECONDS;
+
+		uint secondsInRawTime = floor(rawTimeToMove / SECOND_TO_NANOSECONDS);
+		rawTimeToMove -= secondsInRawTime * SECOND_TO_NANOSECONDS;
+
+		uint milisecondsInRawTime = floor(rawTimeToMove / MILISECOND_TO_NANOSECONDS);
+		rawTimeToMove -= milisecondsInRawTime * MILISECOND_TO_NANOSECONDS;
+
+		uint nanosecondsInRawTime = rawTimeToMove;
+
+		timeDetails.hours = hoursInRawTime;
+		timeDetails.minutes = minutesInRawTime;
+		timeDetails.seconds = secondsInRawTime;
+		timeDetails.miliseconds = milisecondsInRawTime;
+		timeDetails.nanoseconds = nanosecondsInRawTime;
+
+		return timeDetails;
 	}
 
 	/*
@@ -63,7 +95,7 @@ namespace Engine::Common::Time
 	double UInt32ToDouble(const uint32 durationInNanoseconds)
 	{
 		const double durationInSeconds = static_cast<double>(
-			durationInNanoseconds * NANOSECOND_TO_SECOND_RATIO
+			durationInNanoseconds * NANOSECOND_TO_SECONDS
 		);
 
 		return durationInSeconds;

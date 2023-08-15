@@ -5,21 +5,44 @@
 
 #pragma once
 
+#include <Core/Config.h>
+
+#ifdef _DEBUG
+#include <Debug/Debug.h>
+#endif // _DEBUG
+
+class ISystem;
+class IEngineApplication;
+
 namespace Engine 
 {
-	void RunBootingSequence();
-	void FinishBootingSequence();
+	class GameEngine
+	{
+	public:
+		static void Run(std::unique_ptr<IEngineApplication> appInstance);
 
-	void InitDependencies();
-	void PreInit();
-	void Init();
+	private:
+		GameEngine(std::unique_ptr<IEngineApplication> appInstance);
+		~GameEngine();
 
-	void Update(double deltaTime);
-	void Render();
+		std::unique_ptr<IEngineApplication> m_appInstance;
 
-	void ClearEngineCounters();
+		Common::DateTime::Clock m_timeSinceUpdateClock;
+		Common::DateTime::Clock m_timeSinceRenderFrameClock;
+		
+#ifdef _DEBUG
+		Debug::DebugManager m_debugManager;
+#endif
+		
+		uint32 m_deltaTime	= Core::Config::m_targetRenderFrameFrequency;
 
-	void Run();
+		void EngineRun();
 
-	void Destroy();
+		void StartUp();
+
+		void Update(const uint32 deltaTime);
+		void RenderFrame();
+
+		void ShutDown();
+	};
 }

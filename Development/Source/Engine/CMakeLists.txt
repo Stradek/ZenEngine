@@ -42,9 +42,27 @@ target_include_directories(Engine PUBLIC
 #
 
 add_subdirectory("Common")
-target_link_libraries(Engine PUBLIC Common)
-
 add_subdirectory("Core")
-target_link_libraries(Engine PUBLIC Core)
+add_subdirectory("Debug")
 
-target_precompile_headers(Core REUSE_FROM Engine)
+# Engine dependencies
+target_link_libraries(Engine PUBLIC Core Common Debug)
+
+# Tracy dependency
+add_compile_definitions(
+    "$<$<CONFIG:Debug>:TRACY_ENABLE>"
+)
+
+target_link_libraries(Engine PRIVATE TracyProfilerClient)
+target_include_directories(Engine PRIVATE
+    ${TRACY_HEADERS}
+)
+
+#
+# Precompiled Headers
+#
+
+target_precompile_headers(Engine
+    PRIVATE
+    ${ENGINE_PRECOMILED_HEADER}
+)
