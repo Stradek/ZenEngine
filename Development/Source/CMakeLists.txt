@@ -5,6 +5,16 @@
 
 include_guard(GLOBAL)
 
+set(ENGINE_PRECOMILED_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h)
+
+#
+# Project Dependencies
+#
+
+
+# Tracy library
+add_subdirectory(TracyProfilerClient)
+
 #
 # Sources
 #
@@ -13,16 +23,7 @@ add_subdirectory(Engine)
 add_subdirectory(Editor)
 add_subdirectory(Game)
 
-
-#
-# Precompiled Headers
-#
-
-target_precompile_headers(Engine
-    PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h
-)
-
+# Game & Editor 
 target_precompile_headers(Editor REUSE_FROM Engine)
 target_precompile_headers(Game REUSE_FROM Engine)
 

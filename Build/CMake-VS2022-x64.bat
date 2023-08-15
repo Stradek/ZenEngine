@@ -4,31 +4,29 @@ setlocal
 rem Copyright (c) 2023 Piotr Stradowski. All rights reserved.
 rem Software distributed under the permissive MIT License.
 
-set inputDir=%1
-set outputDir=%2
+set myPath=%~dp0
+set sourceDir=%1
+set buildDir=%2
 set arch=%3
 
-if [%inputDir%] == [] set inputDir="../."
-if [%outputDir%] == [] set outputDir="CMake-VS2022-x64"
-if [%arch%] == [] set arch=x64
+if [%sourceDir%] == [] set sourceDir="%myPath%\.."
+if [%buildDir%] == [] set buildDir="%myPath%\CMake-VS2022-x64"
+if [%arch%] == [] set arch="x64"
 
 echo ---- Preparing build directory...
-mkdir %outputDir% >nul 2>&1
-cd %outputDir%
+mkdir %buildDir% >nul 2>&1
 
 where /q cmake.exe
-if %ERRORLEVEL% EQU 1 (
+if %ERRORLEVEL% NEQ 0 (
     goto Error_CMakeNotInstalled
 )
 
 echo ---- Generating CMake project for Visual Studio 2022...
 
-set archArg=-A %arch%
-cmake.exe -G "Visual Studio 17" %archArg% "../%inputDir%"
+cmake.exe -G "Visual Studio 17" -S %sourceDir% -B %buildDir% -A %arch% 
 
 if %ERRORLEVEL% NEQ 0 (
-    pause
-    exit
+    goto Error_CMakeBuildingProjectFailed
 )
 
 pause
@@ -36,4 +34,8 @@ exit
 
 :Error_CMakeNotInstalled
 echo "CMake is not installed or not in environmental path."
+goto:eof
+
+:Error_CMakeBuildingProjectFailed
+echo "CMake failed to build the project for Visual Studio 2022."
 goto:eof

@@ -9,17 +9,36 @@ include_guard(GLOBAL)
 # Targets Configuration
 #
 
+# Engine
 set(MAIN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Include)
 set(MAIN_ENGINE_INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine)
 
-set(SPDLOG_ROOT ${CMAKE_CURRENT_SOURCE_DIR}/External/spdlog)
+# External
+set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External)
 
-set(DEPENDENCIES_INCLUDE_DIR 
-    "${CMAKE_CURRENT_SOURCE_DIR}/External/spdlog"
-)
+# Dependencies
+
+# spdlog
+set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog)
+
+# fmt
+set(FMT_ROOT ${EXTERNAL_DIR}/fmt)
+
+# tracy
+set(TRACY_ROOT ${EXTERNAL_DIR}/tracy)
+set(TRACY_HEADERS ${TRACY_ROOT}/public)
+set(TRACY_DEPENDENCIES_ROOT ${EXTERNAL_DIR}/tracy_dependencies)
+set(TRACY_DEPENDENCIES_HEADERS ${TRACY_DEPENDENCIES_ROOT}/include)
+
+#
+# Programs
+#
+
+add_subdirectory(Programs/TracyProfilerTool)
 
 #
 # Sources
 #
 
 add_subdirectory(Source)
+

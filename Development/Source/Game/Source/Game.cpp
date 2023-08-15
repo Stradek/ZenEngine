@@ -3,9 +3,21 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include <Engine/GameEngine.h>
+#include <Game.h>
 
-int main(int argc, char* argv[])
+#include <Engine/Core/Log.h>
+#include <Engine/Core/Memory.h>
+
+using Engine::Core::Memory::CircularBuffer;
+
+void Game::StartUp()
 {
-	Engine::Run();
+}
+
+void Game::Update(const uint32 deltaTime)
+{
+}
+
+void Game::ShutDown()
+{
 }
