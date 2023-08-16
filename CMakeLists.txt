@@ -12,7 +12,7 @@ cmake_policy(VERSION 3.9)
 
 include(Build/CMakeShared.cmake)
 
-project(DX12EngineTest)
+project(SDLEngineTest)
 
 # Setting up custom properties and functions from "CMakeShared.cmake" file
 custom_cmake_setup()
