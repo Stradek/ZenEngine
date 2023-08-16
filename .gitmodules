@@ -7,3 +7,6 @@
 [submodule "Development/External/tracy"]
 	path = Development/External/tracy
 	url = https://github.com/wolfpld/tracy
+[submodule "Development/External/SDL"]
+	path = Development/External/SDL
+	url = https://github.com/libsdl-org/SDL

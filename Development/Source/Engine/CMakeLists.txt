@@ -44,9 +44,10 @@ target_include_directories(Engine PUBLIC
 add_subdirectory("Common")
 add_subdirectory("Core")
 add_subdirectory("Debug")
+add_subdirectory("Renderer")
 
 # Engine dependencies
-target_link_libraries(Engine PUBLIC Core Common Debug)
+target_link_libraries(Engine PUBLIC Core Common Debug Renderer)
 
 # Tracy dependency
 add_compile_definitions(

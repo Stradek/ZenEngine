@@ -32,7 +32,7 @@ add_library(Debug
 )
 
 set_property(TARGET Debug PROPERTY FOLDER "Engine")
-target_include_directories(Debug PUBLIC
+target_include_directories(Debug PRIVATE
     ${DEBUG_INCLUDE_DIR}
         
     # Dependencies
@@ -44,7 +44,7 @@ target_include_directories(Debug PUBLIC
 #
 
 # Engine dependencies
-target_link_libraries(Debug PUBLIC Common Core)
+target_link_libraries(Debug PRIVATE Core)
 
 # 
 # Precompiled Headers

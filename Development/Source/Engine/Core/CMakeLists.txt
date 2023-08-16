@@ -32,7 +32,7 @@ add_library(Core
 )
 
 set_property(TARGET Core PROPERTY FOLDER "Engine")
-target_include_directories(Core PUBLIC
+target_include_directories(Core PRIVATE
     ${CORE_INCLUDE_DIR}
         
     # Dependencies
@@ -52,7 +52,7 @@ add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)
 set_property(TARGET spdlog PROPERTY FOLDER "Dependencies")
 
 target_link_libraries(Core PUBLIC spdlog)
-target_include_directories(Core PUBLIC
+target_include_directories(Core PRIVATE
     ${SPDLOG_ROOT}/include
 )
 
@@ -62,7 +62,7 @@ add_subdirectory(${FMT_ROOT} ${CMAKE_BINARY_DIR}/fmt)
 set_property(TARGET fmt PROPERTY FOLDER "Dependencies")
 
 target_link_libraries(Core PUBLIC fmt)
-target_include_directories(Core PUBLIC
+target_include_directories(Core PRIVATE
     ${FMT_ROOT}/include
 )
 
@@ -70,7 +70,6 @@ target_include_directories(Core PUBLIC
 # Precompiled Headers
 #
 
-target_precompile_headers(Core
-    PRIVATE
+target_precompile_headers(Core PRIVATE
     ${ENGINE_PRECOMILED_HEADER}
 )
