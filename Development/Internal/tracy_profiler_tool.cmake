@@ -18,5 +18,5 @@ add_subdirectory(${INTERNAL_DIR}/Tools/TracyProfilerTool)
 set_target_properties(
     TracyProfilerTool 
     PROPERTIES 
-    FOLDER "Programs"
+    FOLDER "Tools"
 )

@@ -3,16 +3,14 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include "GameEngine.h"
+#include "Engine/GameEngine.h"
 
-#include "IEngineApplication.h"
+#include <Engine/IEngineApplication.h>
 
-
-#include <Debug/DebugMacros.h>
+#include <Engine/Debug/DebugMacros.h>
 
 #ifdef _DEBUG
-#include <Debug/Debug.h>
-#include <tracy/Tracy.hpp>
+#include <Engine/Debug/Debug.h>
 #endif
 
 namespace Engine

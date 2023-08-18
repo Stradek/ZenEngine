@@ -7,8 +7,8 @@
 
 #ifdef _DEBUG
 
-#include <Core/ISystem.h>
-#include <Core/Memory.h>
+#include <Engine/Core/ISystem.h>
+#include <Engine/Core/Memory.h>
 
 namespace Engine::Debug
 {

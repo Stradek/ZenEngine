@@ -18,5 +18,5 @@ add_subdirectory(${INTERNAL_DIR}/Libraries/TracyProfilerClient)
 set_target_properties(
     TracyProfilerClient 
     PROPERTIES 
-    FOLDER "Programs"
+    FOLDER "Dependencies/Internal"
 )

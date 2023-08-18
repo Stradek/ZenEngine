@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include <Core/ISystem.h>
+#include <Engine/Core/ISystem.h>
 
 // this needs to be defined before including SDL.h 
 // to avoid enforced implementation of SDL_main()

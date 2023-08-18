@@ -6,50 +6,37 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Configuration
 #
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(EVENT_SYSTEM_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/EventSystem)
+set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/EventSystem)
 
-set(EVENT_SYSTEM_INCLUDE_DIR ${EVENT_SYSTEM_INCLUDE_DIR} PARENT_SCOPE)
-
-get_source_files(EVENT_SYSTEM_SOURCE_FILES 0 ${SOURCE_DIR})
-get_header_files(EVENT_SYSTEM_HEADER_FILES 0 ${EVENT_SYSTEM_INCLUDE_DIR})
-
-set(EVENT_SYSTEM_FILES 
-    "${EVENT_SYSTEM_SOURCE_FILES}"
-    "${EVENT_SYSTEM_HEADER_FILES}"
-)
 
 #
 # Library
 #
 
+get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+
 add_library(EventSystem
     STATIC
-    "${EVENT_SYSTEM_FILES}"
+    "${TARGET_FILES}"
 )
 
-set_property(TARGET EventSystem PROPERTY FOLDER "Engine")
 target_include_directories(EventSystem PRIVATE
-    ${EVENT_SYSTEM_INCLUDE_DIR}
-        
-    # Dependencies
-    ${ENGINE_INCLUDE_DIR}
+    ${INCLUDE_DIR}
 )
 
 #
 # Dependencies
 #
 
-# Engine dependencies
-target_link_libraries(EventSystem PRIVATE Core Debug)
+target_link_libraries(EventSystem PUBLIC 
+    # Engine
+    Core Debug
 
-# SDL library
-target_link_libraries(EventSystem PUBLIC SDL2)
-target_include_directories(EventSystem PRIVATE
-    ${SDL_ROOT}/include
+    # External
+    SDL2
 )
 
 # 
@@ -59,4 +46,14 @@ target_include_directories(EventSystem PRIVATE
 target_precompile_headers(EventSystem
     PRIVATE
     ${ENGINE_PRECOMILED_HEADER}
+)
+
+#
+# Visual Studio Configuration
+#
+
+set_target_properties(
+    EventSystem
+    PROPERTIES 
+    FOLDER "Engine"
 )

@@ -24,5 +24,5 @@ add_subdirectory(${FMT_ROOT} ${CMAKE_BINARY_DIR}/fmt)
 set_target_properties(
     fmt 
     PROPERTIES 
-    FOLDER "Dependencies"
+    FOLDER "Dependencies/External"
 )

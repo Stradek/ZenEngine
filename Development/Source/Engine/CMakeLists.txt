@@ -6,35 +6,36 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Configuration
 #
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(ENGINE_INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine/Engine)
+set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine)
 
-# Please...don't set here ENGINE_INCLUDE_DIR to PARENT_SCOPE
-#                         ^^^^^^^^^^^^^ NEVER ^^^^^^^^^^^^^^
+# This one is needed for Core subsystem to link it to every other subsystem
+# then every linked project include in engine systems needs start with <Engine/...>
+set(ENGINE_INCLUDE_DIR_CORE ${INCLUDE_DIR})
 
-get_source_files(ENGINE_SOURCE_FILES 0 ${SOURCE_DIR})
-get_header_files(ENGINE_HEADER_FILES 0 ${ENGINE_INCLUDE_DIR})
+set(ENGINE_INTERNAL_INCLUDE_DIR ${INCLUDE_DIR}/Engine)
 
-set(ENGINE_FILES 
-    "${ENGINE_SOURCE_FILES}"
-    "${ENGINE_HEADER_FILES}"
+
+# Tracy dependency
+add_compile_definitions(
+    "$<$<CONFIG:Debug>:TRACY_ENABLE>"
 )
 
 #
 # Library
 #
 
+get_all_target_files(TARGET_FILES 0 ${ENGINE_INTERNAL_INCLUDE_DIR})
+
 add_library(Engine
     STATIC
-    "${ENGINE_FILES}"
+    "${TARGET_FILES}"
 )
 
-set_property(TARGET Engine PROPERTY FOLDER "Engine")
 target_include_directories(Engine PUBLIC
-    ${ENGINE_INCLUDE_DIR}
+    ${INCLUDE_DIR}
 )
 
 #
@@ -45,18 +46,14 @@ add_subdirectory("Common")
 add_subdirectory("Core")
 add_subdirectory("Debug")
 add_subdirectory("Graphics")
+add_subdirectory("EventSystem")
 
-# Engine dependencies
-target_link_libraries(Engine PUBLIC Core Common Debug Graphics)
+target_link_libraries(Engine PUBLIC 
+    # Engine
+    Common Core Debug Graphics EventSystem
 
-# Tracy dependency
-add_compile_definitions(
-    "$<$<CONFIG:Debug>:TRACY_ENABLE>"
-)
-
-target_link_libraries(Engine PRIVATE TracyProfilerClient)
-target_include_directories(Engine PRIVATE
-    ${TRACY_HEADERS}
+    # Internal 
+    TracyProfilerClient
 )
 
 #
@@ -64,6 +61,16 @@ target_include_directories(Engine PRIVATE
 #
 
 target_precompile_headers(Engine
-    PRIVATE
+    PUBLIC
     ${ENGINE_PRECOMILED_HEADER}
+)
+
+#
+# Visual Studio Configuration
+#
+
+set_target_properties(
+    Engine
+    PROPERTIES 
+    FOLDER "Engine"
 )

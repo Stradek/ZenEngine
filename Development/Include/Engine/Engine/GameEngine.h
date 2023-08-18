@@ -5,12 +5,12 @@
 
 #pragma once
 
-#include <Core/Config.h>
+#include <Engine/Core/Config.h>
 
 #ifdef _DEBUG
-#include <Debug/Debug.h>
+#include <Engine/Debug/Debug.h>
 #endif // _DEBUG
-#include <Graphics/GraphicsManager.h>
+#include <Engine/Graphics/GraphicsManager.h>
 
 class ISystem;
 class IEngineApplication;

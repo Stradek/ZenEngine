@@ -9,53 +9,43 @@ include_guard(GLOBAL)
 # Sources
 #
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(CORE_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Core)
-
-set(CORE_INCLUDE_DIR ${CORE_INCLUDE_DIR} PARENT_SCOPE)
-
-get_source_files(CORE_SOURCE_FILES 0 ${SOURCE_DIR})
-get_header_files(CORE_HEADER_FILES 0 ${CORE_INCLUDE_DIR})
-
-set(CORE_FILES 
-    "${CORE_SOURCE_FILES}"
-    "${CORE_HEADER_FILES}"
-)
+set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Core)
 
 #
 # Library
 #
 
+get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+
 add_library(Core
     STATIC
-    "${CORE_FILES}"
+    "${TARGET_FILES}"
 )
 
 set_property(TARGET Core PROPERTY FOLDER "Engine")
 target_include_directories(Core PRIVATE
-    ${CORE_INCLUDE_DIR}
-        
-    # Dependencies
-    ${ENGINE_INCLUDE_DIR}
+    ${INCLUDE_DIR}
+)
+
+# This needs to be alway here as it makes every
+# include in engine start with <Engine/...>
+target_include_directories(Core PUBLIC
+    ${ENGINE_INCLUDE_DIR_CORE}
 )
 
 #
 # Dependencies
 #
 
-# Engine dependencies
-target_link_libraries(Core PUBLIC Common)
+target_link_libraries(Core PUBLIC 
+    # Engine
+    Common
 
-# spdlog library
-target_link_libraries(Core PUBLIC spdlog)
-target_include_directories(Core PRIVATE
-    ${SPDLOG_ROOT}/include
-)
+    # External 
+    spdlog fmt 
 
-# fmt library
-target_link_libraries(Core PUBLIC fmt)
-target_include_directories(Core PRIVATE
-    ${FMT_ROOT}/include
+    # Internal 
+    TracyProfilerClient
 )
 
 # 

@@ -24,5 +24,5 @@ add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)
 set_target_properties(
     spdlog
     PROPERTIES 
-    FOLDER "Dependencies"
+    FOLDER "Dependencies/External"
 )

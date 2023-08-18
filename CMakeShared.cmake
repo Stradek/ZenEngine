@@ -132,8 +132,8 @@ function(custom_cmake_setup)
         set(${RESULT_VAR} "${SOURCE_FILES}" PARENT_SCOPE)
     endfunction()
 
-     # Search header files in given directory
-     function(get_header_files RESULT_VAR USE_RECURSE INCLUDE_DIR)
+    # Search header files in given directory
+    function(get_header_files RESULT_VAR USE_RECURSE INCLUDE_DIR)
         #message(STATUS "get_header_files")
         #message(STATUS "FILETYPES: ${HEADER_FILE_TYPES}")
 
@@ -142,6 +142,17 @@ function(custom_cmake_setup)
         #message(STATUS "HEADERS: ${HEADER_FILES}")
 
         set(${RESULT_VAR} "${HEADER_FILES}" PARENT_SCOPE)
- endfunction()
+    endfunction()
 
+    function(get_all_target_files RESULT_VAR USE_RECURSE INCLUDE_DIR)
+        get_source_files(TARGET_SOURCE_FILES ${USE_RECURSE} "${CMAKE_CURRENT_SOURCE_DIR}/Source")
+        get_header_files(TARGET_HEADER_FILES ${USE_RECURSE} "${INCLUDE_DIR}")
+
+        set(${RESULT_VAR} 
+            "${TARGET_SOURCE_FILES}"
+            "${TARGET_HEADER_FILES}"
+            PARENT_SCOPE
+        )
+    endfunction()
+    
 endfunction()

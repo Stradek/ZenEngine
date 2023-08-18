@@ -33,5 +33,5 @@ set_target_properties(
     SDL2 SDL2main sdl-build-options SDL2-static 
     SDL2_test sdl_headers_copy uninstall 
     PROPERTIES 
-    FOLDER "Dependencies/SDL2"
+    FOLDER "Dependencies/External/SDL2"
 )
