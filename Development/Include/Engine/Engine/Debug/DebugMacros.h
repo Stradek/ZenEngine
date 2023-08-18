@@ -26,4 +26,4 @@
 #define ENGINE_FRAME_MARK_START(x)
 #define ENGINE_FRAME_MARK_END(x)
 
-#endif // _DEBUG
+#endif

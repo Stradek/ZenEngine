@@ -65,6 +65,7 @@ namespace Engine::Debug
 		void ShutDown() override;
 
 		Performance::PerformanceProfiler& GetPerformanceProfiler() { return m_performanceProfiler; };
+		void StartPerformanceProfiler();
 
 		void Update(const uint32 deltaTime) override;
 

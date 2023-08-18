@@ -53,6 +53,10 @@ function(custom_cmake_setup)
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra" PARENT_SCOPE)
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g" PARENT_SCOPE)
     endif()
+
+    if(MSVC)
+        set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zf /MP" PARENT_SCOPE)
+    endif()
     
     #
     # Configurations

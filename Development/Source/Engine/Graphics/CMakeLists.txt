@@ -10,30 +10,30 @@ include_guard(GLOBAL)
 #
 
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(RENDERER_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Renderer)
+set(GRAPHICS_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Graphics)
 
-set(RENDERER_INCLUDE_DIR ${RENDERER_INCLUDE_DIR} PARENT_SCOPE)
+set(GRAPHICS_INCLUDE_DIR ${GRAPHICS_INCLUDE_DIR} PARENT_SCOPE)
 
-get_source_files(RENDERER_SOURCE_FILES 0 ${SOURCE_DIR})
-get_header_files(RENDERER_HEADER_FILES 0 ${RENDERER_INCLUDE_DIR})
+get_source_files(GRAPHICS_SOURCE_FILES 0 ${SOURCE_DIR})
+get_header_files(GRAPHICS_HEADER_FILES 0 ${GRAPHICS_INCLUDE_DIR})
 
-set(RENDERER_FILES 
-    "${RENDERER_SOURCE_FILES}"
-    "${RENDERER_HEADER_FILES}"
+set(GRAPHICS_FILES 
+    "${GRAPHICS_SOURCE_FILES}"
+    "${GRAPHICS_HEADER_FILES}"
 )
 
 #
 # Library
 #
 
-add_library(Renderer
+add_library(Graphics
     STATIC
-    "${RENDERER_FILES}"
+    "${GRAPHICS_FILES}"
 )
 
-set_property(TARGET Renderer PROPERTY FOLDER "Engine")
-target_include_directories(Renderer PRIVATE
-    ${RENDERER_INCLUDE_DIR}
+set_property(TARGET Graphics PROPERTY FOLDER "Engine")
+target_include_directories(Graphics PRIVATE
+    ${GRAPHICS_INCLUDE_DIR}
         
     # Dependencies
     ${ENGINE_INCLUDE_DIR}
@@ -44,7 +44,7 @@ target_include_directories(Renderer PRIVATE
 #
 
 # Engine dependencies
-target_link_libraries(Renderer PRIVATE Core Debug)
+target_link_libraries(Graphics PRIVATE Core Debug)
 
 set(SDL_TEST                OFF
     SDL2_DISABLE_SDL2MAIN   ON
@@ -60,8 +60,8 @@ add_subdirectory(${SDL_ROOT} ${CMAKE_BINARY_DIR}/SDL)
 set_target_properties(
     SDL2 SDL2main sdl-build-options SDL2-static SDL2_test sdl_headers_copy uninstall PROPERTIES FOLDER "Dependencies/SDL2")
 
-target_link_libraries(Renderer PUBLIC SDL2)
-target_include_directories(Renderer PRIVATE
+target_link_libraries(Graphics PUBLIC SDL2)
+target_include_directories(Graphics PRIVATE
     ${SDL_ROOT}/include
 )
 
@@ -69,7 +69,7 @@ target_include_directories(Renderer PRIVATE
 # Precompiled Headers
 #
 
-target_precompile_headers(Renderer
+target_precompile_headers(Graphics
     PRIVATE
     ${ENGINE_PRECOMILED_HEADER}
 )

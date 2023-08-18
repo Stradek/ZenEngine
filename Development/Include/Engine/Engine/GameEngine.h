@@ -10,6 +10,7 @@
 #ifdef _DEBUG
 #include <Debug/Debug.h>
 #endif // _DEBUG
+#include <Graphics/GraphicsManager.h>
 
 class ISystem;
 class IEngineApplication;
@@ -33,7 +34,8 @@ namespace Engine
 #ifdef _DEBUG
 		Debug::DebugManager m_debugManager;
 #endif
-		
+		Graphics::GraphicsManager m_renderingSystem;
+
 		uint32 m_deltaTime	= Core::Config::m_targetRenderFrameFrequency;
 
 		void EngineRun();

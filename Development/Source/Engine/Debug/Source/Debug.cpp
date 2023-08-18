@@ -95,7 +95,10 @@ namespace Engine::Debug
 	void DebugManager::StartUp()
 	{
 		m_performanceProfiler = Performance::PerformanceProfiler();
+	}
 
+	void DebugManager::StartPerformanceProfiler()
+	{
 		ClearEngineCounters();
 		m_debugUpdateClock.Start();
 	}

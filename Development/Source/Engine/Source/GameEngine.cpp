@@ -7,12 +7,13 @@
 
 #include "IEngineApplication.h"
 
+
 #include <Debug/DebugMacros.h>
 
 #ifdef _DEBUG
 #include <Debug/Debug.h>
 #include <tracy/Tracy.hpp>
-#endif // _DEBUG
+#endif
 
 namespace Engine
 {
@@ -37,6 +38,7 @@ namespace Engine
 #ifdef _DEBUG
 		m_debugManager.StartUp();
 #endif
+		m_renderingSystem.StartUp();
 
 		m_appInstance->StartUp();
 	}
@@ -66,6 +68,9 @@ namespace Engine
 		m_timeSinceUpdateClock.Start();
 		m_timeSinceRenderFrameClock.Start();
 
+#ifdef _DEBUG
+		m_debugManager.StartPerformanceProfiler();
+#endif
 		for (;;)
 		{
 			if (m_timeSinceUpdateClock.GetDuration() >= Core::Config::m_targetUpdateFrequency)
@@ -96,6 +101,7 @@ namespace Engine
 	{
 		m_appInstance->ShutDown();
 
+		m_renderingSystem.ShutDown();
 #ifdef _DEBUG
 		m_debugManager.ShutDown();
 #endif
