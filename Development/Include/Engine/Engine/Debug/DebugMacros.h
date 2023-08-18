@@ -11,6 +11,8 @@
 
 #ifdef _DEBUG
 
+#include <tracy/Tracy.hpp>
+
 #define ENGINE_FRAME_MARK_START(name) {									\
 	m_debugManager.GetPerformanceProfiler().FrameProfilingStart(name);	\
 	FrameMarkStart(name);												\
@@ -26,4 +28,4 @@
 #define ENGINE_FRAME_MARK_START(x)
 #define ENGINE_FRAME_MARK_END(x)
 
-#endif // _DEBUG
+#endif

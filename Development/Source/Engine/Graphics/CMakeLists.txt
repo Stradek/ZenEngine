@@ -6,23 +6,24 @@
 include_guard(GLOBAL)
 
 #
-# Configuration
+# Sources
 #
 
-set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Debug)
+set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Graphics)
+
 
 #
 # Library
 #
 
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
 
-add_library(Debug
+add_library(Graphics
     STATIC
     "${TARGET_FILES}"
 )
 
-target_include_directories(Debug PRIVATE
+target_include_directories(Graphics PRIVATE
     ${INCLUDE_DIR}
 )
 
@@ -30,20 +31,19 @@ target_include_directories(Debug PRIVATE
 # Dependencies
 #
 
-target_link_libraries(Debug PUBLIC 
+target_link_libraries(Graphics PUBLIC
     # Engine
-    Core
-)
+    Core Debug
 
-target_include_directories(Engine PRIVATE
-    ${TRACY_HEADERS}
+    # External
+    SDL2
 )
 
 # 
 # Precompiled Headers
 #
 
-target_precompile_headers(Debug
+target_precompile_headers(Graphics
     PRIVATE
     ${ENGINE_PRECOMILED_HEADER}
 )
@@ -53,7 +53,7 @@ target_precompile_headers(Debug
 #
 
 set_target_properties(
-    Debug
+    Graphics
     PROPERTIES 
     FOLDER "Engine"
 )

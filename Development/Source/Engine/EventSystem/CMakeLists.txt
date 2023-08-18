@@ -9,7 +9,8 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Debug)
+set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/EventSystem)
+
 
 #
 # Library
@@ -17,12 +18,12 @@ set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Debug)
 
 get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
 
-add_library(Debug
+add_library(EventSystem
     STATIC
     "${TARGET_FILES}"
 )
 
-target_include_directories(Debug PRIVATE
+target_include_directories(EventSystem PRIVATE
     ${INCLUDE_DIR}
 )
 
@@ -30,20 +31,19 @@ target_include_directories(Debug PRIVATE
 # Dependencies
 #
 
-target_link_libraries(Debug PUBLIC 
+target_link_libraries(EventSystem PUBLIC 
     # Engine
-    Core
-)
+    Core Debug
 
-target_include_directories(Engine PRIVATE
-    ${TRACY_HEADERS}
+    # External
+    SDL2
 )
 
 # 
 # Precompiled Headers
 #
 
-target_precompile_headers(Debug
+target_precompile_headers(EventSystem
     PRIVATE
     ${ENGINE_PRECOMILED_HEADER}
 )
@@ -53,7 +53,7 @@ target_precompile_headers(Debug
 #
 
 set_target_properties(
-    Debug
+    EventSystem
     PROPERTIES 
     FOLDER "Engine"
 )

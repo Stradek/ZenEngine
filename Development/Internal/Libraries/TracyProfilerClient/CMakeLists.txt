@@ -5,6 +5,10 @@
 
 include_guard(GLOBAL)
 
+#
+# Configuration
+#
+
 add_compile_definitions(
     "$<$<CONFIG:Debug>:TRACY_ENABLE; TRACY_ONLY_LOCALHOST>"
 )
@@ -26,4 +30,12 @@ add_library(TracyProfilerClient
     "${TRACY_PROFILER_CLIENT_FILES}"
 )
 
-set_property(TARGET TracyProfilerClient PROPERTY FOLDER "Dependencies")
+#
+# Visual Studio Configuration
+#
+
+set_target_properties(
+    TracyProfilerClient 
+    PROPERTIES 
+    FOLDER "Dependencies"
+)

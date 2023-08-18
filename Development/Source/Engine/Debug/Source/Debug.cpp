@@ -7,7 +7,7 @@
 
 #include "Debug.h"
 
-#include <Core/Log.h>
+#include <Engine/Core/Log.h>
 
 namespace Engine::Debug
 {
@@ -95,7 +95,10 @@ namespace Engine::Debug
 	void DebugManager::StartUp()
 	{
 		m_performanceProfiler = Performance::PerformanceProfiler();
+	}
 
+	void DebugManager::StartPerformanceProfiler()
+	{
 		ClearEngineCounters();
 		m_debugUpdateClock.Start();
 	}

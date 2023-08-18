@@ -6,35 +6,33 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Configuration
 #
 
-set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Source)
-set(COMMON_INCLUDE_DIR ${ENGINE_INCLUDE_DIR}/Common)
-
-set(COMMON_INCLUDE_DIR ${COMMON_INCLUDE_DIR} PARENT_SCOPE)
-
-get_source_files(COMMON_SOURCE_FILES 1 ${SOURCE_DIR})
-get_header_files(COMMON_HEADER_FILES 1 ${COMMON_INCLUDE_DIR})
-
-
-set(COMMON_FILES 
-    "${COMMON_SOURCE_FILES}"
-    "${COMMON_HEADER_FILES}"
-)
+set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Common)
 
 #
 # Library
 #
 
+get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
+
 add_library(Common
     STATIC
-    "${COMMON_FILES}"
+    "${TARGET_FILES}"
 )
 
-set_property(TARGET Common PROPERTY FOLDER "Common")
-target_include_directories(Common PRIVATE
-    ${COMMON_INCLUDE_DIR}
+target_include_directories(Common PUBLIC
+    ${INCLUDE_DIR}
+)
+
+#
+# Dependencies
+#
+
+target_link_libraries(Common PRIVATE 
+    # Internal
+    TracyProfilerClient
 )
 
 #
@@ -44,4 +42,14 @@ target_include_directories(Common PRIVATE
 target_precompile_headers(Common
     PRIVATE
     "${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h"
+)
+
+#
+# Visual Studio Configuration
+#
+
+set_target_properties(
+    Common
+    PROPERTIES 
+    FOLDER "Engine"
 )

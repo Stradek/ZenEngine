@@ -10,7 +10,11 @@
 cmake_minimum_required(VERSION 3.9 FATAL_ERROR)
 cmake_policy(VERSION 3.9)
 
-include(Build/CMakeShared.cmake)
+include(CMakeShared.cmake)
+
+#
+# Project
+#
 
 project(SDLEngineTest)
 
