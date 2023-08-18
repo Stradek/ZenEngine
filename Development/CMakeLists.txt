@@ -13,31 +13,23 @@ include_guard(GLOBAL)
 set(MAIN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Include)
 set(MAIN_ENGINE_INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine)
 
+#
+# Dependencies
+#
+
 # External
 set(EXTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/External)
 
-# Dependencies
+include(${EXTERNAL_DIR}/fmt.cmake)
+include(${EXTERNAL_DIR}/sdl.cmake)
+include(${EXTERNAL_DIR}/spdlog.cmake)
+include(${EXTERNAL_DIR}/tracy.cmake)
 
-# spdlog
-set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog)
+# Internal
+set(INTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Internal)
 
-# fmt
-set(FMT_ROOT ${EXTERNAL_DIR}/fmt)
-
-# tracy
-set(TRACY_ROOT ${EXTERNAL_DIR}/tracy)
-set(TRACY_HEADERS ${TRACY_ROOT}/public)
-set(TRACY_DEPENDENCIES_ROOT ${EXTERNAL_DIR}/tracy_dependencies)
-set(TRACY_DEPENDENCIES_HEADERS ${TRACY_DEPENDENCIES_ROOT}/include)
-
-# SDL
-set(SDL_ROOT ${EXTERNAL_DIR}/SDL)
-
-#
-# Programs
-#
-
-add_subdirectory(Programs/TracyProfilerTool)
+include(${INTERNAL_DIR}/tracy_profiler_client.cmake)
+include(${INTERNAL_DIR}/tracy_profiler_tool.cmake)
 
 #
 # Sources

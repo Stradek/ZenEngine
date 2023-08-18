@@ -43,7 +43,11 @@ if(MSVC)
     
     # Set warning level to Level 3
     set(TRACY_FLAGS "${TRACY_FLAGS} /W3")
+
+    add_compile_definitions("${TRACY_FLAGS}")
 endif()
+
+
 
 #
 # Sources
@@ -322,7 +326,6 @@ set_target_properties(TracyProfilerTool PROPERTIES LINKER_LANGUAGE CXX)
 
 target_link_libraries(TracyProfilerTool brotlicommon-static brotlidec-static ws2_32 brotlienc-static bz2d capstone freetyped glfw3 libpng16d zlibd)
 
-set_property(TARGET TracyProfilerTool PROPERTY FOLDER "Programs")
 target_include_directories(TracyProfilerTool PRIVATE
     "${TRACY_PROFILER_TOOL_INCLUDE_DIR}"
 )

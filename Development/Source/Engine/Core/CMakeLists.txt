@@ -47,20 +47,12 @@ target_include_directories(Core PRIVATE
 target_link_libraries(Core PUBLIC Common)
 
 # spdlog library
-add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)
-
-set_property(TARGET spdlog PROPERTY FOLDER "Dependencies")
-
 target_link_libraries(Core PUBLIC spdlog)
 target_include_directories(Core PRIVATE
     ${SPDLOG_ROOT}/include
 )
 
-# FMT library
-add_subdirectory(${FMT_ROOT} ${CMAKE_BINARY_DIR}/fmt)
-
-set_property(TARGET fmt PROPERTY FOLDER "Dependencies")
-
+# fmt library
 target_link_libraries(Core PUBLIC fmt)
 target_include_directories(Core PRIVATE
     ${FMT_ROOT}/include

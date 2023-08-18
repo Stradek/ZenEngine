@@ -8,14 +8,6 @@ include_guard(GLOBAL)
 set(ENGINE_PRECOMILED_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h)
 
 #
-# Project Dependencies
-#
-
-
-# Tracy library
-add_subdirectory(TracyProfilerClient)
-
-#
 # Sources
 #
 
