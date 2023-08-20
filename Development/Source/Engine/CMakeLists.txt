@@ -53,7 +53,7 @@ target_include_directories(Engine PUBLIC
     ${INCLUDE_DIR}
 
     # Tracy dependency
-    ${TRACY_HEADERS}
+    $<$<CONFIG:Debug>:${TRACY_HEADER_DIR}>
 )
 
 target_link_libraries(Engine PUBLIC 
@@ -61,7 +61,7 @@ target_link_libraries(Engine PUBLIC
     Common Core Debug WindowManagement Graphics EventSystem
 
     # Internal 
-    TracyProfilerClient
+    $<$<CONFIG:Debug>:TracyProfilerClient>
 )
 
 #
