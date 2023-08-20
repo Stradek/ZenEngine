@@ -323,11 +323,14 @@ add_executable(TracyProfilerTool WIN32
 )
 
 target_link_directories(TracyProfilerTool PRIVATE
-    ${TRACY_DEPENDENCIES_ROOT}/debug/lib
+    $<$<CONFIG:Debug>:${TRACY_DEPENDENCIES_ROOT}/debug/lib>
+    $<$<CONFIG:Release>:${TRACY_DEPENDENCIES_ROOT}/lib>
 )
 
 target_link_libraries(TracyProfilerTool PRIVATE
-    brotlicommon-static brotlidec-static ws2_32 brotlienc-static bz2d capstone freetyped glfw3 libpng16d zlibd
+    brotlicommon-static brotlidec-static ws2_32 brotlienc-static capstone glfw3
+    $<$<CONFIG:Debug>:zlibd bz2d freetyped libpng16d>
+    $<$<CONFIG:Release>:zlib bz2 freetype libpng16>
 )
 
 target_include_directories(TracyProfilerTool PRIVATE

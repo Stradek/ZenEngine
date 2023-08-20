@@ -44,7 +44,7 @@ target_link_libraries(Core PUBLIC
     spdlog fmt 
 
     # Internal 
-    TracyProfilerClient
+    $<$<CONFIG:Debug>:TracyProfilerClient>
 )
 
 # 
