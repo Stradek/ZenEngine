@@ -7,8 +7,6 @@
 
 #include "Debug.h"
 
-#include <Engine/Core/Log.h>
-
 namespace Engine::Debug
 {
 	namespace Performance

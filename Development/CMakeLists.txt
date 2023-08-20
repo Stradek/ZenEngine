@@ -6,12 +6,10 @@
 include_guard(GLOBAL)
 
 #
-# Targets Configuration
+# Project Targets Configuration
 #
 
-# Engine
 set(MAIN_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Include)
-set(MAIN_ENGINE_INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Engine)
 
 #
 # Dependencies

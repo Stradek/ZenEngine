@@ -6,23 +6,22 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Files
 #
 
 set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Core)
 
+get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+
 #
 # Library
 #
-
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
 
 add_library(Core
     STATIC
     "${TARGET_FILES}"
 )
 
-set_property(TARGET Core PROPERTY FOLDER "Engine")
 target_include_directories(Core PRIVATE
     ${INCLUDE_DIR}
 )
@@ -52,6 +51,16 @@ target_link_libraries(Core PUBLIC
 # Precompiled Headers
 #
 
-target_precompile_headers(Core PRIVATE
+target_precompile_headers(Core PUBLIC
     ${ENGINE_PRECOMILED_HEADER}
+)
+
+#
+# Visual Studio Configuration
+#
+
+set_target_properties(
+    Core
+    PROPERTIES 
+    FOLDER "Engine"
 )

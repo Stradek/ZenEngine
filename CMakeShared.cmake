@@ -54,6 +54,7 @@ function(custom_cmake_setup)
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -g" PARENT_SCOPE)
     endif()
 
+    # Multithreaded compilation and faster PDB generation in parallel builds
     if(MSVC)
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zf /MP" PARENT_SCOPE)
     endif()
@@ -144,6 +145,7 @@ function(custom_cmake_setup)
         set(${RESULT_VAR} "${HEADER_FILES}" PARENT_SCOPE)
     endfunction()
 
+    # Search source and header files in given directory
     function(get_all_target_files RESULT_VAR USE_RECURSE INCLUDE_DIR)
         get_source_files(TARGET_SOURCE_FILES ${USE_RECURSE} "${CMAKE_CURRENT_SOURCE_DIR}/Source")
         get_header_files(TARGET_HEADER_FILES ${USE_RECURSE} "${INCLUDE_DIR}")

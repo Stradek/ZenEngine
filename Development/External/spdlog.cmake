@@ -12,7 +12,7 @@ include_guard(GLOBAL)
 set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog)
 
 #
-# Include spdlog Library
+# Include Library
 #
 
 add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)

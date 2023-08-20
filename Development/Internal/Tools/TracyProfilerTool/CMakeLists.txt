@@ -5,7 +5,9 @@
 
 include_guard(GLOBAL)
 
-# From Tracy.sln
+#
+# Configuration
+#
 
 add_compile_definitions(
     _CRT_SECURE_NO_DEPRECATE
@@ -50,16 +52,16 @@ endif()
 
 
 #
-# Sources
+# Files
 #
 
-set(TRACY_PROFILER_TOOL_INCLUDE_DIR 
+set(INCLUDE_DIRS 
     ${TRACY_ROOT}/imgui
     ${TRACY_DEPENDENCIES_HEADERS}
     ${TRACY_DEPENDENCIES_HEADERS}/capstone
 )
 
-set(TRACY_SOURCE_FILES
+set(SOURCE_FILES
     ${TRACY_ROOT}/imgui/imgui.cpp
     ${TRACY_ROOT}/imgui/imgui_demo.cpp
     ${TRACY_ROOT}/imgui/imgui_draw.cpp
@@ -175,7 +177,7 @@ set(TRACY_SOURCE_FILES
     ${TRACY_ROOT}/profiler/src/winmainArchDiscovery.cpp
 )
 
-set(TRACY_HEADER_FILES
+set(HEADER_FILES
     ${TRACY_ROOT}/imgui/imconfig.h
     ${TRACY_ROOT}/imgui/imgui.h
     ${TRACY_ROOT}/imgui/imgui_internal.h
@@ -307,23 +309,36 @@ set(TRACY_HEADER_FILES
     ${TRACY_ROOT}/profiler/src/WindowPosition.hpp
 )
 
+set(TARGET_FILES
+    "${SOURCE_FILES}"
+    "${HEADER_FILES}"
+)
+
 #
-# Library
+# Executable
 #
+
+add_executable(TracyProfilerTool WIN32
+    "${TARGET_FILES}"
+)
 
 link_directories(
     ${TRACY_DEPENDENCIES_ROOT}/debug/lib
 )
 
-add_executable(TracyProfilerTool WIN32
-    "${TRACY_SOURCE_FILES}"
-    "${TRACY_HEADER_FILES}"
+target_link_libraries(TracyProfilerTool PRIVATE
+    brotlicommon-static brotlidec-static ws2_32 brotlienc-static bz2d capstone freetyped glfw3 libpng16d zlibd
 )
 
-set_target_properties(TracyProfilerTool PROPERTIES LINKER_LANGUAGE CXX)
-
-target_link_libraries(TracyProfilerTool brotlicommon-static brotlidec-static ws2_32 brotlienc-static bz2d capstone freetyped glfw3 libpng16d zlibd)
-
 target_include_directories(TracyProfilerTool PRIVATE
-    "${TRACY_PROFILER_TOOL_INCLUDE_DIR}"
+    "${INCLUDE_DIRS}"
+)
+
+#
+# Linker Configuration
+#
+
+set_target_properties(TracyProfilerTool 
+    PROPERTIES 
+    LINKER_LANGUAGE CXX
 )
