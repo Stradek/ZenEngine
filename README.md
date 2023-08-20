@@ -2,7 +2,7 @@
 This game engine is still work in progress. Name of this software still haven't been determined and will change in the future.
 
 # Project Current Goals
-1. Game Genre: I want to develop a simple platformer game.
+1. Game Genre: I want to develop a simple 2D platformer game.
 2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
 3. Level Design: I want to create levels without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in old days.
 4. Engine main goals: memory management with custom allocators and multithreaded job system.
@@ -10,8 +10,9 @@ This game engine is still work in progress. Name of this software still haven't 
 # Repositiory Directory Structure
 * Binaries/ - Build artifacts(files like .lib, .pdb) and executable(.exe)
 * Build/ - CMake related artifacts(in .\CMake-* directory), shared CMake configuration and functions(CMakeShared.cmake) and CMake related batch scripts.
-* Development/ - Source code related to the engine
+* Development/ - Engine related development files
 * Development/External - external libraries
+* Development/Internal - internal libraries and tools
 * Development/Include - project headers code
 * Development/Scripts - automation scripts supporting development process
 * Development/Source - project source code
