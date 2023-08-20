@@ -20,7 +20,7 @@ set(SDL_TEST                OFF
 )
 
 #
-# Include SDL Library
+# Include Library
 #
 
 add_subdirectory(${SDL_ROOT} ${CMAKE_BINARY_DIR}/SDL)

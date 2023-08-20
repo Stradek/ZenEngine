@@ -12,21 +12,17 @@ include_guard(GLOBAL)
 set(ENGINE_PRECOMILED_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h)
 
 #
-# Dependencies
+# Engine Library
 #
 
 add_subdirectory(Engine)
 
 #
-# Applications
+# Application Executables
 #
 
 add_subdirectory(Editor)
 add_subdirectory(Game)
-
-# Game & Editor precompiled headers inheritance from engine
-target_precompile_headers(Editor REUSE_FROM Engine)
-target_precompile_headers(Game REUSE_FROM Engine)
 
 #
 # Targets Additional Settings

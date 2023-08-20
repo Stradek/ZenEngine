@@ -6,20 +6,18 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Files
 #
 
 set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Graphics)
 
+get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
 
 #
 # Library
 #
 
-get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
-
-add_library(Graphics
-    STATIC
+add_library(Graphics STATIC
     "${TARGET_FILES}"
 )
 
@@ -39,21 +37,11 @@ target_link_libraries(Graphics PUBLIC
     SDL2
 )
 
-# 
-# Precompiled Headers
-#
-
-target_precompile_headers(Graphics
-    PRIVATE
-    ${ENGINE_PRECOMILED_HEADER}
-)
-
 #
 # Visual Studio Configuration
 #
 
-set_target_properties(
-    Graphics
+set_target_properties(Graphics
     PROPERTIES 
     FOLDER "Engine"
 )

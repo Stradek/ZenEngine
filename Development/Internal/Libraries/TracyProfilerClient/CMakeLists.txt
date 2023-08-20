@@ -14,28 +14,21 @@ add_compile_definitions(
 )
 
 #
-# Sources
+# Files
 #
 
-set(TRACY_PROFILER_CLIENT_FILES
+set(SOURCE_FILES
     "${TRACY_ROOT}/public/TracyClient.cpp"
+)
+
+set(TARGET_FILES
+    "${SOURCE_FILES}"
 )
 
 #
 # Library
 #
 
-add_library(TracyProfilerClient
-    STATIC
-    "${TRACY_PROFILER_CLIENT_FILES}"
-)
-
-#
-# Visual Studio Configuration
-#
-
-set_target_properties(
-    TracyProfilerClient 
-    PROPERTIES 
-    FOLDER "Dependencies"
+add_library(TracyProfilerClient STATIC
+    "${TARGET_FILES}"
 )

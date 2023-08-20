@@ -6,10 +6,8 @@
 include_guard(GLOBAL)
 
 #
-# Configuration
+# Files
 #
-
-set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Game)
 
 #############################################################
 #                       !WARNING!                           #
@@ -20,11 +18,13 @@ set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Game)
 # In case I will change my mind it's worth looking into.    #
 #############################################################
 
+set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Game)
+
+get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
+
 #
 # Executable
 #
-
-get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
 
 add_executable(Game
     "${TARGET_FILES}"

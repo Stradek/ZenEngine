@@ -6,31 +6,32 @@
 include_guard(GLOBAL)
 
 #
-# Configuration
+# Files
 #
 
 set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Editor)
+
+get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
 
 #
 # Executable
 #
 
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
-
 add_executable(Editor
     "${TARGET_FILES}"
 )
 
-target_include_directories(Editor PUBLIC
-    ${EDITOR_INCLUDE_DIR}
+target_include_directories(Editor PRIVATE
+    ${INCLUDE_DIR}
 )
 
 #
 # Dependencies
 #
 
-# Engine dependency
-target_link_libraries(Editor PUBLIC Engine)
+target_link_libraries(Editor PRIVATE 
+    Engine
+)
 
 #
 # Visual Studio Configuration

@@ -6,20 +6,18 @@
 include_guard(GLOBAL)
 
 #
-# Sources
+# Files
 #
 
 set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/WindowManagement)
 
+get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
 
 #
 # Library
 #
 
-get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
-
-add_library(WindowManagement
-    STATIC
+add_library(WindowManagement STATIC
     "${TARGET_FILES}"
 )
 
@@ -39,21 +37,11 @@ target_link_libraries(WindowManagement PUBLIC
     SDL2
 )
 
-# 
-# Precompiled Headers
-#
-
-target_precompile_headers(WindowManagement
-    PRIVATE
-    ${ENGINE_PRECOMILED_HEADER}
-)
-
 #
 # Visual Studio Configuration
 #
 
-set_target_properties(
-    WindowManagement
+set_target_properties(WindowManagement
     PROPERTIES 
     FOLDER "Engine"
 )

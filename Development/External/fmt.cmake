@@ -12,7 +12,7 @@ include_guard(GLOBAL)
 set(FMT_ROOT ${EXTERNAL_DIR}/fmt)
 
 #
-# Include fmt Library
+# Include Library
 #
 
 add_subdirectory(${FMT_ROOT} ${CMAKE_BINARY_DIR}/fmt)
