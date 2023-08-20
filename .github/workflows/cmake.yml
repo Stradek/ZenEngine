@@ -28,12 +28,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        target: [
-          # Engine Applications
-          Game, Editor,
-          # Tools
-          TracyProfilerTool,
-        ]
+        target: [Game, Editor, TracyProfilerTool]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -46,5 +41,5 @@ jobs:
         name: build
         path: build
 
-      - name: Build ${{matrix.target}} (${{matrix.configuration}})
-        run: cmake --build build --config ${{matrix.configuration}} --target ${{matrix.target}}
+    - name: Build ${{matrix.target}} (${{matrix.configuration}})
+      run: cmake --build build --config ${{matrix.configuration}} --target ${{matrix.target}}
