@@ -9,7 +9,9 @@
 
 int main(int argc, char* argv[])
 {
-	std::shared_ptr<IEngineApplication> gameInstance = std::make_shared<Game>();
-	Engine::GameEngine::Run(gameInstance);
+	{
+		std::shared_ptr<IEngineApplication> gameInstance = std::make_shared<Game>();
+		Engine::GameEngine::Run(gameInstance);
+	}
 	return 0;
 }

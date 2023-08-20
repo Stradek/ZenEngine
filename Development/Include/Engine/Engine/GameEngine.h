@@ -33,8 +33,10 @@ namespace Engine
 	using WindowManagerRef = std::shared_ptr<Window::WindowManager>&;
 	using EventManagerRef = std::shared_ptr<EventSystem::EventManager>&;
 	using GraphicsManagerRef = std::shared_ptr<Graphics::GraphicsManager>&;
-	using DebugManagerRef = std::shared_ptr<Debug::DebugManager>&;
 
+#ifdef _DEBUG
+	using DebugManagerRef = std::shared_ptr<Debug::DebugManager>&;
+#endif
 
 	class GameEngine
 	{
@@ -43,13 +45,16 @@ namespace Engine
 		void operator=(GameEngine& m_gameEngine) = delete;
 
 		static GameEngineRef getInstance();
+		static void DestroyInstance();
 
 		static void Run(EngineApplicationRef appInstanceRef);
 
 		WindowManagerRef GetWindowManager() { return m_windowManager; }
 		EventManagerRef GetEventManager() { return m_eventManager; }
 		GraphicsManagerRef GetGraphicsManager() { return m_graphicsManager; }
+#ifdef _DEBUG
 		DebugManagerRef GetDebugManager() { return m_debugManager; }
+#endif
 
 		void Close();
 

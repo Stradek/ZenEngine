@@ -21,12 +21,14 @@ namespace Engine
 	{
 		Core::Log::Init();
 
-		std::unique_ptr<GameEngine> engineInstance;
-		engineInstance.reset(GameEngine::getInstance().get());
+		{
+			GameEngineRef engineInstance = GameEngine::getInstance();
 
-		engineInstance->SetEngineApplication(appInstance);
-		engineInstance->EngineRun();
-		engineInstance->ShutDown();
+			engineInstance->SetEngineApplication(appInstance);
+			engineInstance->EngineRun();
+		}
+
+		GameEngine::DestroyInstance();
 
 		Core::Log::Close();
 	}
@@ -38,6 +40,14 @@ namespace Engine
 			instance.reset(new GameEngine());
 		}
 		return instance;
+	}
+
+	void GameEngine::DestroyInstance()
+	{
+		ENGINE_FATAL_ASSERT(instance, "There is no engine instance.");
+		ENGINE_FATAL_ASSERT(instance.use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
+
+		instance.reset();
 	}
 
 	GameEngine::GameEngine() :
@@ -55,7 +65,7 @@ namespace Engine
 
 	void GameEngine::SetEngineApplication(EngineApplicationRef appInstance)
 	{
-		m_appInstance = std::move(appInstance);
+		m_appInstance = appInstance;
 	}
 
 	void GameEngine::StartUp()
@@ -63,6 +73,7 @@ namespace Engine
 #ifdef _DEBUG
 		m_debugManager->StartUp();
 #endif
+
 		m_windowManager->StartUp();
 		m_eventManager->StartUp();
 		m_graphicsManager->StartUp();
@@ -73,13 +84,16 @@ namespace Engine
 	void GameEngine::ShutDown()
 	{
 		m_appInstance->ShutDown();
+		m_appInstance.reset();
+
 		m_graphicsManager->ShutDown();
+		m_eventManager->ShutDown();
+		m_windowManager->ShutDown();
 
 #ifdef _DEBUG
 		m_debugManager->ShutDown();
 #endif
-		m_eventManager->ShutDown();
-		m_windowManager->ShutDown();
+
 	}
 
 	void GameEngine::Update(const uint32 deltaTime)
