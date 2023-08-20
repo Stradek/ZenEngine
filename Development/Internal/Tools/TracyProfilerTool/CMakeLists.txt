@@ -168,7 +168,6 @@ set(TRACY_SOURCE_FILES
     ${TRACY_ROOT}/profiler/src/imgui/imgui_impl_opengl3.cpp
     ${TRACY_ROOT}/profiler/src/IsElevated.cpp
     ${TRACY_ROOT}/profiler/src/main.cpp
-    ${TRACY_ROOT}/profiler/src/ini.c
     ${TRACY_ROOT}/profiler/src/ResolvService.cpp
     ${TRACY_ROOT}/profiler/src/RunQueue.cpp
     ${TRACY_ROOT}/profiler/src/WindowPosition.cpp
@@ -297,7 +296,6 @@ set(TRACY_HEADER_FILES
     ${TRACY_ROOT}/profiler/src/font/FontAwesomeSolid.hpp
     ${TRACY_ROOT}/profiler/src/HttpRequest.hpp
     ${TRACY_ROOT}/profiler/src/icon.hpp
-    ${TRACY_ROOT}/profiler/src/ini.h
     ${TRACY_ROOT}/profiler/src/ImGuiContext.hpp
     ${TRACY_ROOT}/profiler/src/imgui/imgui_impl_glfw.h
     ${TRACY_ROOT}/profiler/src/imgui/imgui_impl_opengl3.h
