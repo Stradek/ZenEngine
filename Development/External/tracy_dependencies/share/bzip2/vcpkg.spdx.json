@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/bzip2-x64-windows-static-1.0.8#5-a7bd01c6-77c3-4012-aafa-efdbc67aa5d2",
-  "name": "bzip2:x64-windows-static@1.0.8#5 4d01ae16a2406184e10711275f4269ba4145998e4198ed88f11ab0fd2925641c",
+  "documentNamespace": "https://spdx.org/spdxdocs/bzip2-x64-windows-static-1.0.8#5-24b1d6d1-7abe-43af-bee9-86947c6cca8c",
+  "name": "bzip2:x64-windows-static@1.0.8#5 a48cd5bd440d895124d7226306805685c1e7ff5d27fd64e389b6c1cb35b554e2",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:41:46Z"
+    "created": "2023-08-20T13:53:22Z"
   },
   "relationships": [
     {
@@ -81,11 +81,6 @@
       "spdxElementId": "SPDXRef-file-5",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-5",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -104,7 +99,7 @@
     {
       "name": "bzip2:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "4d01ae16a2406184e10711275f4269ba4145998e4198ed88f11ab0fd2925641c",
+      "versionInfo": "a48cd5bd440d895124d7226306805685c1e7ff5d27fd64e389b6c1cb35b554e2",
       "downloadLocation": "NONE",
       "licenseConcluded": "bzip2-1.0.6",
       "licenseDeclared": "NOASSERTION",
@@ -129,7 +124,7 @@
   ],
   "files": [
     {
-      "fileName": "./bzip2.pc.in",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/bzip2.pc.in",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -141,7 +136,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./CMakeLists.txt",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/CMakeLists.txt",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -153,7 +148,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./fix-import-export-macros.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/fix-import-export-macros.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -165,7 +160,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/portfile.cmake",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -177,7 +172,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./usage",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/usage",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -189,7 +184,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/bzip2/vcpkg.json",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {

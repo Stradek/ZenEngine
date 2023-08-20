@@ -322,7 +322,7 @@ add_executable(TracyProfilerTool WIN32
     "${TARGET_FILES}"
 )
 
-link_directories(
+target_link_directories(TracyProfilerTool PRIVATE
     ${TRACY_DEPENDENCIES_ROOT}/debug/lib
 )
 

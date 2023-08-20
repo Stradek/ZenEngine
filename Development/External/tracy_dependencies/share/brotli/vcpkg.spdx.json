@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/brotli-x64-windows-static-1.0.9#5-a2bf36c3-e4af-4075-8200-897b5c31fe91",
-  "name": "brotli:x64-windows-static@1.0.9#5 b01636d9ad61163ad7bab4d4d9ec5c697ab2ba27784de6970183932e5d43e807",
+  "documentNamespace": "https://spdx.org/spdxdocs/brotli-x64-windows-static-1.0.9#5-9fe1ff87-6bb9-4920-bef9-857f67ef7a0d",
+  "name": "brotli:x64-windows-static@1.0.9#5 96c4f9c641331d6d249ab5dc452da8d27666df39c732a8044965f906a40d875c",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:41:56Z"
+    "created": "2023-08-20T13:53:33Z"
   },
   "relationships": [
     {
@@ -91,11 +91,6 @@
       "spdxElementId": "SPDXRef-file-6",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-6",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -114,7 +109,7 @@
     {
       "name": "brotli:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "b01636d9ad61163ad7bab4d4d9ec5c697ab2ba27784de6970183932e5d43e807",
+      "versionInfo": "96c4f9c641331d6d249ab5dc452da8d27666df39c732a8044965f906a40d875c",
       "downloadLocation": "NONE",
       "licenseConcluded": "MIT",
       "licenseDeclared": "NOASSERTION",
@@ -138,7 +133,7 @@
   ],
   "files": [
     {
-      "fileName": "./fix-arm-uwp.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/fix-arm-uwp.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -150,7 +145,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./install.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/install.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -162,7 +157,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./pkgconfig.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/pkgconfig.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -174,7 +169,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/portfile.cmake",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -186,7 +181,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./unofficial-brotli-config.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/unofficial-brotli-config.cmake",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -198,7 +193,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./usage",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/usage",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -210,7 +205,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/brotli/vcpkg.json",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {
