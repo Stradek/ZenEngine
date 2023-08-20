@@ -13,24 +13,27 @@ namespace Engine::Debug
 {
 	namespace Performance
 	{
-		PerformanceProfiler::PerformanceProfiler()
+		PerformanceProfiler::PerformanceProfiler() :
+			m_nameToStartFrameData(std::make_unique<NameToStartFrameData>()), 
+			m_nameToFrameDataCircularBuffer(std::make_unique<NameToFrameDataCircularBuffer>())
 		{
+
 		}
 
 		void PerformanceProfiler::FrameProfilingStart(std::string functionName)
 		{
-			ENGINE_ASSERT(m_nameToStartFrameData.count(functionName) == 0, "Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName)
+			ENGINE_ASSERT(m_nameToStartFrameData->count(functionName) == 0, "Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName)
 
 			uint32 timeNow = Common::DateTime::GetCurrentTimeRaw();
 			StartFrameData frameData{ timeNow, false };
 
-			m_nameToStartFrameData[functionName] = frameData;
+			(*m_nameToStartFrameData)[functionName] = frameData;
 		}
 
 		void PerformanceProfiler::FrameProfilingEnd(std::string functionName)
 		{
 			uint32 frameFinishTime = Common::DateTime::GetCurrentTimeRaw();
-			uint32 frameStartTime = m_nameToStartFrameData[functionName].startTime;
+			uint32 frameStartTime = (*m_nameToStartFrameData)[functionName].startTime;
 			uint32 frameDuration = frameFinishTime - frameStartTime;
 
 			FrameData finishedFrameData;
@@ -38,17 +41,17 @@ namespace Engine::Debug
 			finishedFrameData.endTime = frameFinishTime;
 			finishedFrameData.duration = frameDuration;
 
-			m_nameToStartFrameData.erase(functionName);
+			m_nameToStartFrameData->erase(functionName);
 
 			// create new buffer, if there is none for this function name
-			m_nameToFrameDataCircularBuffer[functionName].EmplaceBack(finishedFrameData);
+			(*m_nameToFrameDataCircularBuffer)[functionName].EmplaceBack(finishedFrameData);
 		}
 
 		NameToFrameDataBuffer PerformanceProfiler::GetFrameProfilingData()
 		{
 			NameToFrameDataBuffer framesDone;
 
-			for (auto nameEntryIt : m_nameToFrameDataCircularBuffer)
+			for (auto nameEntryIt : *m_nameToFrameDataCircularBuffer)
 			{
 				FrameDataBuffer frameDataBuffer = nameEntryIt.second.GetAll();
 
@@ -92,9 +95,19 @@ namespace Engine::Debug
 		}
 	}
 
+	DebugManager::DebugManager() :
+		m_debugInfoUpdateFrequency(Common::DateTime::Time(Common::DateTime::SECOND_TO_NANOSECONDS)),
+		m_shouldLogStats(false),
+		m_engineUpdatesLastSecondCounter(0), m_renderedFramesLastSecondCounter(0),
+		m_currentSecondUpdatesCount(0), m_currentSecondRenderFramesCount(0),
+		m_performanceProfiler(std::make_shared<Performance::PerformanceProfiler>())
+	{
+
+	}
+
 	void DebugManager::StartUp()
 	{
-		m_performanceProfiler = Performance::PerformanceProfiler();
+		
 	}
 
 	void DebugManager::StartPerformanceProfiler()
@@ -117,7 +130,7 @@ namespace Engine::Debug
 	{
 		if(m_shouldLogStats)
 		{
-			Performance::NameToRawTime m_profiledFunctionNameToAvgDuration = GetPerformanceProfiler().GetAvgFrameProfilingData();
+			Performance::NameToRawTime m_profiledFunctionNameToAvgDuration = GetPerformanceProfiler()->GetAvgFrameProfilingData();
 
 			uint32 engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
 			uint32 engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
@@ -156,7 +169,6 @@ namespace Engine::Debug
 	{
 		++m_currentSecondRenderFramesCount;
 	}
-
 }
 
 #endif // _DEBUG

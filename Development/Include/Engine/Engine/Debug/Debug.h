@@ -51,20 +51,26 @@ namespace Engine::Debug
 
 			NameToRawTime GetAvgFrameProfilingData();
 		private:
-			NameToStartFrameData m_nameToStartFrameData;
-			NameToFrameDataCircularBuffer m_nameToFrameDataCircularBuffer;
+			std::unique_ptr<NameToStartFrameData> m_nameToStartFrameData;
+			std::unique_ptr<NameToFrameDataCircularBuffer> m_nameToFrameDataCircularBuffer;
 
 			NameToFrameDataBuffer GetFrameProfilingData();
 		};
 	}
 
+	using PerformanceProfilerPtr = std::shared_ptr<Performance::PerformanceProfiler>;
+	using PerformanceProfilerRef = PerformanceProfilerPtr&;
+
 	class DebugManager : Engine::Core::ISystem
 	{
 	public:
+		DebugManager();
+
 		void StartUp() override;
 		void ShutDown() override;
 
-		Performance::PerformanceProfiler& GetPerformanceProfiler() { return m_performanceProfiler; };
+		PerformanceProfilerRef GetPerformanceProfiler() { return m_performanceProfiler; };
+
 		void StartPerformanceProfiler();
 
 		void Update(const uint32 deltaTime) override;
@@ -72,17 +78,17 @@ namespace Engine::Debug
 		void AddToUpdateCounter();
 		void AddToRenderFrameCounter();
 	private:
-		const Common::DateTime::Time m_debugInfoUpdateFrequency = Common::DateTime::Time(Common::DateTime::SECOND_TO_NANOSECONDS);
+		const Common::DateTime::Time m_debugInfoUpdateFrequency;
 		
-		Performance::PerformanceProfiler m_performanceProfiler;
+		PerformanceProfilerPtr m_performanceProfiler;
 
-		bool m_shouldLogStats = false;
+		bool m_shouldLogStats;
 
-		uint m_engineUpdatesLastSecondCounter = 0;
-		uint m_renderedFramesLastSecondCounter = 0;
+		uint m_engineUpdatesLastSecondCounter;
+		uint m_renderedFramesLastSecondCounter;
 
-		uint m_currentSecondUpdatesCount = 0;
-		uint m_currentSecondRenderFramesCount = 0;
+		uint m_currentSecondUpdatesCount;
+		uint m_currentSecondRenderFramesCount;
 
 		Common::DateTime::Clock m_debugUpdateClock;
 

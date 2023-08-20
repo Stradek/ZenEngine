@@ -13,14 +13,14 @@
 
 #include <tracy/Tracy.hpp>
 
-#define ENGINE_FRAME_MARK_START(name) {									\
-	m_debugManager.GetPerformanceProfiler().FrameProfilingStart(name);	\
-	FrameMarkStart(name);												\
+#define ENGINE_FRAME_MARK_START(name) {																\
+	GameEngine::getInstance()->GetDebugManager()->GetPerformanceProfiler()->FrameProfilingStart(name);	\
+	FrameMarkStart(name);																			\
 }
 
-#define ENGINE_FRAME_MARK_END(name) {									\
-	m_debugManager.GetPerformanceProfiler().FrameProfilingEnd(name);	\
-	FrameMarkEnd(name);													\
+#define ENGINE_FRAME_MARK_END(name) {																\
+	GameEngine::getInstance()->GetDebugManager()->GetPerformanceProfiler()->FrameProfilingEnd(name);	\
+	FrameMarkEnd(name);																				\
 }
 
 #else

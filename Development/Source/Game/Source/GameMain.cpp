@@ -9,6 +9,9 @@
 
 int main(int argc, char* argv[])
 {
-	std::unique_ptr<Game> gameInstance = std::make_unique<Game>();
-	Engine::GameEngine::Run(std::move(gameInstance));
+	{
+		std::shared_ptr<IEngineApplication> gameInstance = std::make_shared<Game>();
+		Engine::GameEngine::Run(gameInstance);
+	}
+	return 0;
 }
