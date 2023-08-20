@@ -7,12 +7,21 @@
 
 #include <Engine/Core/ISystem.h>
 
-namespace Engine::Graphics
+#include <SDL.h>
+
+namespace Engine::Window
 {
-	class GraphicsManager : Core::ISystem
+	class WindowManager : Core::ISystem
 	{
 	public:
 		void StartUp() override;
 		void ShutDown() override;
+
+		SDL_Window*& GetSDLWindowInstance();
+	private:
+		uint32 m_SDLSubsystemFlags;
+		uint32 m_SDLWindowFlags;
+
+		SDL_Window* m_SDLWindow;
 	};
 }

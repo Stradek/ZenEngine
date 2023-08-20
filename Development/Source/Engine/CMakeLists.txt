@@ -45,12 +45,13 @@ target_include_directories(Engine PUBLIC
 add_subdirectory("Common")
 add_subdirectory("Core")
 add_subdirectory("Debug")
+add_subdirectory("WindowManagement")
 add_subdirectory("Graphics")
 add_subdirectory("EventSystem")
 
 target_link_libraries(Engine PUBLIC 
     # Engine
-    Common Core Debug Graphics EventSystem
+    Common Core Debug WindowManagement Graphics EventSystem
 
     # Internal 
     TracyProfilerClient

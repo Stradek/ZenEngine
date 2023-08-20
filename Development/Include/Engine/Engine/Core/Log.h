@@ -14,20 +14,23 @@ namespace Engine::Core
 	class Log
 	{
 	public:
-		static void Init();
-		inline static std::shared_ptr<spdlog::logger>& Log::GetEngineLogger() { return s_engineLogger; }
-		inline static std::shared_ptr<spdlog::logger>& Log::GetGameLogger() { return s_gameLogger; }
+		using LoggerRef = std::shared_ptr<spdlog::logger>&;
 
-	private:
-		typedef spdlog::sinks::stdout_color_sink_mt output_sink;
-		typedef spdlog::sinks::basic_file_sink_mt file_sink;
+		static void Init();
+		static void Close();
+
+		inline static LoggerRef Log::GetEngineLogger() { return s_engineLogger; }
+		inline static LoggerRef Log::GetGameLogger() { return s_gameLogger; }
+
+		typedef spdlog::sinks::stdout_color_sink_mt		OutputSink;
+		typedef spdlog::sinks::basic_file_sink_mt		FileSink;
+
+		typedef std::unique_ptr<OutputSink>				OutputSinkPtr;
+		typedef std::unique_ptr<FileSink>				FileSinkPtr;
 
 	private:
 		template<class SinkType> 
-		static std::shared_ptr<SinkType>	CreateSink(const spdlog::level::level_enum level, const std::string pattern, const std::filesystem::path fileSinkPath = "");
-
-		static std::shared_ptr<output_sink>	CreateOutputSink(const spdlog::level::level_enum level);
-		static std::shared_ptr<file_sink>	CreateFileSink(const spdlog::level::level_enum level, const std::filesystem::path fileSinkPath);
+		static std::unique_ptr<SinkType> CreateSink(const spdlog::level::level_enum level, const std::string pattern, const std::filesystem::path fileSinkPath = "");
 
 		static void InitEngineLogger(const std::filesystem::path coreLogPath);
 		static void InitGameLogger(const std::filesystem::path gameLogPath);

@@ -10,7 +10,6 @@ namespace Engine::Core
 	class ISystem
 	{
 	public:
-		ISystem(ISystem& other) = delete;
 		ISystem& operator=(const ISystem& other) = delete;
 
 		virtual void StartUp() = 0;
