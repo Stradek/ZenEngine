@@ -2,41 +2,49 @@ name: CMake
 
 on: push
 
-jobs:
-  build:
-    # The CMake configure and build commands are platform agnostic and should work equally well on Windows or Mac.
-    # You can convert this to a matrix build if you need cross-platform coverage.
-    # See: https://docs.github.com/en/free-pro-team@latest/actions/learn-github-actions/managing-complex-workflows#using-a-build-matrix
+defaults:
+  run:
     runs-on: windows-latest
-    strategy:
-      matrix:
-        configuration: [Release, Debug]
+
+jobs:
+  configure:
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
       with:
         submodules: true
 
     - name: Configure CMake
-      # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
-      # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
-      run: cmake -G "Visual Studio 17" -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{matrix.configuration}}
+      run: cmake -G "Visual Studio 17" -B build
 
-    - name: Build Engine
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.configuration}} --target=Engine
-      
-    - name: Build Editor
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.configuration}} --target=Editor
-      
-    - name: Build Game
-      # Build your program with the given configuration
-      run: cmake --build ${{github.workspace}}/build --config ${{matrix.configuration}} --target=Game
+    - name: Save build directory
+      uses: actions/upload-artifact@v3
+      with:
+        name: build
+        path: build
+        
+  build:
+    needs: configure
+    strategy:
+      matrix:
+        configuration: [Release, Debug]
+        target: [
+          # Engine Applications
+          Game, Editor,
+          # Tools
+          TracyProfilerTool,
+        ]
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      with:
+        submodules: true
 
-# No testing for now
-#     - name: Test
-#       working-directory: ${{github.workspace}}/build
-#       # Execute tests defined by the CMake configuration.
-#       # See https://cmake.org/cmake/help/latest/manual/ctest.1.html for more detail
-#       run: ctest -C ${{env.BUILD_TYPE}}
+    - name: Retrieve build directory
+      uses: actions/download-artifact@v3
+      with:
+        name: build
+        path: build
 
+      - name: Build ${{matrix.target}} (${{matrix.configuration}})
+        run: cmake --build build --config ${{matrix.configuration}} --target ${{matrix.target}}
