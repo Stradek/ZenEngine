@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/capstone-x64-windows-static-5.0.0-rc2#2-8358dd10-d569-48cd-bfa2-75c43b39f108",
-  "name": "capstone:x64-windows-static@5.0.0-rc2#2 9d8cbdc7a60099e99c5c92fb405b64cb37ac76f7155365abe9698f5bcc8f5dfe",
+  "documentNamespace": "https://spdx.org/spdxdocs/capstone-x64-windows-static-5.0.0-rc2#2-54713f1b-7576-4cb6-9452-4d2575f47c51",
+  "name": "capstone:x64-windows-static@5.0.0-rc2#2 e85819a62c8a0388d1be6d4bb6a5886dcb2dd1d80432fa5f4c644148b2f5f928",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:41:28Z"
+    "created": "2023-08-20T13:53:04Z"
   },
   "relationships": [
     {
@@ -51,11 +51,6 @@
       "spdxElementId": "SPDXRef-file-2",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-2",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -74,7 +69,7 @@
     {
       "name": "capstone:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "9d8cbdc7a60099e99c5c92fb405b64cb37ac76f7155365abe9698f5bcc8f5dfe",
+      "versionInfo": "e85819a62c8a0388d1be6d4bb6a5886dcb2dd1d80432fa5f4c644148b2f5f928",
       "downloadLocation": "NONE",
       "licenseConcluded": "NOASSERTION",
       "licenseDeclared": "NOASSERTION",
@@ -98,7 +93,7 @@
   ],
   "files": [
     {
-      "fileName": "./001-silence-windows-crt-secure-warnings.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/capstone/001-silence-windows-crt-secure-warnings.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -110,7 +105,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/capstone/portfile.cmake",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -122,7 +117,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/capstone/vcpkg.json",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
