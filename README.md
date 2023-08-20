@@ -8,9 +8,9 @@ This game engine is still work in progress. Name of this software still haven't 
 4. Engine main goals: memory management with custom allocators and multithreaded job system.
 
 # Repositiory Directory Structure
-* Binaries/ - Build artifacts(files like .lib, .pdb) and executable(.exe)
-* Build/ - CMake related artifacts(in .\CMake-* directory), shared CMake configuration and functions(CMakeShared.cmake) and CMake related batch scripts.
-* Development/ - Engine related development files
+* Binaries/ - compilation artifacts(libraries and symbolos) and executables
+* Build/CMake-*/ - project build directory
+* Development/ - engine and game development related directory
 * Development/External - external libraries
 * Development/Internal - internal libraries and tools
 * Development/Include - project headers code
