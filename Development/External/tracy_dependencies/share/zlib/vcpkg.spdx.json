@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/zlib-x64-windows-static-1.2.13-014901cb-dbda-4e75-ba51-8ba9cf4153c4",
-  "name": "zlib:x64-windows-static@1.2.13 db0e393707d3768a5a1c5bce373c10cd5c4e08d61ba0a91d1795029ac8647bff",
+  "documentNamespace": "https://spdx.org/spdxdocs/zlib-x64-windows-static-1.2.13-b2860b87-3a13-485a-93e1-5ab5c4606108",
+  "name": "zlib:x64-windows-static@1.2.13 24fca764fd81de4d42f20ca2236897c5b91d4d097ff199d4b6ad791122937bbe",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:41:35Z"
+    "created": "2023-08-20T13:53:11Z"
   },
   "relationships": [
     {
@@ -101,11 +101,6 @@
       "spdxElementId": "SPDXRef-file-7",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-7",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -124,7 +119,7 @@
     {
       "name": "zlib:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "db0e393707d3768a5a1c5bce373c10cd5c4e08d61ba0a91d1795029ac8647bff",
+      "versionInfo": "24fca764fd81de4d42f20ca2236897c5b91d4d097ff199d4b6ad791122937bbe",
       "downloadLocation": "NONE",
       "licenseConcluded": "Zlib",
       "licenseDeclared": "NOASSERTION",
@@ -148,7 +143,7 @@
   ],
   "files": [
     {
-      "fileName": "./0001-Prevent-invalid-inclusions-when-HAVE_-is-set-to-0.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/0001-Prevent-invalid-inclusions-when-HAVE_-is-set-to-0.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -160,7 +155,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./0002-skip-building-examples.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/0002-skip-building-examples.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -172,7 +167,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./0003-build-static-or-shared-not-both.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/0003-build-static-or-shared-not-both.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -184,7 +179,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./0004-android-and-mingw-fixes.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/0004-android-and-mingw-fixes.patch",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -196,7 +191,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/portfile.cmake",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -208,7 +203,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./usage",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/usage",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -220,7 +215,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg-cmake-wrapper.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/vcpkg-cmake-wrapper.cmake",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {
@@ -232,7 +227,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/zlib/vcpkg.json",
       "SPDXID": "SPDXRef-file-7",
       "checksums": [
         {

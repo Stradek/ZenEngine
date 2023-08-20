@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-x64-windows-static-3.3.8#2-15d76214-b237-426e-a6e4-9011b5e35743",
-  "name": "glfw3:x64-windows-static@3.3.8#2 e24fa938b736a15c54cf9fdc8b67156d57321e4203e703948981df41e254f683",
+  "documentNamespace": "https://spdx.org/spdxdocs/glfw3-x64-windows-static-3.3.8#2-c250d91d-43ef-417c-a681-419a5c568e79",
+  "name": "glfw3:x64-windows-static@3.3.8#2 39cef10b7a7fb16570ba7279382205206815236d3edcfdcd230e9afff90c95cc",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:42:12Z"
+    "created": "2023-08-20T13:53:49Z"
   },
   "relationships": [
     {
@@ -41,11 +41,6 @@
       "spdxElementId": "SPDXRef-file-1",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-1",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -64,7 +59,7 @@
     {
       "name": "glfw3:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "e24fa938b736a15c54cf9fdc8b67156d57321e4203e703948981df41e254f683",
+      "versionInfo": "39cef10b7a7fb16570ba7279382205206815236d3edcfdcd230e9afff90c95cc",
       "downloadLocation": "NONE",
       "licenseConcluded": "Zlib",
       "licenseDeclared": "NOASSERTION",
@@ -88,7 +83,7 @@
   ],
   "files": [
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/glfw3/portfile.cmake",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -100,7 +95,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/glfw3/vcpkg.json",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {

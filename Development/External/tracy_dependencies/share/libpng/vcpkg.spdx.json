@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/libpng-x64-windows-static-1.6.39#1-f41b482f-730a-4cc3-b1b8-81622ba0762a",
-  "name": "libpng:x64-windows-static@1.6.39#1 e4824dea18c3311b7e899ce4fd8e7733cc881e37a256af81c7bebcb011534c2f",
+  "documentNamespace": "https://spdx.org/spdxdocs/libpng-x64-windows-static-1.6.39#1-db2c7e2d-df1d-4e3b-a3cb-74fdf86aee77",
+  "name": "libpng:x64-windows-static@1.6.39#1 8d0e575e9311f5dac6e661a8d8286b4a5a793b84c47f7d4fac448808ca61b48c",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:41:40Z"
+    "created": "2023-08-20T13:53:17Z"
   },
   "relationships": [
     {
@@ -101,11 +101,6 @@
       "spdxElementId": "SPDXRef-file-7",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-7",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -124,7 +119,7 @@
     {
       "name": "libpng:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "e4824dea18c3311b7e899ce4fd8e7733cc881e37a256af81c7bebcb011534c2f",
+      "versionInfo": "8d0e575e9311f5dac6e661a8d8286b4a5a793b84c47f7d4fac448808ca61b48c",
       "downloadLocation": "NONE",
       "licenseConcluded": "libpng-2.0",
       "licenseDeclared": "NOASSERTION",
@@ -163,7 +158,7 @@
   ],
   "files": [
     {
-      "fileName": "./cmake.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/cmake.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -175,7 +170,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./fix-export-targets.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/fix-export-targets.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -187,7 +182,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./fix-msa-support-for-mips.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/fix-msa-support-for-mips.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -199,7 +194,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./pkgconfig.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/pkgconfig.patch",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -211,7 +206,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/portfile.cmake",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -223,7 +218,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./usage",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/usage",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -235,7 +230,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg-cmake-wrapper.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/vcpkg-cmake-wrapper.cmake",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {
@@ -247,7 +242,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/libpng/vcpkg.json",
       "SPDXID": "SPDXRef-file-7",
       "checksums": [
         {

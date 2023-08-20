@@ -3,13 +3,13 @@
   "spdxVersion": "SPDX-2.2",
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
-  "documentNamespace": "https://spdx.org/spdxdocs/freetype-x64-windows-static-2.12.1#3-7478a835-958a-4449-95ca-1f1571725986",
-  "name": "freetype:x64-windows-static@2.12.1#3 45b40f171c25b5cb016cb1808daf6b078ab290cf058515b071a001af75f70380",
+  "documentNamespace": "https://spdx.org/spdxdocs/freetype-x64-windows-static-2.12.1#3-c50f4fbe-135c-43b1-9e71-574eb5ca4d71",
+  "name": "freetype:x64-windows-static@2.12.1#3 950d7fa4620209839a42f6ce6d97637dcd609fe1f2e7c3bf34d7cb6ecd0d6ad6",
   "creationInfo": {
     "creators": [
-      "Tool: vcpkg-6d13efa755f9b5e101712d210199e4139b4c29f6"
+      "Tool: vcpkg-9990a4c9026811a312cb2af78bf77f3d9d288416"
     ],
-    "created": "2023-08-04T22:42:07Z"
+    "created": "2023-08-20T13:53:44Z"
   },
   "relationships": [
     {
@@ -111,11 +111,6 @@
       "spdxElementId": "SPDXRef-file-8",
       "relationshipType": "CONTAINED_BY",
       "relatedSpdxElement": "SPDXRef-port"
-    },
-    {
-      "spdxElementId": "SPDXRef-file-8",
-      "relationshipType": "DEPENDENCY_MANIFEST_OF",
-      "relatedSpdxElement": "SPDXRef-port"
     }
   ],
   "packages": [
@@ -134,7 +129,7 @@
     {
       "name": "freetype:x64-windows-static",
       "SPDXID": "SPDXRef-binary",
-      "versionInfo": "45b40f171c25b5cb016cb1808daf6b078ab290cf058515b071a001af75f70380",
+      "versionInfo": "950d7fa4620209839a42f6ce6d97637dcd609fe1f2e7c3bf34d7cb6ecd0d6ad6",
       "downloadLocation": "NONE",
       "licenseConcluded": "FTL OR GPL-2.0-or-later",
       "licenseDeclared": "NOASSERTION",
@@ -159,7 +154,7 @@
   ],
   "files": [
     {
-      "fileName": "./0003-Fix-UWP.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/0003-Fix-UWP.patch",
       "SPDXID": "SPDXRef-file-0",
       "checksums": [
         {
@@ -171,7 +166,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./brotli-static.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/brotli-static.patch",
       "SPDXID": "SPDXRef-file-1",
       "checksums": [
         {
@@ -183,7 +178,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./bzip2.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/bzip2.patch",
       "SPDXID": "SPDXRef-file-2",
       "checksums": [
         {
@@ -195,7 +190,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./error-strings.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/error-strings.patch",
       "SPDXID": "SPDXRef-file-3",
       "checksums": [
         {
@@ -207,7 +202,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./fix-exports.patch",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/fix-exports.patch",
       "SPDXID": "SPDXRef-file-4",
       "checksums": [
         {
@@ -219,7 +214,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./portfile.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/portfile.cmake",
       "SPDXID": "SPDXRef-file-5",
       "checksums": [
         {
@@ -231,7 +226,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./usage",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/usage",
       "SPDXID": "SPDXRef-file-6",
       "checksums": [
         {
@@ -243,7 +238,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg-cmake-wrapper.cmake",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/vcpkg-cmake-wrapper.cmake",
       "SPDXID": "SPDXRef-file-7",
       "checksums": [
         {
@@ -255,7 +250,7 @@
       "copyrightText": "NOASSERTION"
     },
     {
-      "fileName": "./vcpkg.json",
+      "fileName": "./V:/Programming/Repositories/SDLEngineTest/Development/External/tracy/vcpkg/vcpkg/ports/freetype/vcpkg.json",
       "SPDXID": "SPDXRef-file-8",
       "checksums": [
         {
