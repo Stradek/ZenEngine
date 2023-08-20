@@ -2,12 +2,9 @@ name: CMake
 
 on: push
 
-defaults:
-  run:
-    runs-on: windows-latest
-
 jobs:
   configure:
+    runs-on: windows-latest
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -25,6 +22,7 @@ jobs:
         
   build:
     needs: configure
+    runs-on: windows-latest
     strategy:
       matrix:
         configuration: [Release, Debug]
