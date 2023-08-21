@@ -22,11 +22,11 @@ namespace Engine::Core
 		inline static LoggerRef Log::GetEngineLogger() { return s_engineLogger; }
 		inline static LoggerRef Log::GetGameLogger() { return s_gameLogger; }
 
-		typedef spdlog::sinks::stdout_color_sink_mt		OutputSink;
-		typedef spdlog::sinks::basic_file_sink_mt		FileSink;
+		using OutputSink = spdlog::sinks::stdout_color_sink_mt;
+		using FileSink = spdlog::sinks::basic_file_sink_mt;
 
-		typedef std::unique_ptr<OutputSink>				OutputSinkPtr;
-		typedef std::unique_ptr<FileSink>				FileSinkPtr;
+		using OutputSinkPtr = std::unique_ptr<OutputSink>;
+		using FileSinkPtr = std::unique_ptr<FileSink>;
 
 	private:
 		template<class SinkType> 

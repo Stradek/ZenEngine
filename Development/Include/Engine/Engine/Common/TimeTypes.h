@@ -9,18 +9,18 @@
 
 namespace Engine::Common::DateTime
 {
-	typedef std::chrono::high_resolution_clock					high_res_clock;
-	typedef std::chrono::system_clock							system_clock;
+	using high_res_clock	= std::chrono::high_resolution_clock;
+	using system_clock		= std::chrono::system_clock;
 
-	typedef std::chrono::time_point<high_res_clock>				time_point;
-	typedef std::chrono::time_point<system_clock>				system_time_point;
+	using time_point		= std::chrono::time_point<high_res_clock>;
+	using system_time_point = std::chrono::time_point<system_clock>;
 
-	typedef std::chrono::hours									hours;
-	typedef std::chrono::minutes								minutes;
-	typedef std::chrono::seconds								seconds;
-	typedef std::chrono::milliseconds							milliseconds;
-	typedef std::chrono::nanoseconds							nanoseconds;
+	using hours			= std::chrono::hours;
+	using minutes		= std::chrono::minutes;
+	using seconds		= std::chrono::seconds;
+	using milliseconds	= std::chrono::milliseconds;
+	using nanoseconds	= std::chrono::nanoseconds;
 
-	typedef std::chrono::duration<double, std::ratio<1, 1>>		seconds_duration_from_double;
-	typedef std::chrono::duration<uint32, std::nano>			nanoseconds_duration_from_uint32;
+	using seconds_duration_from_double		= std::chrono::duration<double, std::ratio<1, 1>>;
+	using nanoseconds_duration_from_uint32	= std::chrono::duration<uint32, std::nano>;
 }
