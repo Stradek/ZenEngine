@@ -20,7 +20,7 @@ namespace Engine::Debug
 			bool isFinished = false;
 		};
 
-		typedef std::unordered_map<std::string, StartFrameData> NameToStartFrameData;
+		using NameToStartFrameData = std::unordered_map<std::string, StartFrameData>;
 
 
 		struct FrameData
@@ -32,14 +32,15 @@ namespace Engine::Debug
 			uint32 duration;
 		};
 		static constexpr size_t s_frameDataBufferSize = 256;
-		typedef Core::Memory::CircularBuffer<FrameData, s_frameDataBufferSize> FrameDataCircularBuffer;
-		typedef std::unordered_map<std::string, FrameDataCircularBuffer> NameToFrameDataCircularBuffer;
+		
+		using FrameDataCircularBuffer = Core::Memory::CircularBuffer<FrameData, s_frameDataBufferSize>;
+		using NameToFrameDataCircularBuffer = std::unordered_map<std::string, FrameDataCircularBuffer>;
 
-		typedef std::vector<FrameData> FrameDataBuffer;
-		typedef std::unordered_map<std::string, FrameDataBuffer> NameToFrameDataBuffer;
+		using FrameDataBuffer = std::vector<FrameData>;
+		using NameToFrameDataBuffer = std::unordered_map<std::string, FrameDataBuffer>;
 
-		typedef std::unordered_map<std::string, FrameData> NameToFrameData;
-		typedef std::unordered_map<std::string, uint32> NameToRawTime;
+		using NameToFrameData = std::unordered_map<std::string, FrameData>;
+		using NameToRawTime = std::unordered_map<std::string, uint32>;
 
 		class PerformanceProfiler
 		{

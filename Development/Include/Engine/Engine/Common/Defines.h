@@ -9,12 +9,12 @@
     Data Types
 */
 
-typedef unsigned int uint;
+using uint      = unsigned int;
 
-typedef std::uint8_t uint8;
-typedef std::uint16_t uint16_t;
-typedef std::uint32_t uint32;
-typedef std::uint64_t uint64;
+using uint8     = std::uint8_t;
+using uint16    = std::uint16_t;
+using uint32    = std::uint32_t;
+using uint64    = std::uint64_t;
 
 /*
     Configuration
