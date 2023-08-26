@@ -6,14 +6,6 @@
 include_guard(GLOBAL)
 
 #
-# Configuration
-#
-
-add_compile_definitions(
-    "$<$<CONFIG:Debug>:TRACY_ENABLE; TRACY_ONLY_LOCALHOST>"
-)
-
-#
 # Files
 #
 
@@ -31,4 +23,14 @@ set(TARGET_FILES
 
 add_library(TracyProfilerClient STATIC
     "${TARGET_FILES}"
+)
+
+target_compile_definitions(TracyProfilerClient PUBLIC
+    "$<$<CONFIG:Debug>:TRACY_ENABLE; TRACY_ONLY_LOCALHOST>"
+)
+
+# include Tracy headers only for targets
+# that are linked agains TracyProfilerClient
+target_include_directories(TracyProfilerClient INTERFACE
+    $<$<CONFIG:Debug>:${TRACY_HEADER_DIR}>
 )

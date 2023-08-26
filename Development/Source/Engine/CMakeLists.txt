@@ -9,11 +9,6 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-# Tracy dependency
-add_compile_definitions(
-    "$<$<CONFIG:Debug>:TRACY_ENABLE>"
-)
-
 #
 # Files
 #
@@ -52,9 +47,6 @@ add_library(Engine STATIC
 
 target_include_directories(Engine PUBLIC
     ${INCLUDE_DIR}
-
-    # Tracy dependency
-    $<$<CONFIG:Debug>:${TRACY_HEADER_DIR}>
 )
 
 target_link_libraries(Engine PUBLIC 
