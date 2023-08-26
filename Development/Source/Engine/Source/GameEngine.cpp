@@ -7,7 +7,7 @@
 
 #include <Engine/IEngineApplication.h>
 
-#include <Engine/Debug/DebugMacros.h>
+#include <Engine/Core/ProfilingMacros.h>
 
 #ifdef _DEBUG
 #include <Engine/Debug/Debug.h>
