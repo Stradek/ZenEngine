@@ -26,15 +26,6 @@ target_include_directories(Common PUBLIC
 )
 
 #
-# Dependencies
-#
-
-target_link_libraries(Common PRIVATE 
-    # Internal
-    TracyProfilerClient
-)
-
-#
 # Precompiled Headers
 #
 
