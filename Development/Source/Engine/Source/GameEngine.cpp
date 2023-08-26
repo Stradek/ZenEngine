@@ -136,9 +136,7 @@ namespace Engine
 			if (m_timeSinceUpdateClock.GetDuration() >= Core::Config::m_targetUpdateFrequency)
 			{
 				Update(m_deltaTime);
-#ifdef _DEBUG
-				m_debugManager->AddToUpdateCounter();
-#endif
+
 				m_timeSinceUpdateClock.Reset();
 			}
 
@@ -147,10 +145,7 @@ namespace Engine
 				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
 				RenderFrame();
-#ifdef _DEBUG
-				m_debugManager->AddToRenderFrameCounter();
-				FrameMark;
-#endif
+				ENGINE_FRAME_MARK();
 				
 				m_timeSinceRenderFrameClock.Reset();
 			}

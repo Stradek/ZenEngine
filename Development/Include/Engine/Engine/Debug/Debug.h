@@ -12,6 +12,12 @@
 
 namespace Engine::Debug
 {
+	enum CounterType
+	{
+		CounterRaw,
+		CounterPerSecond
+	};
+
 	namespace Performance
 	{
 		struct StartFrameData
@@ -22,7 +28,6 @@ namespace Engine::Debug
 
 		using NameToStartFrameData = std::unordered_map<std::string, StartFrameData>;
 
-
 		struct FrameData
 		{
 			FrameData() : startTime(0), endTime(0), duration(0) {};
@@ -31,9 +36,9 @@ namespace Engine::Debug
 			uint32 endTime;
 			uint32 duration;
 		};
-		static constexpr size_t s_frameDataBufferSize = 256;
+		static constexpr size_t s_frameDataCircularBufferSize = 256;
 		
-		using FrameDataCircularBuffer = Core::Memory::CircularBuffer<FrameData, s_frameDataBufferSize>;
+		using FrameDataCircularBuffer = Core::Memory::CircularBuffer<FrameData, s_frameDataCircularBufferSize>;
 		using NameToFrameDataCircularBuffer = std::unordered_map<std::string, FrameDataCircularBuffer>;
 
 		using FrameDataBuffer = std::vector<FrameData>;
@@ -42,18 +47,31 @@ namespace Engine::Debug
 		using NameToFrameData = std::unordered_map<std::string, FrameData>;
 		using NameToRawTime = std::unordered_map<std::string, uint32>;
 
+		using NameToCounter = std::unordered_map<std::string, uint32>;
+
 		class PerformanceProfiler
 		{
 		public:
 			PerformanceProfiler();
 
+			void UpdateCounterPerSecond();
+
 			void FrameProfilingStart(std::string functionName);
 			void FrameProfilingEnd(std::string functionName);
 
-			NameToRawTime GetAvgFrameProfilingData();
+			void IncrementCounter(std::string functionName, uint32 count);
+
+			NameToRawTime GetAvgFrameTimingData();
+			uint32 GetCounterValue(CounterType counterType, std::string functionName);
+
 		private:
 			std::unique_ptr<NameToStartFrameData> m_nameToStartFrameData;
 			std::unique_ptr<NameToFrameDataCircularBuffer> m_nameToFrameDataCircularBuffer;
+
+			std::shared_ptr<NameToCounter> m_nameToCounterRaw;
+			std::shared_ptr<NameToCounter> m_nameToCounterPerSecond;
+			
+			std::shared_ptr<NameToCounter> m_nameToCounterLastSecond;
 
 			NameToFrameDataBuffer GetFrameProfilingData();
 		};
@@ -76,20 +94,12 @@ namespace Engine::Debug
 
 		void Update(const uint32 deltaTime) override;
 
-		void AddToUpdateCounter();
-		void AddToRenderFrameCounter();
 	private:
 		const Common::DateTime::Time m_debugInfoUpdateFrequency;
 		
 		PerformanceProfilerPtr m_performanceProfiler;
 
 		bool m_shouldLogStats;
-
-		uint m_engineUpdatesLastSecondCounter;
-		uint m_renderedFramesLastSecondCounter;
-
-		uint m_currentSecondUpdatesCount;
-		uint m_currentSecondRenderFramesCount;
 
 		Common::DateTime::Clock m_debugUpdateClock;
 
