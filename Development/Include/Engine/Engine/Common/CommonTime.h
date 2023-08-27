@@ -31,7 +31,7 @@ namespace Engine::Common::DateTime
 	public:
 		Time(uint32 rawTime) : m_rawTime(rawTime) {}
 
-		TimeDetails GetTime() const;
+		TimeDetails GetTimeDetails() const;
 		uint32 GetTimeRaw() const;
 
 	private:
@@ -59,8 +59,8 @@ namespace Engine::Common::DateTime
 		(double)nanoseconds(1).count() / MILISECOND_TO_NANOSECONDS
 	);
 
-	extern Time GetCurrentTime();
-	extern uint32 GetCurrentTimeRaw();
+	extern Time GetTime();
+	extern uint32 GetTimeRaw();
 
 	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime);
 

@@ -27,11 +27,9 @@ include(${EXTERNAL_DIR}/tracy.cmake)
 set(INTERNAL_DIR ${CMAKE_CURRENT_SOURCE_DIR}/Internal)
 
 include(${INTERNAL_DIR}/tracy_profiler_client.cmake)
-include(${INTERNAL_DIR}/tracy_profiler_tool.cmake)
 
 #
 # Sources
 #
 
 add_subdirectory(Source)
-

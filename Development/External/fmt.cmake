@@ -9,20 +9,19 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-set(FMT_ROOT ${EXTERNAL_DIR}/fmt)
+set(FMT_ROOT ${EXTERNAL_DIR}/fmt-10.0.0)
 
 #
-# Include Library
+# Libraries
 #
 
-add_subdirectory(${FMT_ROOT} ${CMAKE_BINARY_DIR}/fmt)
-
-#
-# Visual Studio Configuration
-#
-
-set_target_properties(
-    fmt 
-    PROPERTIES 
-    FOLDER "Dependencies/External"
+set(FMT_LIB 
+    $<$<CONFIG:Debug>:${FMT_ROOT}/lib/x64/Debug/fmtd.lib>
+    $<$<CONFIG:Release>:${FMT_ROOT}/lib/x64/Release/fmt.lib>
 )
+
+#
+# Include Directory
+#
+
+set(FMT_INCLUDE_DIR ${FMT_ROOT}/include)

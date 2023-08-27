@@ -26,11 +26,19 @@ target_include_directories(Editor PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(Editor PRIVATE 
     Engine
+)
+
+#
+# Post Build
+#
+
+add_custom_command(TARGET Editor POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Editor> ${SDL_DLL}
 )
 
 #

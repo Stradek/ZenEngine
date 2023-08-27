@@ -9,20 +9,10 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog)
+set(SPDLOG_ROOT ${EXTERNAL_DIR}/spdlog-1.12.0)
 
 #
-# Include Library
+# Include Directory
 #
 
-add_subdirectory(${SPDLOG_ROOT} ${CMAKE_BINARY_DIR}/spdlog)
-
-#
-# Visual Studio Configuration
-#
-
-set_target_properties(
-    spdlog
-    PROPERTIES 
-    FOLDER "Dependencies/External"
-)
+set(SPDLOG_INCLUDE_DIR ${SPDLOG_ROOT}/include)

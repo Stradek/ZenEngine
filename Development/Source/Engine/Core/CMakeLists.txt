@@ -33,19 +33,31 @@ target_include_directories(Core PUBLIC
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(Core PUBLIC 
     # Engine
     Common
 
-    # External 
-    spdlog fmt 
-
     # Internal 
     $<$<CONFIG:Debug>:TracyProfilerClient>
 )
+
+
+#
+# External Dependencies
+#
+
+target_link_libraries(Core PUBLIC 
+    ${FMT_LIB}
+)
+
+target_include_directories(Core PUBLIC 
+    ${FMT_INCLUDE_DIR}
+    ${SPDLOG_INCLUDE_DIR}
+)
+
 
 # 
 # Precompiled Headers

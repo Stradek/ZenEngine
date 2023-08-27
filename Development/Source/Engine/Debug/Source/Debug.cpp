@@ -71,7 +71,7 @@ namespace Engine::Debug
 		{
 			ENGINE_ASSERT(m_nameToStartFrameData->count(functionName) == 0, "Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName)
 
-			uint32 timeNow = Common::DateTime::GetCurrentTimeRaw();
+			uint32 timeNow = Common::DateTime::GetTimeRaw();
 			StartFrameData frameData{ timeNow, false };
 
 			(*m_nameToStartFrameData)[functionName] = frameData;
@@ -79,7 +79,7 @@ namespace Engine::Debug
 
 		void PerformanceProfiler::FrameProfilingEnd(std::string functionName)
 		{
-			uint32 frameFinishTime = Common::DateTime::GetCurrentTimeRaw();
+			uint32 frameFinishTime = Common::DateTime::GetTimeRaw();
 			uint32 frameStartTime = (*m_nameToStartFrameData)[functionName].startTime;
 			uint32 frameDuration = frameFinishTime - frameStartTime;
 

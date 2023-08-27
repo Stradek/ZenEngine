@@ -5,10 +5,6 @@
 
 #pragma once
 
-// this needs to be defined before including SDL.h 
-// to avoid enforced implementation of SDL_main()
-#define SDL_MAIN_HANDLED
-
 #include <Engine/Core/Config.h>
 
 #ifdef _DEBUG

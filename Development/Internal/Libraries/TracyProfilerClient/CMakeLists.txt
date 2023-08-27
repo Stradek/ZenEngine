@@ -9,12 +9,8 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(SOURCE_FILES
-    "${TRACY_ROOT}/public/TracyClient.cpp"
-)
-
 set(TARGET_FILES
-    "${SOURCE_FILES}"
+    "${TRACY_PUBLIC_DIRECTORY}/TracyClient.cpp"
 )
 
 #
@@ -32,5 +28,5 @@ target_compile_definitions(TracyProfilerClient PUBLIC
 # include Tracy headers only for targets
 # that are linked agains TracyProfilerClient
 target_include_directories(TracyProfilerClient INTERFACE
-    $<$<CONFIG:Debug>:${TRACY_HEADER_DIR}>
+    $<$<CONFIG:Debug>:${TRACY_PUBLIC_DIRECTORY}>
 )
