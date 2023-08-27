@@ -26,7 +26,7 @@ jobs:
     strategy:
       matrix:
         configuration: [Release, Debug]
-        target: [Game, Editor, TracyProfilerTool]
+        target: [Game, Editor]
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
