@@ -26,7 +26,7 @@ namespace Engine::Core
 	void Log::Init()
 	{
 		const Common::DateTime::Date currentDate = Common::DateTime::GetCurrentDate();
-		const Common::DateTime::TimeDetails currentTime = Common::DateTime::GetCurrentTime().GetTime();
+		const Common::DateTime::TimeDetails currentTime = Common::DateTime::GetTime().GetTimeDetails();
 
 		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.year, currentDate.month, currentDate.day, currentTime.hours, currentTime.minutes, currentTime.seconds);
 

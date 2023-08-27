@@ -26,15 +26,24 @@ target_include_directories(WindowManagement PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(WindowManagement PUBLIC
     # Engine
     Core Debug
+)
 
-    # External
-    SDL2
+#
+# External Dependencies
+#
+
+target_link_libraries(WindowManagement PUBLIC 
+    ${SDL_LIB}
+)
+
+target_include_directories(WindowManagement PUBLIC
+    ${SDL_INCLUDE_DIR}
 )
 
 #

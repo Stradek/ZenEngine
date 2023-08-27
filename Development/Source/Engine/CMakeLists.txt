@@ -57,6 +57,12 @@ target_link_libraries(Engine PUBLIC
     $<$<CONFIG:Debug>:TracyProfilerClient>
 )
 
+# definition to aviod SDL preprocessor rule to 
+# redefine main() as SDL_main()
+target_compile_definitions(Engine PUBLIC
+    "SDL_MAIN_HANDLED"
+)
+
 #
 # Visual Studio Configuration
 #

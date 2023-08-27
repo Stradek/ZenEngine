@@ -26,15 +26,24 @@ target_include_directories(Graphics PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(Graphics PUBLIC
     # Engine
     Core Debug
+)
 
-    # External
-    SDL2
+#
+# External Dependencies
+#
+
+target_link_libraries(Graphics PUBLIC 
+    ${SDL_LIB}
+)
+
+target_include_directories(Graphics PUBLIC
+    ${SDL_INCLUDE_DIR}
 )
 
 #

@@ -9,7 +9,6 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-set(TRACY_ROOT ${EXTERNAL_DIR}/tracy)
-set(TRACY_HEADER_DIR ${TRACY_ROOT}/public)
-set(TRACY_DEPENDENCIES_ROOT ${EXTERNAL_DIR}/tracy_dependencies)
-set(TRACY_DEPENDENCIES_HEADERS ${TRACY_DEPENDENCIES_ROOT}/include)
+set(TRACY_ROOT ${EXTERNAL_DIR}/tracy-0.9.1)
+
+set(TRACY_PUBLIC_DIRECTORY ${TRACY_ROOT}/public)

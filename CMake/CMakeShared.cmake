@@ -58,6 +58,13 @@ function(custom_cmake_setup)
     if(MSVC)
         set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /Zf /MP" PARENT_SCOPE)
     endif()
+
+    # Mark as GUI application on Release (leave commandline on Debug)
+    if (MSVC)
+        set(CMAKE_EXE_LINKER_FLAGS_RELEASE  "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup" PARENT_SCOPE)
+    else()
+        set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -mwindows" PARENT_SCOPE)
+    endif()
     
     #
     # Configurations
@@ -156,5 +163,4 @@ function(custom_cmake_setup)
             PARENT_SCOPE
         )
     endfunction()
-    
 endfunction()

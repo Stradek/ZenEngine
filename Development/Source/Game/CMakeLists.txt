@@ -35,11 +35,19 @@ target_include_directories(Game PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(Game PRIVATE 
     Engine 
+)
+
+#
+# Post Build
+#
+
+add_custom_command(TARGET Game POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Game> ${SDL_DLL}
 )
 
 #

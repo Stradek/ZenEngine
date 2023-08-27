@@ -27,7 +27,7 @@ namespace Engine::Common::DateTime
 		uint32 endTime;
 		if (m_isRunning)
 		{
-			endTime = DateTime::GetCurrentTimeRaw();
+			endTime = DateTime::GetTimeRaw();
 		}
 		else
 		{
@@ -47,19 +47,19 @@ namespace Engine::Common::DateTime
 
 	void Clock::Start()
 	{
-		m_startTime = DateTime::GetCurrentTimeRaw();
+		m_startTime = DateTime::GetTimeRaw();
 		m_isRunning = true;
 	}
 	void Clock::Stop()
 	{
-		m_endTime = DateTime::GetCurrentTimeRaw();
+		m_endTime = DateTime::GetTimeRaw();
 		m_isRunning = false;
 	}
 
 	void Clock::Reset()
 	{
 		if(!m_isRunning) m_isRunning = true;
-		m_startTime = DateTime::GetCurrentTimeRaw();
+		m_startTime = DateTime::GetTimeRaw();
 	}
 
 	uint32 Clock::GetStartTime()

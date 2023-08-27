@@ -24,7 +24,7 @@ using std::chrono::duration_cast;
 
 namespace Engine::Common::DateTime
 {
-	TimeDetails Time::GetTime() const
+	TimeDetails Time::GetTimeDetails() const
 	{
 		const uint32 rawTime = GetTimeRaw();
 		const TimeDetails timeDetails = RawTimeToTimeDetails(rawTime);
@@ -38,15 +38,15 @@ namespace Engine::Common::DateTime
 	};
 
 
-	Time GetCurrentTime()
+	Time GetTime()
 	{
-		uint32 rawTime = GetCurrentTimeRaw();
+		uint32 rawTime = GetTimeRaw();
 
 		Time currentTime = Time(rawTime);
 		return currentTime;
 	}
 
-	extern uint32 GetCurrentTimeRaw()
+	extern uint32 GetTimeRaw()
 	{
 		uint32 rawTimeNow = high_res_clock::now().time_since_epoch().count();
 		return rawTimeNow;

@@ -26,7 +26,7 @@ target_include_directories(Debug PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(Debug PUBLIC 

@@ -26,15 +26,24 @@ target_include_directories(EventSystem PRIVATE
 )
 
 #
-# Dependencies
+# Internal Dependencies
 #
 
 target_link_libraries(EventSystem PUBLIC 
     # Engine
     Core Debug
+)
 
-    # External
-    SDL2
+#
+# External Dependencies
+#
+
+target_link_libraries(EventSystem PUBLIC 
+    ${SDL_LIB}
+)
+
+target_include_directories(EventSystem PUBLIC
+    ${SDL_INCLUDE_DIR}
 )
 
 #
