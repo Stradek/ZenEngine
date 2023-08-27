@@ -4,7 +4,10 @@ setlocal
 rem Copyright (c) 2023 Piotr Stradowski. All rights reserved.
 rem Software distributed under the permissive MIT License.
 
-set buildDir="CMake-VS2022-x64"
+set myPath=%~dp0
+
+if [%sourceDir%] == [] set sourceDir="%myPath%\.."
+if [%buildDir%] == [] set buildDir="%sourceDir%\Build\CMake-VS2022-x64"
 
 if not exist %buildDir% (
     goto :Error_CMakeDirectoryNotExist

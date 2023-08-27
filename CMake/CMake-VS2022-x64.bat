@@ -8,9 +8,10 @@ set myPath=%~dp0
 set sourceDir=%1
 set buildDir=%2
 set arch=%3
+set presetsFile=%4
 
 if [%sourceDir%] == [] set sourceDir="%myPath%\.."
-if [%buildDir%] == [] set buildDir="%myPath%\CMake-VS2022-x64"
+if [%buildDir%] == [] set buildDir="%sourceDir%\Build\CMake-VS2022-x64"
 if [%arch%] == [] set arch="x64"
 
 echo ---- Preparing build directory...
@@ -23,7 +24,7 @@ if %ERRORLEVEL% NEQ 0 (
 
 echo ---- Generating CMake project for Visual Studio 2022...
 
-cmake.exe -G "Visual Studio 17" -S %sourceDir% -B %buildDir% -A %arch% 
+cmake.exe -G "Visual Studio 17" -S %sourceDir% -B %buildDir% -A %arch%
 
 if %ERRORLEVEL% NEQ 0 (
     goto Error_CMakeBuildingProjectFailed
