@@ -19,11 +19,11 @@ namespace Engine::Common::DateTime
 {
 	struct TimeDetails
 	{
-		uint hours;
-		uint minutes;
-		uint seconds;
-		uint miliseconds;
-		uint nanoseconds;
+		uint32 hours;
+		uint32 minutes;
+		uint32 seconds;
+		uint32 miliseconds;
+		uint32 nanoseconds;
 	};
 
 	class Time
