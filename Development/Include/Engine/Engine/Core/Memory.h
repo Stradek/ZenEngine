@@ -5,6 +5,8 @@
 
 #pragma once
 
+#include <Engine/Common/Defines.h>
+
 namespace Engine::Core::Memory
 {
 	template<typename T, const size_t size>
@@ -12,7 +14,7 @@ namespace Engine::Core::Memory
 	{
 	public:
 		
-		CircularBuffer() : m_bufferSize(size), m_currentIndex(0), m_buffer{}
+		CircularBuffer() : m_bufferSize(size), m_currentIndex(0), m_buffer[size]
 		{
 		}
 
@@ -42,5 +44,16 @@ namespace Engine::Core::Memory
 		size_t m_bufferSize;
 		T m_buffer[size];
 		uint m_currentIndex;
+	};
+
+	class PoolAllocator
+	{
+	public:
+		PoolAllocator(size_t chunkSize, size_t chunkCount);
+		void* Allocate();
+		void Deallocate(void* chunkPtr);
+	private:
+		uint8* m_base;
+		uint8* m_freeList;
 	};
 }
