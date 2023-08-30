@@ -14,7 +14,7 @@ namespace Engine::Core::Memory
 	{
 	public:
 		
-		CircularBuffer() : m_bufferSize(size), m_currentIndex(0), m_buffer[size]
+		CircularBuffer() : m_bufferSize(size), m_currentIndex(0)
 		{
 		}
 
