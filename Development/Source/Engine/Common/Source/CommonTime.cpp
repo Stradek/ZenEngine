@@ -48,7 +48,7 @@ namespace Engine::Common::DateTime
 
 	extern uint32 GetTimeRaw()
 	{
-		uint32 rawTimeNow = high_res_clock::now().time_since_epoch().count();
+		uint32 rawTimeNow = static_cast<uint32>(high_res_clock::now().time_since_epoch().count());
 		return rawTimeNow;
 	}
 
@@ -58,19 +58,19 @@ namespace Engine::Common::DateTime
 		uint32 rawTimeToMove = const_cast<uint32&>(rawTime);
 		TimeDetails timeDetails;
 
-		uint hoursInRawTime = floor(rawTimeToMove / HOUR_TO_NANOSECONDS);
+		uint32 hoursInRawTime = static_cast<uint32>(rawTimeToMove / HOUR_TO_NANOSECONDS);
 		rawTimeToMove -= hoursInRawTime * HOUR_TO_NANOSECONDS;
 
-		uint minutesInRawTime = floor(rawTimeToMove / MINUTE_TO_NANOSECONDS);
+		uint32 minutesInRawTime = static_cast<uint32>(rawTimeToMove / MINUTE_TO_NANOSECONDS);
 		rawTimeToMove -= minutesInRawTime * MINUTE_TO_NANOSECONDS;
 
-		uint secondsInRawTime = floor(rawTimeToMove / SECOND_TO_NANOSECONDS);
+		uint32 secondsInRawTime = static_cast<uint32>(rawTimeToMove / SECOND_TO_NANOSECONDS);
 		rawTimeToMove -= secondsInRawTime * SECOND_TO_NANOSECONDS;
 
-		uint milisecondsInRawTime = floor(rawTimeToMove / MILISECOND_TO_NANOSECONDS);
+		uint32 milisecondsInRawTime = static_cast<uint32>(rawTimeToMove / MILISECOND_TO_NANOSECONDS);
 		rawTimeToMove -= milisecondsInRawTime * MILISECOND_TO_NANOSECONDS;
 
-		uint nanosecondsInRawTime = rawTimeToMove;
+		uint32 nanosecondsInRawTime = rawTimeToMove;
 
 		timeDetails.hours = hoursInRawTime;
 		timeDetails.minutes = minutesInRawTime;

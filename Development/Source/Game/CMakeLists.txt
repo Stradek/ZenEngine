@@ -47,7 +47,7 @@ target_link_libraries(Game PRIVATE
 #
 
 add_custom_command(TARGET Game POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Game> ${SDL_DLL}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SDL_DLL} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
 #
