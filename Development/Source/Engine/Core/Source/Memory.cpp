@@ -11,7 +11,7 @@ namespace Engine::Core::Memory
 	{
 		chunkSize = (chunkSize + 15) & ~15;
 
-		m_base = new uint8[chunkSize * chunkCount];
+		m_base = Allocator::AllocateAligned<uint8>(chunkSize * chunkCount);
 
 		for (size_t chunkIndex = 0; chunkIndex < chunkCount; ++chunkIndex)
 		{
@@ -43,5 +43,10 @@ namespace Engine::Core::Memory
 	{
 		*(reinterpret_cast<uint8**>(chunkPtr)) = m_freeList;
 		m_freeList = static_cast<uint8*>(chunkPtr);
+	}
+
+	PoolAllocator::~PoolAllocator()
+	{
+		Allocator::Deallocate(m_base);
 	}
 }

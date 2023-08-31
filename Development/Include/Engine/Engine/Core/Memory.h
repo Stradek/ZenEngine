@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include <Engine/Common/Defines.h>
-
 namespace Engine::Core::Memory
 {
 	template<typename T, const size_t size>
@@ -46,10 +44,42 @@ namespace Engine::Core::Memory
 		uint m_currentIndex;
 	};
 
+	class Allocator
+	{
+	public:
+		template <typename T>
+		static T* AllocateAligned(size_t size)
+		{
+			ENGINE_FATAL_ASSERT(alignof(T) > alignment, 
+								"Failed to allocate object T of size: {}, \
+								larger than alignment requirements of size {}.", 
+								sizeof(T), alignment);
+
+			void* unalignedBase = new uint8[size];
+			if (std::align(alignment, sizeof(T), unalignedBase, size))
+			{
+				T* alignedBase = reinterpret_cast<T*>(unalignedBase);
+				return alignedBase;
+			}
+
+			ENGINE_ASSERT(false, "Allocation failed.");
+			return nullptr;
+		}
+
+		static void	Deallocate(void* obj)
+		{
+			delete[] obj;
+			obj = nullptr;
+		}
+
+		static const uint8 alignment = 16;
+	};
+
 	class PoolAllocator
 	{
 	public:
 		PoolAllocator(size_t chunkSize, size_t chunkCount);
+		~PoolAllocator();
 		void* Allocate();
 		void Deallocate(void* chunkPtr);
 	private:
