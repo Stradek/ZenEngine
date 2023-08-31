@@ -9,6 +9,8 @@
 	STD Precompiled Headers
 */
 
+#include <cstdlib>
+
 // math
 #include <ratio>
 #include <cmath>
