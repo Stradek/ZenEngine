@@ -5,9 +5,9 @@
 
 #pragma once
 
-#include "Defines.h"
-#include "CommonTime.h"
-#include "CommonDate.h"
-#include "TimeTypes.h"
 #include "Clock.h"
+#include "CommonDate.h"
+#include "CommonTime.h"
+#include "Defines.h"
+#include "TimeTypes.h"
 #include "TracingFunctionNames.h"
