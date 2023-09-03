@@ -1,7 +1,16 @@
 # SDLEngineTest
 This game engine is still work in progress. Name of this software still haven't been determined and will change in the future.
 
-# Project Current Goals
+# Project Short-Term Goals
+- Finishing custom memory allocation systems which includes:
+- Finishing GeneralAllocator
+- Finishing Handles implementationand other interfaces for managing allocated memory and pointers
+- Finishing SlabAllocator implementation
+- Figuring out a way to implement allocators with dynamic memory allocations like PoolAllocator or ResizablePoolAllocator
+- Moveing all heap allocated data to custom allocators
+- Ensuring that custom allocation is "working"(tbd)
+
+# Project Long-Term Goals
 1. Game Genre: I want to develop a simple 2D platformer game.
 2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
 3. Level Design: I want to create levels without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in old days.
