@@ -1,0 +1,31 @@
+name: Delete Merged Branch
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  delete-branch:
+    runs-on: windows-latest
+    if: github.event.pull_request.merged == true
+    steps:
+    - name: Delete Branch
+      run: |
+        target_branches=("main" "develop")
+        current_branch="${{ github.event.pull_request.head.ref }}"
+      
+        should_delete=true
+      
+        for target in "${target_branches[@]}"; do
+          if [[ "$current_branch" == "$target" ]]; then
+            should_delete=false
+            break
+          fi
+        done
+      
+        if [ "$should_delete" = true ]; then
+          echo "Deleting branch $current_branch"
+          git push origin --delete "$current_branch"
+        fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
