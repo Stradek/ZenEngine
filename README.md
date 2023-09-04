@@ -4,7 +4,7 @@ This game engine is still work in progress. Name of this software still haven't 
 # Project Short-Term Goals
 - Finishing custom memory allocation systems which includes:
 - Finishing GeneralAllocator
-- Finishing Handles implementationand other interfaces for managing allocated memory and pointers
+- Finishing Handles implementation and other interfaces for managing allocated memory and pointers
 - Finishing SlabAllocator implementation
 - Figuring out a way to implement allocators with dynamic memory allocations like PoolAllocator or ResizablePoolAllocator
 - Moveing all heap allocated data to custom allocators
