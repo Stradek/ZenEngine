@@ -4,6 +4,7 @@ on:
     types:
       - closed
     branches-ignore:
+      - main
       - develop
 
 jobs:
