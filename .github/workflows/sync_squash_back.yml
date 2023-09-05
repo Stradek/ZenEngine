@@ -17,5 +17,5 @@ jobs:
       run: |
         git fetch origin
         git checkout develop
-        git merge --no-edit main
+        git merge --no-edit main --allow-unrelated-histories
         git push origin develop
