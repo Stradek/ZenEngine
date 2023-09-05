@@ -6,7 +6,7 @@ on:
       - main
       - develop
     types:
-      - closed
+      - opened
 
 jobs:
   configure:
