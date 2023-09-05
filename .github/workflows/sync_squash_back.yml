@@ -1,0 +1,19 @@
+name: Sync develop with main
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  sync:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Sync develop
+        run: |
+            git checkout develop
+            git merge --strategy=ours main
+            git push origin develop
