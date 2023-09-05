@@ -6,12 +6,17 @@
 #include <Game.h>
 
 #include <Engine/GameEngine.h>
+#include <Engine/Core/Memory.h>
+
+using GameHandle = Engine::Core::Memory::ObjectHandle<Game>;
+using EngineAppHandle = Engine::Core::Memory::ObjectHandle<IEngineApplication>;
 
 int main(int argc, char* argv[])
 {
 	{
-		std::shared_ptr<IEngineApplication> gameInstance = std::make_shared<Game>();
-		Engine::GameEngine::Run(gameInstance);
+		GameHandle gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
+		EngineAppHandle engineAppInstance = EngineAppHandle(gameInstance.Get());
+		Engine::GameEngine::Run(engineAppInstance);
 	}
 	return 0;
 }

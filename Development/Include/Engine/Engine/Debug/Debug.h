@@ -77,8 +77,7 @@ namespace Engine::Debug
 		};
 	}
 
-	using PerformanceProfilerPtr = std::shared_ptr<Performance::PerformanceProfiler>;
-	using PerformanceProfilerRef = PerformanceProfilerPtr&;
+	using PerformanceProfilerRef = Core::Memory::ObjectHandle<Performance::PerformanceProfiler>&;
 
 	class DebugManager : Engine::Core::ISystem
 	{
@@ -88,22 +87,21 @@ namespace Engine::Debug
 		void StartUp() override;
 		void ShutDown() override;
 
-		PerformanceProfilerRef GetPerformanceProfiler() { return m_performanceProfiler; };
+		Performance::PerformanceProfiler& GetPerformanceProfiler() { return m_performanceProfiler; };
 
 		void StartPerformanceProfiler();
 
 		void Update(const uint32 deltaTime) override;
 
 	private:
-		const Common::DateTime::Time m_debugInfoUpdateFrequency;
-		
-		PerformanceProfilerPtr m_performanceProfiler;
+		Performance::PerformanceProfiler m_performanceProfiler;
 
+		const Common::DateTime::Time m_debugInfoUpdateFrequency;
+		Common::DateTime::Clock m_debugUpdateClock;
 		bool m_shouldLogStats;
 
-		Common::DateTime::Clock m_debugUpdateClock;
-
-		void DebugManager::ClearEngineCounters();
+		void LogProfilingInfo(const uint32 deltaTime);
+		void LogMemoryInfo();
 	};
 }
 

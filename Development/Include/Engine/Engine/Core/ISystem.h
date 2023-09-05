@@ -11,14 +11,13 @@ namespace Engine::Core
 	{
 	public:
 		ISystem& operator=(const ISystem& other) = delete;
-
+		
+		ISystem() {}
 		virtual void StartUp() = 0;
 
 		virtual void Update(const uint32 deltaTime) {};
 		virtual void Render() {};
 
 		virtual void ShutDown() = 0;
-	protected:
-		ISystem() {}
 	};
 }
