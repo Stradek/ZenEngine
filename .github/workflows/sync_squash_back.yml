@@ -6,14 +6,20 @@ on:
       - main
 
 jobs:
-  sync:
-    runs-on: ubuntu-latest
+  sync_branches:
+    runs-on: windows-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-      - name: Sync develop
-        run: |
-            git checkout develop
-            git merge --strategy=ours main
-            git push origin develop
+    - name: Fetch all branches
+      run: git fetch --all
+
+    - name: Checkout develop branch
+      run: git checkout develop
+
+    - name: Merge main into develop
+      run: git merge --strategy=ours main
+
+    - name: Push changes
+      run: git push origin develop
