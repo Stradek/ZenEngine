@@ -60,13 +60,13 @@ namespace Engine
 	private:
 		static Core::Memory::ObjectHandle<GameEngine> instance;
 
-		Core::Memory::ObjectHandle<IEngineApplication> m_appInstance;
+		Core::Memory::ObjectHandle<IEngineApplication>			m_appInstance;
 		
 		Core::Memory::ObjectHandle<Window::WindowManager>		m_windowManager;
 		Core::Memory::ObjectHandle<EventSystem::EventManager>	m_eventManager;
 		Core::Memory::ObjectHandle<Graphics::GraphicsManager>	m_graphicsManager;
 #ifdef _DEBUG
-		Core::Memory::ObjectHandle<Debug::DebugManager>		m_debugManager;
+		Core::Memory::ObjectHandle<Debug::DebugManager>			m_debugManager;
 #endif
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;

@@ -10,45 +10,87 @@ namespace Engine::Core::Memory
 	// implement SharedAllocatorHandle and UniqueAllocatorHandle that hold references and deallocate automatically
 	// implement SafeAllocatorHandle that holds reference and deallocate automatically when all references are gone
 
+
+	template <typename T>
+	struct ObjectAllocationInfo
+	{
+		void* base;
+		size_t allocationSize;
+
+		T* object;
+		size_t objectSize;
+
+		ObjectAllocationInfo() : base(nullptr), allocationSize(0), object(nullptr), objectSize(0) {}
+
+		ObjectAllocationInfo(ObjectAllocationInfo<T>& other) : base(other.base), allocationSize(other.allocationSize), object(other.object), objectSize(other.objectSize) {}
+		
+		template<typename U>
+		ObjectAllocationInfo(ObjectAllocationInfo<U>& o) : base(o.base), allocationSize(o.allocationSize), objectSize(o.objectSize) 
+		{
+			object = dynamic_cast<T*>(o.object);
+		}
+
+		ObjectAllocationInfo(void* base, size_t allocationSize, T* object, size_t objectSize) :
+			base(base), allocationSize(allocationSize), object(object), objectSize(objectSize)
+		{
+		}
+	};
+
+	struct AllocationInfo
+	{
+		void* base;
+		void* firstChunk;
+		void* lastChunk;
+		size_t chunkSize;
+		size_t chunkCount;
+
+		AllocationInfo(void* base, void* firstObject, void* lastObject, size_t chunkSize) :
+			base(base), firstChunk(firstObject), lastChunk(lastObject), chunkSize(chunkSize)
+		{
+			uintptr_t lastChunkAddr = reinterpret_cast<uintptr_t>(lastChunk);
+			uintptr_t firstChunkAddr = reinterpret_cast<uintptr_t>(firstChunk);
+
+			this->chunkCount = (lastChunkAddr - firstChunkAddr) / chunkSize;
+		}
+	};
+
 	template<typename T>
 	class ObjectHandle
 	{
 	public:
-		void* operator new(std::size_t) = delete;
-		void operator delete(void*) = delete;
-
 		explicit operator bool() const 
 		{
 			return m_isValid;
 		}
 
-		ObjectHandle() : m_object(nullptr), m_isValid(false) {}
+		ObjectHandle() : m_object(nullptr), m_isValid(false) 
+		{
+		}
 
 		template <typename U>
-		ObjectHandle(const ObjectHandle<U>& other)
+		ObjectHandle(ObjectHandle<U>& other)
 		{
 			if (other)
 			{
-				m_allocationInfo = dynamic_cast<ObjectAllocationInfo<T>>(other->GetAllocationInfo());
-				m_object = m_allocationInfo.object;
-				m_isValid = true;
+				ObjectAllocationInfo<T> otherAllocationInfo = other.GetAllocationInfo();
+				
+				InitializeFromAllocationInfo(otherAllocationInfo);
 			}
 		}
 
-		// not use it for 
-		ObjectHandle(ObjectAllocationInfo<T> allocationInfo)
+		ObjectHandle(ObjectHandle<T>& other)
 		{
-			if(allocationInfo.base != nullptr && allocationInfo.object != nullptr &&
-				allocationInfo.allocationSize > 0 && allocationInfo.objectSize > 0)
+			if (other)
 			{
-				m_allocationInfo = allocationInfo;
-				m_object = allocationInfo.object;
-				m_isValid = true;
+				auto allocationInfo = other.GetAllocationInfo();
+				
+				InitializeFromAllocationInfo(allocationInfo);
 			}
-			else
-			{
-				m_isValid = false;
-			}
+		}
+
+		ObjectHandle(ObjectAllocationInfo<T>& allocationInfo)
+		{
+			InitializeFromAllocationInfo(allocationInfo);
 		}
 
 		inline T* operator->()
@@ -65,7 +107,7 @@ namespace Engine::Core::Memory
 		{
 			if (m_isValid)
 			{
-				return dynamic_cast<T*>(m_object);
+				return *m_object;
 			}
 
 			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
@@ -80,7 +122,7 @@ namespace Engine::Core::Memory
 			}
 
 			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
-			return nullptr;
+			return ObjectAllocationInfo<T>();
 		}
 
 		~ObjectHandle()
@@ -100,40 +142,22 @@ namespace Engine::Core::Memory
 
 	private:
 		ObjectAllocationInfo<T> m_allocationInfo;
-		T& m_object;
+		T** m_object;
 		bool m_isValid;
-	};
 
-	template <typename T>
-	struct ObjectAllocationInfo
-	{
-		void* base;
-		size_t allocationSize;
-
-		T* object;
-		size_t objectSize;
-
-		ObjectAllocationInfo(void* base, size_t allocationSize, T* object, size_t objectSize) :
-			base(base), allocationSize(allocationSize), object(object), objectSize(objectSize) 
+		void InitializeFromAllocationInfo(ObjectAllocationInfo<T>& allocationInfo)
 		{
-		}
-	};
-
-	struct AllocationInfo
-	{
-		void* base;
-		void* firstChunk;
-		void* lastChunk;
-		size_t chunkSize;
-		size_t chunkCount;
-
-		AllocationInfo(void* base, void* firstObject, void* lastObject, size_t chunkSize) :
-			base(base), firstChunk(firstObject), lastChunk(lastObject), chunkSize(chunkSize)
-		{
-			uintptr_t lastChunkAddr = reinterpret_cast<uintptr_t>(lastChunk);
-			uintptr_t firstChunkAddr = reinterpret_cast<uintptr_t>(firstChunk);
-			
-			this->chunkCount = (lastChunkAddr - firstChunkAddr) / chunkSize;
+			if (allocationInfo.base != nullptr && allocationInfo.object != nullptr &&
+				allocationInfo.allocationSize > 0 && allocationInfo.objectSize > 0)
+			{
+				m_allocationInfo = allocationInfo;
+				m_object = &allocationInfo.object;
+				m_isValid = true;
+			}
+			else
+			{
+				m_isValid = false;
+			}
 		}
 	};
 
@@ -166,7 +190,7 @@ namespace Engine::Core::Memory
 			}
 
 			ENGINE_ASSERT(false, "Allocation failed.");
-			return nullptr;
+			return ObjectHandle<T>();
 		}
 
 		template<typename T>

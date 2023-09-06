@@ -98,7 +98,7 @@ namespace Engine::Debug
 		{
 			NameToFrameDataBuffer framesDone;
 
-			for (auto frameDataCircularBufferIt : *m_nameToFrameDataCircularBuffer)
+			for (auto& frameDataCircularBufferIt : *m_nameToFrameDataCircularBuffer)
 			{
 				auto& frameDataName = frameDataCircularBufferIt.first;
 				auto& frameDataValue = frameDataCircularBufferIt.second;
