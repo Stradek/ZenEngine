@@ -19,20 +19,35 @@ namespace Engine::Core::Memory
 
 		explicit operator bool() const 
 		{
-			return m_base != nullptr;
+			return m_isValid;
 		}
 
-		ObjectHandle()
-		{
-			m_base = nullptr;
-		}
+		ObjectHandle() : m_object(nullptr), m_isValid(false) {}
 
-		ObjectHandle(void* base, void* object)
+		template <typename U>
+		ObjectHandle(const ObjectHandle<U>& other)
 		{
-			if (base)
+			if (other)
 			{
-				m_base = reinterpret_cast<T*>(pointer);
+				m_allocationInfo = dynamic_cast<ObjectAllocationInfo<T>>(other->GetAllocationInfo());
+				m_object = m_allocationInfo.object;
 				m_isValid = true;
+			}
+		}
+
+		// not use it for 
+		ObjectHandle(ObjectAllocationInfo<T> allocationInfo)
+		{
+			if(allocationInfo.base != nullptr && allocationInfo.object != nullptr &&
+				allocationInfo.allocationSize > 0 && allocationInfo.objectSize > 0)
+			{
+				m_allocationInfo = allocationInfo;
+				m_object = allocationInfo.object;
+				m_isValid = true;
+			}
+			else
+			{
+				m_isValid = false;
 			}
 		}
 
@@ -50,10 +65,21 @@ namespace Engine::Core::Memory
 		{
 			if (m_isValid)
 			{
-				return m_object;
+				return dynamic_cast<T*>(m_object);
 			}
 
-			ENGINE_ASSERT(m_object != nullptr, "Object pointer is nullptr.");
+			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
+			return nullptr;
+		}
+
+		ObjectAllocationInfo<T> GetAllocationInfo()
+		{
+			if (m_isValid)
+			{
+				return m_allocationInfo;
+			}
+
+			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
 			return nullptr;
 		}
 
@@ -61,17 +87,36 @@ namespace Engine::Core::Memory
 		{
 			if (m_isValid)
 			{
-				delete m_base;
-				m_base = nullptr;
-				m_object = nullptr;
+				delete[m_allocationInfo.allocationSize] m_allocationInfo.base;\
+				m_allocationInfo.base = nullptr;
+				m_allocationInfo.object = nullptr;
+				
+				m_allocationInfo.allocationSize = 0;
+				m_allocationInfo.objectSize = 0;
+
+				m_isValid = false;
 			}
-			m_isValid = false;
 		}
 
 	private:
-		void* m_base = nullptr; 
-		T* m_object = nullptr;
-		bool m_isValid = false;
+		ObjectAllocationInfo<T> m_allocationInfo;
+		T& m_object;
+		bool m_isValid;
+	};
+
+	template <typename T>
+	struct ObjectAllocationInfo
+	{
+		void* base;
+		size_t allocationSize;
+
+		T* object;
+		size_t objectSize;
+
+		ObjectAllocationInfo(void* base, size_t allocationSize, T* object, size_t objectSize) :
+			base(base), allocationSize(allocationSize), object(object), objectSize(objectSize) 
+		{
+		}
 	};
 
 	struct AllocationInfo
@@ -82,15 +127,12 @@ namespace Engine::Core::Memory
 		size_t chunkSize;
 		size_t chunkCount;
 
-		AllocationInfo(void* base, void* firstObject, void* lastObject, size_t chunkSize)
+		AllocationInfo(void* base, void* firstObject, void* lastObject, size_t chunkSize) :
+			base(base), firstChunk(firstObject), lastChunk(lastObject), chunkSize(chunkSize)
 		{
-			this->base = base;
-			this->firstChunk = firstObject;
-			this->lastChunk = lastObject;
-			this->chunkSize = chunkSize;
-
 			uintptr_t lastChunkAddr = reinterpret_cast<uintptr_t>(lastChunk);
 			uintptr_t firstChunkAddr = reinterpret_cast<uintptr_t>(firstChunk);
+			
 			this->chunkCount = (lastChunkAddr - firstChunkAddr) / chunkSize;
 		}
 	};
@@ -106,15 +148,21 @@ namespace Engine::Core::Memory
 		static ObjectHandle<T> Allocate()
 		{
 			// size + alignment ensures that there is space for alignment
-			size_t allocationSize = sizeof(T);
-			size_t bufferSize = allocationSize + alignment;
-			void* unalignedBase = new uint8[bufferSize];
+			size_t objectSize = sizeof(T);
+			size_t bufferSize = objectSize + alignment;
+			void* notAlignedBase = new uint8[bufferSize];
 
-			void* aligned = nullptr;
-			if (aligned = std::align(alignment, allocationSize, unalignedBase, bufferSize))
+			void* alignedBase = nullptr;
+			if (alignedBase = std::align(alignment, objectSize, notAlignedBase, bufferSize))
 			{
-				new (static_cast<uint8*>(aligned)) T;
-				return ObjectHandle<T>(aligned);
+				// std::align modifies bufferSize and now: bufferSize is equal to allocated memory 
+				// for object + alignment leftovers, so we can move it to ObjectAllocationInfo as 
+				// allocationSize parameter
+
+				T* allocatedObject = new (static_cast<uint8*>(alignedBase)) T();
+				ObjectAllocationInfo<T> allocationInfo(alignedBase, bufferSize, allocatedObject, objectSize);
+
+				return ObjectHandle<T>(allocationInfo);
 			}
 
 			ENGINE_ASSERT(false, "Allocation failed.");

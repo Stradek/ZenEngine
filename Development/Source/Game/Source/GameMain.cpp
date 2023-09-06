@@ -14,8 +14,8 @@ using EngineAppHandle = Engine::Core::Memory::ObjectHandle<IEngineApplication>;
 int main(int argc, char* argv[])
 {
 	{
-		GameHandle gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
-		EngineAppHandle engineAppInstance = EngineAppHandle(gameInstance.Get());
+		Engine::Core::Memory::ObjectHandle<Game> gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
+		Engine::Core::Memory::ObjectHandle<IEngineApplication> engineAppInstance = gameInstance;
 		Engine::GameEngine::Run(engineAppInstance);
 	}
 	return 0;
