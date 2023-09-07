@@ -11,9 +11,10 @@ namespace Engine::Core::Memory
 	// implement SafeAllocatorHandle that holds reference and deallocate automatically when all references are gone
 
 
-	template <typename T>
+	template<typename T>
 	struct ObjectAllocationInfo
 	{
+		// TODO: we should add here bool for allocation validation 
 		void* base;
 		size_t allocationSize;
 
@@ -58,23 +59,33 @@ namespace Engine::Core::Memory
 	class ObjectHandle
 	{
 	public:
+		void* operator new(std::size_t) = delete;
+		void operator delete(void*) = delete;
+
 		explicit operator bool() const 
 		{
 			return m_isValid;
 		}
 
-		ObjectHandle() : m_object(nullptr), m_isValid(false) 
+		ObjectHandle() : m_isValid(false), m_allocationInfo()
+#ifdef _DEBUG
+			,m_object(nullptr)
+#endif
 		{
+
 		}
 
-		template <typename U>
+		template<typename U>
 		ObjectHandle(ObjectHandle<U>& other)
 		{
 			if (other)
 			{
 				ObjectAllocationInfo<T> otherAllocationInfo = other.GetAllocationInfo();
-				
 				InitializeFromAllocationInfo(otherAllocationInfo);
+			}
+			else
+			{
+				m_isValid = false;
 			}
 		}
 
@@ -85,6 +96,10 @@ namespace Engine::Core::Memory
 				auto allocationInfo = other.GetAllocationInfo();
 				
 				InitializeFromAllocationInfo(allocationInfo);
+			}
+			else
+			{
+				m_isValid = false;
 			}
 		}
 
@@ -107,7 +122,7 @@ namespace Engine::Core::Memory
 		{
 			if (m_isValid)
 			{
-				return *m_object;
+				return m_allocationInfo.object;
 			}
 
 			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
@@ -125,25 +140,35 @@ namespace Engine::Core::Memory
 			return ObjectAllocationInfo<T>();
 		}
 
+		void Free()
+		{
+			this->~ObjectHandle();
+		}
+
 		~ObjectHandle()
 		{
 			if (m_isValid)
 			{
-				delete[m_allocationInfo.allocationSize] m_allocationInfo.base;\
 				m_allocationInfo.base = nullptr;
 				m_allocationInfo.object = nullptr;
 				
 				m_allocationInfo.allocationSize = 0;
 				m_allocationInfo.objectSize = 0;
 
+#ifdef _DEBUG
+				m_object = nullptr;
+#endif
 				m_isValid = false;
 			}
 		}
 
-	private:
+	protected:
 		ObjectAllocationInfo<T> m_allocationInfo;
-		T** m_object;
 		bool m_isValid;
+
+#ifdef _DEBUG
+		T** m_object;
+#endif
 
 		void InitializeFromAllocationInfo(ObjectAllocationInfo<T>& allocationInfo)
 		{
@@ -151,14 +176,59 @@ namespace Engine::Core::Memory
 				allocationInfo.allocationSize > 0 && allocationInfo.objectSize > 0)
 			{
 				m_allocationInfo = allocationInfo;
-				m_object = &allocationInfo.object;
 				m_isValid = true;
+#if _DEBUG
+				m_object = &allocationInfo.object;
+#endif
 			}
 			else
 			{
 				m_isValid = false;
 			}
 		}
+	};
+
+	template<typename T>
+	class ScopedObjectHandle : public ObjectHandle<T>
+	{
+	public:
+		ScopedObjectHandle() : ObjectHandle<T>() {}
+
+		template<typename U>
+		ScopedObjectHandle(ObjectHandle<U>& objectHandleRef) : ObjectHandle<T>(objectHandleRef)
+		{
+		}
+
+		ScopedObjectHandle(ObjectHandle<T>& objectHandleRef) : ObjectHandle<T>(objectHandleRef)
+		{
+		}
+		
+		void Invalidate()
+		{
+			m_isValid = false;
+			~ScopedObjectHandle();
+		}
+
+		~ScopedObjectHandle()
+		{
+			if (m_isValid)
+			{
+				delete[m_allocationInfo.allocationSize] m_allocationInfo.base;
+			}
+
+			ObjectHandle<T>::Free();
+		}
+
+
+		/* 
+		TODO: implement
+		we need to prevent ~ScopedObjectHandle() being called on assignment via operator=()
+
+		ScopedObjectHandle<T>& operator=(const ObjectHandle<T>& other)
+		{
+			return *this;
+		}
+		*/
 	};
 
 	class GeneralAllocator
@@ -194,9 +264,13 @@ namespace Engine::Core::Memory
 		}
 
 		template<typename T>
-		static void	Deallocate(ObjectHandle<T>& obj)
+		static void	Deallocate(ObjectHandle<T>& objHandle)
 		{
-			delete obj.Get();
+			if (objHandle)
+			{
+				ObjectAllocationInfo allocationInfo = objHandle.GetAllocationInfo();
+				delete[allocationInfo.allocationSize] allocationInfo.base;
+			}
 		}
 
 		template<typename T>

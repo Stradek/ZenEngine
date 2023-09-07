@@ -15,7 +15,7 @@ int main(int argc, char* argv[])
 {
 	{
 		Engine::Core::Memory::ObjectHandle<Game> gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
-		Engine::Core::Memory::ObjectHandle<IEngineApplication> engineAppInstance = gameInstance;
+		Engine::Core::Memory::ScopedObjectHandle<IEngineApplication> engineAppInstance = gameInstance;
 		Engine::GameEngine::Run(engineAppInstance);
 	}
 	return 0;

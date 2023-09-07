@@ -77,7 +77,7 @@ namespace Engine::Debug
 		};
 	}
 
-	using PerformanceProfilerRef = Core::Memory::ObjectHandle<Performance::PerformanceProfiler>&;
+	using PerformanceProfilerRef = Core::Memory::ScopedObjectHandle<Performance::PerformanceProfiler>&;
 
 	class DebugManager : Engine::Core::ISystem
 	{
