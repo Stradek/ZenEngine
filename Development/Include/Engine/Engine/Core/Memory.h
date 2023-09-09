@@ -14,31 +14,19 @@ namespace Engine::Core::Memory
 	template<typename T>
 	struct ObjectAllocationInfo
 	{
-		// TODO: we should add here bool for allocation validation 
 		void* base;
 		size_t allocationSize;
-
+		
 		T* object;
 		size_t objectSize;
-
-		ObjectAllocationInfo() : base(nullptr), allocationSize(0), object(nullptr), objectSize(0) {}
-
-		ObjectAllocationInfo(ObjectAllocationInfo<T>& other) : base(other.base), allocationSize(other.allocationSize), object(other.object), objectSize(other.objectSize) {}
-		
-		template<typename U>
-		ObjectAllocationInfo(ObjectAllocationInfo<U>& o) : base(o.base), allocationSize(o.allocationSize), objectSize(o.objectSize) 
-		{
-			object = dynamic_cast<T*>(o.object);
-		}
-
-		ObjectAllocationInfo(void* base, size_t allocationSize, T* object, size_t objectSize) :
-			base(base), allocationSize(allocationSize), object(object), objectSize(objectSize)
-		{
-		}
 	};
 
 	struct AllocationInfo
 	{
+		// TODO: 
+		// - we should add here bool for allocation validation
+		// - refactor that
+		// - decouple implementation to class, leave here data only
 		void* base;
 		void* firstChunk;
 		void* lastChunk;
@@ -56,18 +44,102 @@ namespace Engine::Core::Memory
 	};
 
 	template<typename T>
+	class ObjectPtr
+	{
+	public:
+		ObjectPtr() : m_allocationInfo() {}
+		ObjectPtr(ObjectAllocationInfo<T>& allocationInfo) : m_allocationInfo(allocationInfo) {}
+
+		template<typename U>
+		ObjectPtr(ObjectAllocationInfo<U>& allocationInfo) : m_allocationInfo(allocationInfo) {}
+
+		T* Get()
+		{
+			if (!m_isValid)
+			{
+				return nullptr;
+			}
+
+			return m_allocationInfo.object;
+		}
+
+		bool IsValid()
+		{
+			return m_isValid;
+		}
+
+		explicit operator bool() const
+		{
+			return IsValid();
+		}
+
+		inline T* operator->()
+		{
+			return this->Get();
+		}
+
+		inline T& operator*()
+		{
+			return *(this->Get());
+		}
+	private:
+		ObjectAllocationInfo<T> m_allocationInfo;
+	};
+
+	template<typename T>
+	class ScopedObjectPtr : public ObjectPtr<T>
+	{
+	public:
+		ScopedObjectPtr() : ObjectPtr<T>() {}
+
+		ScopedObjectPtr<T>& operator=(const ObjectPtr<T>& objectPtr)
+		{
+			ENGINE_ASSERT(objectPtr, "Object is not valid.");
+			ENGINE_ASSERT(this != &objectPtr, "Objects are the same.");
+
+			Release();
+			ScopedObjectPtr<T>(objectPtr);
+
+			return *this;
+		}
+		//template<typename U>
+		//ScopedObjectPtr(const ObjectPtr<U>& objectPtr) : ObjectPtr<T>(objectPtr) {}
+
+		//ScopedObjectPtr(const ObjectPtr<T>& objectPtr) : ObjectPtr<T>(objectPtr) {}
+
+		void Release()
+		{
+			if (IsValid())
+			{
+				FreeAllocator();
+			}
+		}
+
+		~ScopedObjectPtr()
+		{
+			Release();
+		}
+
+		ScopedObjectPtr(const ScopedObjectPtr<T>& other) = delete;
+	protected:
+		bool m_isValid = false;
+
+		void FreeAllocator()
+		{
+			delete[m_allocationInfo.allocationSize] m_allocationInfo.base;
+		}
+	};
+
+	template<typename T>
 	class ObjectHandle
 	{
 	public:
-		void* operator new(std::size_t) = delete;
-		void operator delete(void*) = delete;
-
 		explicit operator bool() const 
 		{
 			return m_isValid;
 		}
 
-		ObjectHandle() : m_isValid(false), m_allocationInfo()
+		ObjectHandle() : m_isValid(false), m_objectPtr()
 #ifdef _DEBUG
 			,m_object(nullptr)
 #endif
@@ -75,39 +147,31 @@ namespace Engine::Core::Memory
 
 		}
 
+		ObjectHandle(const ObjectPtr<T>& objectPtr) :
+			m_isValid(false), 
+			m_objectPtr(objectPtr)
+#ifdef _DEBUG
+			, m_object(objectPtr.Get())
+#endif
+		{
+			auto& allocationInfo = m_objectPtr.GetAllocationInfo();
+			if (allocationInfo.base == nullptr || allocationInfo.object == nullptr ||
+				allocationInfo.allocationSize <= 0 || allocationInfo.objectSize <= 0)
+			{
+				m_isValid = false;
+				return;
+			}
+			else
+			{
+				m_isValid = true;
+			}
+		}
+
 		template<typename U>
-		ObjectHandle(ObjectHandle<U>& other)
-		{
-			if (other)
-			{
-				ObjectAllocationInfo<T> otherAllocationInfo = other.GetAllocationInfo();
-				InitializeFromAllocationInfo(otherAllocationInfo);
-			}
-			else
-			{
-				m_isValid = false;
-			}
-		}
+		ObjectHandle(const ObjectHandle<U>& otherObjectHandle) : ObjectHandle(other->GetAllocationInfo()) {}
 
-		ObjectHandle(ObjectHandle<T>& other)
-		{
-			if (other)
-			{
-				auto allocationInfo = other.GetAllocationInfo();
-				
-				InitializeFromAllocationInfo(allocationInfo);
-			}
-			else
-			{
-				m_isValid = false;
-			}
-		}
-
-		ObjectHandle(ObjectAllocationInfo<T>& allocationInfo)
-		{
-			InitializeFromAllocationInfo(allocationInfo);
-		}
-
+		ObjectHandle(const ObjectHandle<T>& other) : ObjectHandle(other->GetAllocationInfo()) {}
+		
 		inline T* operator->()
 		{
 			return this->Get();
@@ -136,99 +200,29 @@ namespace Engine::Core::Memory
 				return m_allocationInfo;
 			}
 
-			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
 			return ObjectAllocationInfo<T>();
 		}
 
-		void Free()
+		void Invalidate()
 		{
-			this->~ObjectHandle();
+			m_isValid = false;
 		}
 
 		~ObjectHandle()
 		{
-			if (m_isValid)
-			{
-				m_allocationInfo.base = nullptr;
-				m_allocationInfo.object = nullptr;
-				
-				m_allocationInfo.allocationSize = 0;
-				m_allocationInfo.objectSize = 0;
-
-#ifdef _DEBUG
-				m_object = nullptr;
-#endif
-				m_isValid = false;
-			}
+			Release();
 		}
+
+		void* operator new(std::size_t) = delete;
+		void operator delete(void*) = delete;
 
 	protected:
-		ObjectAllocationInfo<T> m_allocationInfo;
 		bool m_isValid;
 
+		const ObjectPtr<T> m_objectPtr;
 #ifdef _DEBUG
-		T** m_object;
+		T* m_object;
 #endif
-
-		void InitializeFromAllocationInfo(ObjectAllocationInfo<T>& allocationInfo)
-		{
-			if (allocationInfo.base != nullptr && allocationInfo.object != nullptr &&
-				allocationInfo.allocationSize > 0 && allocationInfo.objectSize > 0)
-			{
-				m_allocationInfo = allocationInfo;
-				m_isValid = true;
-#if _DEBUG
-				m_object = &allocationInfo.object;
-#endif
-			}
-			else
-			{
-				m_isValid = false;
-			}
-		}
-	};
-
-	template<typename T>
-	class ScopedObjectHandle : public ObjectHandle<T>
-	{
-	public:
-		ScopedObjectHandle() : ObjectHandle<T>() {}
-
-		template<typename U>
-		ScopedObjectHandle(ObjectHandle<U>& objectHandleRef) : ObjectHandle<T>(objectHandleRef)
-		{
-		}
-
-		ScopedObjectHandle(ObjectHandle<T>& objectHandleRef) : ObjectHandle<T>(objectHandleRef)
-		{
-		}
-		
-		void Invalidate()
-		{
-			m_isValid = false;
-			~ScopedObjectHandle();
-		}
-
-		~ScopedObjectHandle()
-		{
-			if (m_isValid)
-			{
-				delete[m_allocationInfo.allocationSize] m_allocationInfo.base;
-			}
-
-			ObjectHandle<T>::Free();
-		}
-
-
-		/* 
-		TODO: implement
-		we need to prevent ~ScopedObjectHandle() being called on assignment via operator=()
-
-		ScopedObjectHandle<T>& operator=(const ObjectHandle<T>& other)
-		{
-			return *this;
-		}
-		*/
 	};
 
 	class GeneralAllocator
@@ -239,7 +233,7 @@ namespace Engine::Core::Memory
 		// TODO: could convert it to template function that takes count(N count of T) as an argument
 
 		template<typename T>
-		static ObjectHandle<T> Allocate()
+		static ObjectPtr<T> Allocate()
 		{
 			// size + alignment ensures that there is space for alignment
 			size_t objectSize = sizeof(T);
@@ -254,13 +248,21 @@ namespace Engine::Core::Memory
 				// allocationSize parameter
 
 				T* allocatedObject = new (static_cast<uint8*>(alignedBase)) T();
-				ObjectAllocationInfo<T> allocationInfo(alignedBase, bufferSize, allocatedObject, objectSize);
+				
+				ObjectAllocationInfo<T> allocationInfo;
+				allocationInfo.base = notAlignedBase;
+				allocationInfo.allocationSize = bufferSize;
+				allocationInfo.object = allocatedObject;
+				allocationInfo.objectSize = objectSize;
 
-				return ObjectHandle<T>(allocationInfo);
+				ObjectPtr<T> objectPtr(allocationInfo);
+				objectPtr.
+
+				return ;
 			}
 
 			ENGINE_ASSERT(false, "Allocation failed.");
-			return ObjectHandle<T>();
+			return ObjectPtr<T>();
 		}
 
 		template<typename T>
@@ -320,9 +322,6 @@ namespace Engine::Core::Memory
 	class SlabAllocator
 	{
 	public:
-		void* operator new(std::size_t) = delete;
-		void operator delete(void*) = delete;
-
 		SlabAllocator(size_t chunkCount)
 		{
 			ENGINE_ASSERT(chunkSize != sizeof(T), "Chunk size is not equal size of template type. chunkSize = {}; sizeof(T) = {}", chunkSize, sizeof(T));
@@ -378,6 +377,9 @@ namespace Engine::Core::Memory
 			m_freeList = chunk.Get();
 		}
 
+		void* operator new(std::size_t) = delete;
+		void operator delete(void*) = delete;
+
 	private:
 		AllocationInfo allocationInfo;
 		void* m_freeList;
@@ -387,7 +389,6 @@ namespace Engine::Core::Memory
 	class CircularBuffer
 	{
 	public:
-
 		CircularBuffer() : m_bufferSize(size), m_currentIndex(0)
 		{
 		}
