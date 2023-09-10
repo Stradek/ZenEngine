@@ -21,10 +21,6 @@ namespace Engine::Core::Memory
 
 	struct AllocationInfo
 	{
-		// TODO: 
-		// - we should add here bool for allocation validation
-		// - refactor that
-		// - decouple implementation to class, leave here data only
 		uint8* base;
 		uint8* firstChunk;
 		uint8* lastChunk;
@@ -79,7 +75,7 @@ namespace Engine::Core::Memory
 
 		bool IsValid() const
 		{
-			return GeneralAllocator::ValidateAllocation(GetAllocationInfo());
+			return GeneralAllocator::IsAllocationValid(GetAllocationInfo());
 		}
 
 		explicit operator bool() const
@@ -220,7 +216,7 @@ namespace Engine::Core::Memory
 
 		// TODO: could convert it to template function that takes count(N count of T) as an argument
 
-		static bool ValidateAllocation(const ObjectAllocationInfo& allocationInfo)
+		static bool IsAllocationValid(const ObjectAllocationInfo& allocationInfo)
 		{
 			auto it = allocationValidationMap.find(allocationInfo.base);
 			if (it != allocationValidationMap.end())
@@ -249,8 +245,6 @@ namespace Engine::Core::Memory
 				alignedBase = static_cast<uint8*>(std::align(alignment, objectSize,
 					notAlignedBaseVoid, bufferSize));
 			}
-			
-
 
 			size_t alignedBaseAddr = reinterpret_cast<size_t>(alignedBase);
 
@@ -283,15 +277,10 @@ namespace Engine::Core::Memory
 
 		static void Deallocate(const ObjectAllocationInfo& allocationInfo)
 		{
-			if (ValidateAllocation(allocationInfo))
-			{
-				delete[allocationInfo.allocationSize] allocationInfo.base;
-				allocationValidationMap.erase(allocationInfo.base);
-			}
-			else
-			{
-				ENGINE_ASSERT(false, "Deallocating invalid object.");
-			}
+			ENGINE_ASSERT(IsAllocationValid(allocationInfo), "Deallocating invalid object.");
+
+			delete[allocationInfo.allocationSize] allocationInfo.base;
+			allocationValidationMap.erase(allocationInfo.base);
 		}
 
 		template<typename T>
