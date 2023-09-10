@@ -14,9 +14,9 @@ using EngineAppHandle = Engine::Core::Memory::ObjectHandle<IEngineApplication>;
 int main(int argc, char* argv[])
 {
 	{
-		Engine::Core::Memory::ObjectPtr<Game> gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
-		Engine::Core::Memory::ScopedObjectPtr<IEngineApplication> engineAppInstance = gameInstance;
-		Engine::GameEngine::Run(engineAppInstance);
+		Engine::Core::Memory::ScopedObjectPtr<IEngineApplication> gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
+		Engine::GameEngine::Run(gameInstance);
 	}
+
 	return 0;
 }
