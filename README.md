@@ -32,7 +32,7 @@ Zen Engine is still work in progress. A lot of systems are subject to change in 
 2. CMake (look for proper version in CMakeLists.txt)
 
 # Building
-1. $ git clone --recursive https://github.com/Stradek/ZenEngine.git
+1. $ git clone https://github.com/Stradek/ZenEngine.git
 2. $ cd .\ZenEngine\
 3. $ .\BuildSolution-VS2022.bat
 4. $ .\OpenSolution-VS2022.bat
