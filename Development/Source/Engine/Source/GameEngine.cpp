@@ -86,13 +86,20 @@ namespace Engine
 	void GameEngine::ShutDown()
 	{
 		m_appInstance->ShutDown();
+		m_appInstance.Free();
 
 		m_graphicsManager->ShutDown();
+		m_graphicsManager.Free();
+
 		m_eventManager->ShutDown();
+		m_eventManager.Free();
+
 		m_windowManager->ShutDown();
+		m_windowManager.Free();
 
 #ifdef _DEBUG
 		m_debugManager->ShutDown();
+		m_debugManager.Free();
 #endif
 
 	}

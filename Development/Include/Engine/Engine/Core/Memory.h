@@ -74,8 +74,6 @@ namespace Engine::Core::Memory
 
 		const ObjectAllocationInfo& GetAllocationInfo() const
 		{
-			ENGINE_ASSERT(!IsValid(), "Object is not valid.");
-		
 			return m_allocationInfo;
 		}
 
@@ -128,8 +126,7 @@ namespace Engine::Core::Memory
 			ENGINE_ASSERT(objectPtr, "Object is not valid.");
 			ENGINE_ASSERT(this != &objectPtr, "Objects are the same.");
 
-			Free();
-			ScopedObjectPtr<T>::ScopedObjectPtr(objectPtr);
+			ObjectPtr<T>::ObjectPtr(objectPtr);
 
 			return *this;
 		}
@@ -256,10 +253,11 @@ namespace Engine::Core::Memory
 
 
 			size_t alignedBaseAddr = reinterpret_cast<size_t>(alignedBase);
-			size_t alignmentBits = alignedBaseAddr - (alignedBaseAddr - alignment - 1);
 
-			// if alignmentBits are not equal to 0 then alignment is not correct
-			if (alignmentBits | ~(alignment - 1))
+			size_t alignmentBitmask = alignment - 1;
+			size_t baseAlignmentBits = alignedBaseAddr & alignmentBitmask;
+
+			if (baseAlignmentBits != 0)
 			{
 				delete[bufferSize] notAlignedBase;
 				ENGINE_ASSERT(false, "Allocation failed. Allignment is not correct");

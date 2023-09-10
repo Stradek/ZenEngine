@@ -25,14 +25,14 @@ namespace Engine
 	class GameEngine;
 	using GameEngineRef = Core::Memory::ObjectPtr<GameEngine>&;
 
-	using EngineApplicationRef = Core::Memory::ScopedObjectPtr<IEngineApplication>&;
+	using EngineApplicationRef = Core::Memory::ObjectPtr<IEngineApplication>&;
 
-	using WindowManagerRef = Core::Memory::ScopedObjectPtr<Window::WindowManager>&;
-	using EventManagerRef = Core::Memory::ScopedObjectPtr<EventSystem::EventManager>&;
-	using GraphicsManagerRef = Core::Memory::ScopedObjectPtr<Graphics::GraphicsManager>&;
+	using WindowManagerRef = Core::Memory::ObjectPtr<Window::WindowManager>&;
+	using EventManagerRef = Core::Memory::ObjectPtr<EventSystem::EventManager>&;
+	using GraphicsManagerRef = Core::Memory::ObjectPtr<Graphics::GraphicsManager>&;
 
 #ifdef _DEBUG
-	using DebugManagerRef = Core::Memory::ScopedObjectPtr<Debug::DebugManager>&;
+	using DebugManagerRef = Core::Memory::ObjectPtr<Debug::DebugManager>&;
 #endif
 
 	class GameEngine
@@ -60,13 +60,13 @@ namespace Engine
 	private:
 		static Core::Memory::ObjectPtr<GameEngine> instance;
 
-		Core::Memory::ScopedObjectPtr<IEngineApplication>			m_appInstance;
+		Core::Memory::ObjectPtr<IEngineApplication>			m_appInstance;
 		
-		Core::Memory::ScopedObjectPtr<Window::WindowManager>		m_windowManager;
-		Core::Memory::ScopedObjectPtr<EventSystem::EventManager>	m_eventManager;
-		Core::Memory::ScopedObjectPtr<Graphics::GraphicsManager>	m_graphicsManager;
+		Core::Memory::ObjectPtr<Window::WindowManager>		m_windowManager;
+		Core::Memory::ObjectPtr<EventSystem::EventManager>	m_eventManager;
+		Core::Memory::ObjectPtr<Graphics::GraphicsManager>	m_graphicsManager;
 #ifdef _DEBUG
-		Core::Memory::ScopedObjectPtr<Debug::DebugManager>			m_debugManager;
+		Core::Memory::ObjectPtr<Debug::DebugManager>			m_debugManager;
 #endif
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
