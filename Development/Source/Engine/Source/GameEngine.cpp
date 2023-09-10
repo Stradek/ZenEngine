@@ -15,7 +15,7 @@
 
 namespace Engine
 {
-	Core::Memory::ObjectHandle<GameEngine> GameEngine::instance;
+	Core::Memory::ObjectPtr<GameEngine> GameEngine::instance;
 
 	void GameEngine::Run(EngineApplicationRef appInstance)
 	{
@@ -49,7 +49,7 @@ namespace Engine
 		// This handle should count references to it and ensure it has only one reference `instance` !!!
 		// ENGINE_FATAL_ASSERT(instance.Get().use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
 
-		Core::Memory::GeneralAllocator::Deallocate(instance);
+		instance.Free();
 	}
 
 	GameEngine::GameEngine() :
@@ -86,7 +86,6 @@ namespace Engine
 	void GameEngine::ShutDown()
 	{
 		m_appInstance->ShutDown();
-		Core::Memory::GeneralAllocator::Deallocate(m_appInstance);
 
 		m_graphicsManager->ShutDown();
 		m_eventManager->ShutDown();

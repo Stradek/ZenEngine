@@ -10,14 +10,12 @@ namespace Engine::Core::Memory
 	// implement SharedAllocatorHandle and UniqueAllocatorHandle that hold references and deallocate automatically
 	// implement SafeAllocatorHandle that holds reference and deallocate automatically when all references are gone
 
-
-	template<typename T>
 	struct ObjectAllocationInfo
 	{
-		void* base;
+		uint8* base;
 		size_t allocationSize;
-		
-		T* object;
+
+		uint8* object;
 		size_t objectSize;
 	};
 
@@ -27,17 +25,17 @@ namespace Engine::Core::Memory
 		// - we should add here bool for allocation validation
 		// - refactor that
 		// - decouple implementation to class, leave here data only
-		void* base;
-		void* firstChunk;
-		void* lastChunk;
+		uint8* base;
+		uint8* firstChunk;
+		uint8* lastChunk;
 		size_t chunkSize;
 		size_t chunkCount;
 
-		AllocationInfo(void* base, void* firstObject, void* lastObject, size_t chunkSize) :
+		AllocationInfo(uint8* base, uint8* firstObject, uint8* lastObject, size_t chunkSize) :
 			base(base), firstChunk(firstObject), lastChunk(lastObject), chunkSize(chunkSize)
 		{
-			uintptr_t lastChunkAddr = reinterpret_cast<uintptr_t>(lastChunk);
-			uintptr_t firstChunkAddr = reinterpret_cast<uintptr_t>(firstChunk);
+			uint8 lastChunkAddr = *lastChunk;
+			uint8 firstChunkAddr = *firstChunk;
 
 			this->chunkCount = (lastChunkAddr - firstChunkAddr) / chunkSize;
 		}
@@ -48,24 +46,42 @@ namespace Engine::Core::Memory
 	{
 	public:
 		ObjectPtr() : m_allocationInfo() {}
-		ObjectPtr(ObjectAllocationInfo<T>& allocationInfo) : m_allocationInfo(allocationInfo) {}
 
-		template<typename U>
-		ObjectPtr(ObjectAllocationInfo<U>& allocationInfo) : m_allocationInfo(allocationInfo) {}
+		ObjectPtr(const ObjectPtr<T>& objectPtr) : m_allocationInfo(objectPtr.GetAllocationInfo())
+#ifdef _DEBUG
+			, m_object(reinterpret_cast<T**>(objectPtr.GetAllocationInfo().object))
+#endif
+		{
+		}
 
 		T* Get()
 		{
-			if (!m_isValid)
+			if (!IsValid())
 			{
 				return nullptr;
 			}
 
-			return m_allocationInfo.object;
+			return reinterpret_cast<T*>(m_allocationInfo.object);
 		}
 
-		bool IsValid()
+		void Free()
 		{
-			return m_isValid;
+			if (IsValid())
+			{
+				GeneralAllocator::Deallocate(GetAllocationInfo());
+			}
+		}
+
+		const ObjectAllocationInfo& GetAllocationInfo() const
+		{
+			ENGINE_ASSERT(!IsValid(), "Object is not valid.");
+		
+			return m_allocationInfo;
+		}
+
+		bool IsValid() const
+		{
+			return GeneralAllocator::ValidateAllocation(GetAllocationInfo());
 		}
 
 		explicit operator bool() const
@@ -83,7 +99,22 @@ namespace Engine::Core::Memory
 			return *(this->Get());
 		}
 	private:
-		ObjectAllocationInfo<T> m_allocationInfo;
+		ObjectAllocationInfo m_allocationInfo;
+#ifdef _DEBUG
+		T** m_object;
+#endif
+
+	protected:
+		// This is used to create ObjectPtr and initialize object 
+		// It should be used only after Object is created with GeneralAllocator
+		ObjectPtr(const ObjectAllocationInfo& allocationInfo) : m_allocationInfo(allocationInfo)
+#ifdef _DEBUG
+			, m_object(reinterpret_cast<T**>(allocationInfo.object))
+#endif
+		{
+		}
+
+		friend class GeneralAllocator;
 	};
 
 	template<typename T>
@@ -97,37 +128,23 @@ namespace Engine::Core::Memory
 			ENGINE_ASSERT(objectPtr, "Object is not valid.");
 			ENGINE_ASSERT(this != &objectPtr, "Objects are the same.");
 
-			Release();
-			ScopedObjectPtr<T>(objectPtr);
+			Free();
+			ScopedObjectPtr<T>::ScopedObjectPtr(objectPtr);
 
 			return *this;
 		}
-		//template<typename U>
-		//ScopedObjectPtr(const ObjectPtr<U>& objectPtr) : ObjectPtr<T>(objectPtr) {}
 
-		//ScopedObjectPtr(const ObjectPtr<T>& objectPtr) : ObjectPtr<T>(objectPtr) {}
+		template<typename U>
+		ScopedObjectPtr(const ObjectPtr<U>& objectPtr) : ObjectPtr<T>(objectPtr.GetAllocationInfo()) {}
 
-		void Release()
-		{
-			if (IsValid())
-			{
-				FreeAllocator();
-			}
-		}
+		ScopedObjectPtr(const ObjectPtr<T>& objectPtr) : ObjectPtr<T>(objectPtr) {}
 
 		~ScopedObjectPtr()
 		{
-			Release();
+			Free();
 		}
 
 		ScopedObjectPtr(const ScopedObjectPtr<T>& other) = delete;
-	protected:
-		bool m_isValid = false;
-
-		void FreeAllocator()
-		{
-			delete[m_allocationInfo.allocationSize] m_allocationInfo.base;
-		}
 	};
 
 	template<typename T>
@@ -136,10 +153,10 @@ namespace Engine::Core::Memory
 	public:
 		explicit operator bool() const 
 		{
-			return m_isValid;
+			return m_objectPtr.IsValid();
 		}
 
-		ObjectHandle() : m_isValid(false), m_objectPtr()
+		ObjectHandle() : m_objectPtr()
 #ifdef _DEBUG
 			,m_object(nullptr)
 #endif
@@ -148,29 +165,18 @@ namespace Engine::Core::Memory
 		}
 
 		ObjectHandle(const ObjectPtr<T>& objectPtr) :
-			m_isValid(false), 
 			m_objectPtr(objectPtr)
 #ifdef _DEBUG
 			, m_object(objectPtr.Get())
 #endif
 		{
-			auto& allocationInfo = m_objectPtr.GetAllocationInfo();
-			if (allocationInfo.base == nullptr || allocationInfo.object == nullptr ||
-				allocationInfo.allocationSize <= 0 || allocationInfo.objectSize <= 0)
-			{
-				m_isValid = false;
-				return;
-			}
-			else
-			{
-				m_isValid = true;
-			}
+			ENGINE_ASSERT(objectPtr.IsValid(), "Object is not valid.");
 		}
 
 		template<typename U>
 		ObjectHandle(const ObjectHandle<U>& otherObjectHandle) : ObjectHandle(other->GetAllocationInfo()) {}
 
-		ObjectHandle(const ObjectHandle<T>& other) : ObjectHandle(other->GetAllocationInfo()) {}
+		ObjectHandle(const ObjectHandle<T>& other) : ObjectHandle() {}
 		
 		inline T* operator->()
 		{
@@ -184,42 +190,26 @@ namespace Engine::Core::Memory
 
 		T* Get()
 		{
-			if (m_isValid)
+			if (!m_objectPtr.IsValid())
 			{
-				return m_allocationInfo.object;
+				ENGINE_ASSERT(false, "Object handle is not valid.");
+				return nullptr;
 			}
 
-			ENGINE_ASSERT(m_isValid, "Object handle is not valid.");
-			return nullptr;
+			return m_objectPtr.Get();
 		}
 
-		ObjectAllocationInfo<T> GetAllocationInfo()
+		ObjectAllocationInfo GetAllocationInfo()
 		{
-			if (m_isValid)
-			{
-				return m_allocationInfo;
-			}
+			return m_objectPtr.GetAllocationInfo();
 
-			return ObjectAllocationInfo<T>();
-		}
-
-		void Invalidate()
-		{
-			m_isValid = false;
-		}
-
-		~ObjectHandle()
-		{
-			Release();
 		}
 
 		void* operator new(std::size_t) = delete;
 		void operator delete(void*) = delete;
 
 	protected:
-		bool m_isValid;
-
-		const ObjectPtr<T> m_objectPtr;
+		const ObjectPtr<T>& m_objectPtr;
 #ifdef _DEBUG
 		T* m_object;
 #endif
@@ -229,8 +219,20 @@ namespace Engine::Core::Memory
 	{
 	public:
 		static const uint8 alignment = 16;
+		static std::unordered_map<uint8*, bool> allocationValidationMap;
 
 		// TODO: could convert it to template function that takes count(N count of T) as an argument
+
+		static bool ValidateAllocation(const ObjectAllocationInfo& allocationInfo)
+		{
+			auto it = allocationValidationMap.find(allocationInfo.base);
+			if (it != allocationValidationMap.end())
+			{
+				return it->second;
+			}
+
+			return false;
+		}
 
 		template<typename T>
 		static ObjectPtr<T> Allocate()
@@ -238,40 +240,59 @@ namespace Engine::Core::Memory
 			// size + alignment ensures that there is space for alignment
 			size_t objectSize = sizeof(T);
 			size_t bufferSize = objectSize + alignment;
-			void* notAlignedBase = new uint8[bufferSize];
 
-			void* alignedBase = nullptr;
-			if (alignedBase = std::align(alignment, objectSize, notAlignedBase, bufferSize))
+			uint8* notAlignedBase = new uint8[bufferSize];
+			uint8* alignedBase = nullptr;
+
 			{
+				void* notAlignedBaseVoid = static_cast<void*>(notAlignedBase);
 				// std::align modifies bufferSize and now: bufferSize is equal to allocated memory 
 				// for object + alignment leftovers, so we can move it to ObjectAllocationInfo as 
 				// allocationSize parameter
+				alignedBase = static_cast<uint8*>(std::align(alignment, objectSize,
+					notAlignedBaseVoid, bufferSize));
+			}
+			
 
-				T* allocatedObject = new (static_cast<uint8*>(alignedBase)) T();
-				
-				ObjectAllocationInfo<T> allocationInfo;
-				allocationInfo.base = notAlignedBase;
-				allocationInfo.allocationSize = bufferSize;
-				allocationInfo.object = allocatedObject;
-				allocationInfo.objectSize = objectSize;
 
-				ObjectPtr<T> objectPtr(allocationInfo);
-				objectPtr.
+			size_t alignedBaseAddr = reinterpret_cast<size_t>(alignedBase);
+			size_t alignmentBits = alignedBaseAddr - (alignedBaseAddr - alignment - 1);
 
-				return ;
+			// if alignmentBits are not equal to 0 then alignment is not correct
+			if (alignmentBits | ~(alignment - 1))
+			{
+				delete[bufferSize] notAlignedBase;
+				ENGINE_ASSERT(false, "Allocation failed. Allignment is not correct");
+
+				return ObjectPtr<T>();
 			}
 
-			ENGINE_ASSERT(false, "Allocation failed.");
-			return ObjectPtr<T>();
+			ObjectAllocationInfo allocationInfo;
+
+			allocationInfo.base = notAlignedBase;
+			allocationInfo.allocationSize = bufferSize;
+
+			T* allocatedObject = new (static_cast<uint8*>(alignedBase)) T();
+			uint8* allocatedObjectAddr = reinterpret_cast<uint8*>(allocatedObject);
+			allocationInfo.object = allocatedObjectAddr;
+			allocationInfo.objectSize = objectSize;
+
+			ObjectPtr<T> objectPtr(allocationInfo);
+			allocationValidationMap.insert(std::make_pair(notAlignedBase, true));
+
+			return objectPtr;
 		}
 
-		template<typename T>
-		static void	Deallocate(ObjectHandle<T>& objHandle)
+		static void Deallocate(const ObjectAllocationInfo& allocationInfo)
 		{
-			if (objHandle)
+			if (ValidateAllocation(allocationInfo))
 			{
-				ObjectAllocationInfo allocationInfo = objHandle.GetAllocationInfo();
 				delete[allocationInfo.allocationSize] allocationInfo.base;
+				allocationValidationMap.erase(allocationInfo.base);
+			}
+			else
+			{
+				ENGINE_ASSERT(false, "Deallocating invalid object.");
 			}
 		}
 
@@ -285,11 +306,11 @@ namespace Engine::Core::Memory
 			// ensures that there is space for address alignment
 			size_t bufferSize = allocationSize + alignment;
 
-			void* unalignedBase = new uint8[bufferSize];
-			if (void* aligned = std::align(alignment, allocationSize, &unalignedBase bufferSize))
+			uint8* unalignedBase = new uint8[bufferSize];
+			if (uint8* aligned = std::align(alignment, allocationSize, &unalignedBase bufferSize))
 			{
-				void* firstObject = aligned;
-				void* lastObject = aligned + sizeof(T) * count;
+				uint8* firstObject = aligned;
+				uint8* lastObject = aligned + sizeof(T) * count;
 
 				// should this be here or outside of this function?
 				// maybe in constructor of SlabAllocator etc?
@@ -306,16 +327,16 @@ namespace Engine::Core::Memory
 		}
 
 		// we can just pass start and end object pointers 
-		template<typename T>
-		static void	Deallocate(void*& obj, size_t count)
-		{
-			delete[count] reinterpret_cast<T*>(obj);
-		}
+		//template<typename T>
+		//static void	Deallocate(uint8*& obj, size_t count)
+		//{
+		//	delete[count] reinterpret_cast<T*>(obj);
+		//}
 
-		static void	Deallocate(void*& obj, size_t byteSize)
-		{
-			delete[byteSize] reinterpret_cast<uint8*>(obj);
-		}
+		//static void	Deallocate(uint8*& obj, size_t byteSize)
+		//{
+		//	delete[byteSize] reinterpret_cast<uint8*>(obj);
+		//}
 	};
 
 	template<typename T>
@@ -361,9 +382,9 @@ namespace Engine::Core::Memory
 				return nullptr;
 			}
 
-			void* chunk = m_freeList.Get();
+			uint8* chunk = m_freeList.Get();
 
-			void* nextChunk = *(reinterpret_cast<T**>(m_freeList.Get()));
+			uint8* nextChunk = *(reinterpret_cast<T**>(m_freeList.Get()));
 			m_freeList = nextChunk.Get();
 
 			return reinterpret_cast<T*>(chunk);
@@ -371,7 +392,7 @@ namespace Engine::Core::Memory
 
 		// implement Shared/Unique/Safe AllocatorHandle to deallocate automatically and call 
 		// this function on it's destructor
-		void Deallocate(void* chunk)
+		void Deallocate(uint8* chunk)
 		{
 			*chunk = m_freeList.Get();
 			m_freeList = chunk.Get();
@@ -382,7 +403,7 @@ namespace Engine::Core::Memory
 
 	private:
 		AllocationInfo allocationInfo;
-		void* m_freeList;
+		uint8* m_freeList;
 	};
 
 	template<typename T, const size_t size>

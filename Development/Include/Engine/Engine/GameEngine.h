@@ -23,16 +23,16 @@ class IEngineApplication;
 namespace Engine 
 {
 	class GameEngine;
-	using GameEngineRef = Core::Memory::ObjectHandle<GameEngine>&;
+	using GameEngineRef = Core::Memory::ObjectPtr<GameEngine>&;
 
-	using EngineApplicationRef = Core::Memory::ScopedObjectHandle<IEngineApplication>&;
+	using EngineApplicationRef = Core::Memory::ScopedObjectPtr<IEngineApplication>&;
 
-	using WindowManagerRef = Core::Memory::ScopedObjectHandle<Window::WindowManager>&;
-	using EventManagerRef = Core::Memory::ScopedObjectHandle<EventSystem::EventManager>&;
-	using GraphicsManagerRef = Core::Memory::ScopedObjectHandle<Graphics::GraphicsManager>&;
+	using WindowManagerRef = Core::Memory::ScopedObjectPtr<Window::WindowManager>&;
+	using EventManagerRef = Core::Memory::ScopedObjectPtr<EventSystem::EventManager>&;
+	using GraphicsManagerRef = Core::Memory::ScopedObjectPtr<Graphics::GraphicsManager>&;
 
 #ifdef _DEBUG
-	using DebugManagerRef = Core::Memory::ScopedObjectHandle<Debug::DebugManager>&;
+	using DebugManagerRef = Core::Memory::ScopedObjectPtr<Debug::DebugManager>&;
 #endif
 
 	class GameEngine
@@ -58,15 +58,15 @@ namespace Engine
 		void Close();
 
 	private:
-		static Core::Memory::ObjectHandle<GameEngine> instance;
+		static Core::Memory::ObjectPtr<GameEngine> instance;
 
-		Core::Memory::ScopedObjectHandle<IEngineApplication>		m_appInstance;
+		Core::Memory::ScopedObjectPtr<IEngineApplication>			m_appInstance;
 		
-		Core::Memory::ScopedObjectHandle<Window::WindowManager>		m_windowManager;
-		Core::Memory::ScopedObjectHandle<EventSystem::EventManager>	m_eventManager;
-		Core::Memory::ScopedObjectHandle<Graphics::GraphicsManager>	m_graphicsManager;
+		Core::Memory::ScopedObjectPtr<Window::WindowManager>		m_windowManager;
+		Core::Memory::ScopedObjectPtr<EventSystem::EventManager>	m_eventManager;
+		Core::Memory::ScopedObjectPtr<Graphics::GraphicsManager>	m_graphicsManager;
 #ifdef _DEBUG
-		Core::Memory::ScopedObjectHandle<Debug::DebugManager>		m_debugManager;
+		Core::Memory::ScopedObjectPtr<Debug::DebugManager>			m_debugManager;
 #endif
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;
