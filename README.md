@@ -1,21 +1,27 @@
 # Zen Engine
 Zen Engine is still work in progress. A lot of systems are subject to change in the future.
 
-# Project Short-Term Goals
-- Finishing custom memory allocation systems which includes:
-  - Improving GeneralAllocator to have streamlined interface for different use cases
-  - Finishing Handles implementation and other interfaces for managing allocated memory and pointers
-  - Finishing SlabAllocator implementation
-  - Figuring out a way to implement allocators with dynamic memory allocations like PoolAllocator or ResizablePoolAllocator
-  - Moving all heap allocated data to custom allocators
+# Objectives and features
+## Zen Engine Goals
+  - (In Progress) Memory Management: Implement memory management with custom memory allocators: GeneralAllocator, SlabAllocator, PoolAllocator...
+  - Multithreading: Develop a sophisticated multithreaded job system.
 
-# Project Long-Term Goals
-1. Game Genre: I want to develop a simple 2D platformer game.
-2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
-3. Level Design: I want to create levels with simple platforms. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in good, old days of arcade gaming.
-4. Zen Engine main goals:
-   - (In Progress) memory management with custom allocators 
-   - multithreaded job system
+## Platformer Game Goals
+  - Game Genre: Create a 2D platformer game.
+  - Core Mechanics: Implement jumping, running at constant speed, and collecting points.
+  - Level Design: Design levels with straightforward platform layouts, combining horizontal and vertical segments. Emulate classic arcade gaming simplicity.
+
+# Prerequisities
+1. Visual Studio 2022
+2. CMake (look for proper version in CMakeLists.txt)
+
+# Configuration
+1. $ git clone https://github.com/Stradek/ZenEngine.git
+2. $ cd .\ZenEngine\
+3. $ .\BuildSolution-VS2022.bat
+4. $ .\OpenSolution-VS2022.bat
+5. Build & Run **Game** project
+6. Enjoy!
 
 # Repositiory Directory Structure
 * Binaries/ - compilation artifacts(libraries and symbolos) and executables
@@ -26,18 +32,6 @@ Zen Engine is still work in progress. A lot of systems are subject to change in 
 * Development/Include - Zen Engine and Game headers code
 * Development/Scripts - automation scripts supporting development process
 * Development/Source - Zen Engine and Game source code
-
-# Prerequisities
-1. Visual Studio 2022
-2. CMake (look for proper version in CMakeLists.txt)
-
-# Building
-1. $ git clone https://github.com/Stradek/ZenEngine.git
-2. $ cd .\ZenEngine\
-3. $ .\BuildSolution-VS2022.bat
-4. $ .\OpenSolution-VS2022.bat
-5. Build & Run **Game** project
-6. Enjoy!
 
 # License
 MIT License
