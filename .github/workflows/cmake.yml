@@ -2,8 +2,11 @@ name: CMake
 
 on: 
   pull_request:
-    types:
-      - edited
+    branches:
+      - main
+  push:
+    branches:
+      - main
 
 jobs:
   configure:
