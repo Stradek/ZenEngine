@@ -1,41 +1,42 @@
-# SDLEngineTest
-This game engine is still work in progress. Name of this software still haven't been determined and will change in the future.
+# Zen Engine
+Zen Engine is still work in progress. A lot of systems are subject to change in the future.
 
 # Project Short-Term Goals
 - Finishing custom memory allocation systems which includes:
-- Finishing GeneralAllocator
-- Finishing Handles implementation and other interfaces for managing allocated memory and pointers
-- Finishing SlabAllocator implementation
-- Figuring out a way to implement allocators with dynamic memory allocations like PoolAllocator or ResizablePoolAllocator
-- Moveing all heap allocated data to custom allocators
-- Ensuring that custom allocation is "working"(tbd)
+  - Improving GeneralAllocator to have streamlined interface for different use cases
+  - Finishing Handles implementation and other interfaces for managing allocated memory and pointers
+  - Finishing SlabAllocator implementation
+  - Figuring out a way to implement allocators with dynamic memory allocations like PoolAllocator or ResizablePoolAllocator
+  - Moving all heap allocated data to custom allocators
 
 # Project Long-Term Goals
 1. Game Genre: I want to develop a simple 2D platformer game.
 2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
-3. Level Design: I want to create levels without organic elements, hazards, puzzles, secrets, or checkpoints. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in old days.
-4. Engine main goals: memory management with custom allocators and multithreaded job system.
+3. Level Design: I want to create levels with simple platforms. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in good, old days of arcade gaming.
+4. Engine main goals:
+   - (In Progress) memory management with custom allocators 
+   - multithreaded job system
 
 # Repositiory Directory Structure
 * Binaries/ - compilation artifacts(libraries and symbolos) and executables
 * Build/CMake-*/ - project build directory
-* Development/ - engine and game development related directory
+* Development/ - Zen Engine and Game development related directory
 * Development/External - external libraries
 * Development/Internal - internal libraries and tools
-* Development/Include - project headers code
+* Development/Include - Zen Engine and Game headers code
 * Development/Scripts - automation scripts supporting development process
-* Development/Source - project source code
+* Development/Source - Zen Engine and Game source code
 
 # Prerequisities
 1. Visual Studio 2022
 2. CMake (look for proper version in CMakeLists.txt)
 
 # Building
-1. $ git clone --recursive https://github.com/Stradek/DX12EngineTest.git
-2. $ cd .\DX12EngineTest\
+1. $ git clone --recursive https://github.com/Stradek/ZenEngine.git
+2. $ cd .\ZenEngine\
 3. $ .\BuildSolution-VS2022.bat
 4. $ .\OpenSolution-VS2022.bat
-5. Build & Run Game project
+5. Build & Run **Game** project
 6. Enjoy!
 
 # License
