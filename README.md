@@ -2,7 +2,7 @@
 [![license](https://badgen.net/github/license/stradek/ZenEngine?color=blue)](https://github.com/Stradek/ZenEngine/blob/main/LICENSE)
 [![commits](https://badgen.net/github/commits/stradek/ZenEngine?color=238636&icon=git)](https://github.com/Stradek/ZenEngine/commits/main)
 [![last commit](https://badgen.net/github/last-commit/stradek/ZenEngine?color=238636&icon=github)](https://github.com/Stradek/ZenEngine/commits/main)
-[![Build Status](https://badgen.net/github/checks/stradek/ZenEngine/main/build-windows)](https://github.com/stradek/ZenEngine/actions/workflows/build-windows.yml)
+[![Build Status](https://badgen.net/github/checks/stradek/ZenEngine/main)](https://github.com/stradek/ZenEngine/actions/workflows/build-windows.yml)
 
 # Description
 Zen Engine is my hobbyist long-term C++ game engine project, a testament to my passion for creating exceptional high-performance, real-time game engines. In this iteration, I'm focused on building a robust foundation for my future, more advanced iterations on this game engine.
