@@ -4,10 +4,12 @@
 [![last commit](https://badgen.net/github/last-commit/stradek/ZenEngine?color=238636&icon=github)](https://github.com/Stradek/ZenEngine/commits/main)
 [![Build Status](https://badgen.net/github/checks/stradek/ZenEngine/main/build-windows)](https://github.com/stradek/ZenEngine/actions/workflows/build-windows.yml)
 
-Zen Engine is still work in progress. A lot of systems are subject to change in the future.
+# Description
+Zen Engine is my hobbyist long-term C++ game engine project, a testament to my passion for creating exceptional high-performance, real-time game engines. In this iteration, I'm focused on building a robust foundation for my future, more advanced iterations on this game engine.
 
-# Features and objectives
-## Features
+All systems are subject to change in the future.
+
+# Key Features
   - custom memory allocation management
   - decoupled game, editor, and engine projects and systems
   - custom, in-engine runtime performance measurement system
@@ -15,14 +17,12 @@ Zen Engine is still work in progress. A lot of systems are subject to change in 
   - tracy integration
   - spdlog integration
 
-## Zen Engine Goals
+# Project Objectives
   - (In Progress) Memory Management: Implement memory management with custom memory allocators: GeneralAllocator, SlabAllocator, PoolAllocator...
   - Multithreading: Develop a sophisticated multithreaded job system.
-
-## Platformer Game Goals
   - Game Genre: Create a 2D platformer game.
-  - Core Mechanics: Implement jumping, running at constant speed, and collecting points.
-  - Level Design: Design levels with straightforward platform layouts, combining horizontal and vertical segments. Emulate classic arcade gaming simplicity.
+  - Core Game Mechanics: Implement jumping, running at constant speed, and collecting points.
+  - Game Level Design: Design levels with straightforward platform layouts, combining horizontal and vertical segments. Emulate classic arcade gaming simplicity.
 
 # Prerequisities
 1. Visual Studio 2022
