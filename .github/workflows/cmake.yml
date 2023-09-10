@@ -4,6 +4,9 @@ on:
   pull_request:
     types:
       - edited
+  push:
+    branches:
+      - main
 
 jobs:
   configure:
