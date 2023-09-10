@@ -6,7 +6,15 @@
 
 Zen Engine is still work in progress. A lot of systems are subject to change in the future.
 
-# Objectives and features
+# Features and objectives
+## Features
+  - custom memory allocation management
+  - decoupled game, editor, and engine projects and systems
+  - custom, in-engine runtime performance measurement system
+  - simple cmake setup
+  - tracy integration
+  - spdlog integration
+
 ## Zen Engine Goals
   - (In Progress) Memory Management: Implement memory management with custom memory allocators: GeneralAllocator, SlabAllocator, PoolAllocator...
   - Multithreading: Develop a sophisticated multithreaded job system.
