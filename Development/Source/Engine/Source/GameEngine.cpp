@@ -15,7 +15,7 @@
 
 namespace Engine
 {
-	std::shared_ptr<GameEngine> GameEngine::instance = nullptr;
+	Core::Memory::ObjectPtr<GameEngine> GameEngine::instance;
 
 	void GameEngine::Run(EngineApplicationRef appInstance)
 	{
@@ -35,9 +35,10 @@ namespace Engine
 
 	GameEngineRef GameEngine::getInstance()
 	{
-		if (instance == nullptr)
+		if (!instance)
 		{
-			instance.reset(new GameEngine());
+			instance = Core::Memory::GeneralAllocator::Allocate<GameEngine>();
+			ENGINE_ASSERT(instance, "Failed to allocate engine instance.");
 		}
 		return instance;
 	}
@@ -45,9 +46,10 @@ namespace Engine
 	void GameEngine::DestroyInstance()
 	{
 		ENGINE_FATAL_ASSERT(instance, "There is no engine instance.");
-		ENGINE_FATAL_ASSERT(instance.use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
+		// This handle should count references to it and ensure it has only one reference `instance` !!!
+		// ENGINE_FATAL_ASSERT(instance.Get().use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
 
-		instance.reset();
+		instance.Free();
 	}
 
 	GameEngine::GameEngine() :
@@ -55,12 +57,12 @@ namespace Engine
 		m_shutDown(false)
 	{
 #ifdef _DEBUG
-		m_debugManager = std::make_shared<Debug::DebugManager>();
+		m_debugManager = Core::Memory::GeneralAllocator::Allocate<Debug::DebugManager>();
 #endif
 
-		m_windowManager = std::make_shared<Window::WindowManager>();
-		m_eventManager = std::make_shared<EventSystem::EventManager>();
-		m_graphicsManager = std::make_shared<Graphics::GraphicsManager>();
+		m_windowManager = Core::Memory::GeneralAllocator::Allocate<Window::WindowManager>();
+		m_eventManager = Core::Memory::GeneralAllocator::Allocate<EventSystem::EventManager>();
+		m_graphicsManager = Core::Memory::GeneralAllocator::Allocate<Graphics::GraphicsManager>();
 	}
 
 	void GameEngine::SetEngineApplication(EngineApplicationRef appInstance)
@@ -84,8 +86,6 @@ namespace Engine
 	void GameEngine::ShutDown()
 	{
 		m_appInstance->ShutDown();
-		m_appInstance.reset();
-
 		m_graphicsManager->ShutDown();
 		m_eventManager->ShutDown();
 		m_windowManager->ShutDown();
@@ -93,7 +93,6 @@ namespace Engine
 #ifdef _DEBUG
 		m_debugManager->ShutDown();
 #endif
-
 	}
 
 	void GameEngine::Update(const uint32 deltaTime)

@@ -98,7 +98,7 @@ namespace Engine::Debug
 		{
 			NameToFrameDataBuffer framesDone;
 
-			for (auto frameDataCircularBufferIt : *m_nameToFrameDataCircularBuffer)
+			for (auto& frameDataCircularBufferIt : *m_nameToFrameDataCircularBuffer)
 			{
 				auto& frameDataName = frameDataCircularBufferIt.first;
 				auto& frameDataValue = frameDataCircularBufferIt.second;
@@ -151,7 +151,7 @@ namespace Engine::Debug
 	DebugManager::DebugManager() :
 		m_debugInfoUpdateFrequency(Common::DateTime::Time(Common::DateTime::SECOND_TO_NANOSECONDS)),
 		m_shouldLogStats(false),
-		m_performanceProfiler(std::make_shared<Performance::PerformanceProfiler>())
+		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
 
 	}
@@ -163,40 +163,42 @@ namespace Engine::Debug
 
 	void DebugManager::StartPerformanceProfiler()
 	{
-		ClearEngineCounters();
 		m_debugUpdateClock.Start();
 	}
 
-	void DebugManager::ClearEngineCounters()
+	void DebugManager::LogProfilingInfo(const uint32 deltaTime)
 	{
+		Performance::NameToRawTime m_profiledFunctionNameToAvgDuration = GetPerformanceProfiler().GetAvgFrameTimingData();
 
+		uint32 renderedFramesPerSecond = GetPerformanceProfiler().GetCounterValue(CounterType::CounterPerSecond, sl_Engine_RenderFrame);
+		uint32 engineUpdatesPerSecond = GetPerformanceProfiler().GetCounterValue(CounterType::CounterPerSecond, sl_Engine_Update);
+
+		uint32 engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
+		uint32 engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
+
+		double engineUpdateTime = Common::DateTime::UInt32ToDouble(engineUpdateTimeRaw);
+		double engineRenderFrameTime = Common::DateTime::UInt32ToDouble(engineRenderFrameTimeRaw);
+
+		double deltaTimeMiliseconds = deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
+
+		ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; DeltaTime ms: {:.4f}", renderedFramesPerSecond, engineUpdateTime, engineRenderFrameTime, deltaTimeMiliseconds);
+		ENGINE_LOG("          Game Updates per Second: {}", engineUpdatesPerSecond);
 	}
 
 	void DebugManager::Update(const uint32 deltaTime)
 	{
 		if(m_shouldLogStats)
 		{
-			Performance::NameToRawTime m_profiledFunctionNameToAvgDuration = GetPerformanceProfiler()->GetAvgFrameTimingData();
-
-			uint32 renderedFramesPerSecond = GetPerformanceProfiler()->GetCounterValue(CounterType::CounterPerSecond, sl_Engine_RenderFrame);
-			uint32 engineUpdatesPerSecond = GetPerformanceProfiler()->GetCounterValue(CounterType::CounterPerSecond, sl_Engine_Update);
-
-			uint32 engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
-			uint32 engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
-
-			double engineUpdateTime = Common::DateTime::UInt32ToDouble(engineUpdateTimeRaw);
-			double engineRenderFrameTime = Common::DateTime::UInt32ToDouble(engineRenderFrameTimeRaw);
 			
-			double deltaTimeMiliseconds = deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
+			LogProfilingInfo(deltaTime);
+			LogMemoryInfo();
 
-			ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; DeltaTime ms: {:.4f}", renderedFramesPerSecond, engineUpdateTime, engineRenderFrameTime, deltaTimeMiliseconds);
-			ENGINE_LOG("          Game Updates per Second: {}", engineUpdatesPerSecond);
 			m_shouldLogStats = false;
 		}
 
 		if (m_debugUpdateClock.GetDuration() >= m_debugInfoUpdateFrequency.GetTimeRaw())
 		{
-			GetPerformanceProfiler()->UpdateCounterPerSecond();
+			GetPerformanceProfiler().UpdateCounterPerSecond();
 			m_shouldLogStats = true;
 
 			m_debugUpdateClock.Reset();
@@ -208,6 +210,12 @@ namespace Engine::Debug
 	{
 
 	}
+
+	void DebugManager::LogMemoryInfo()
+	{
+
+	}
+
 }
 
 #endif // _DEBUG
