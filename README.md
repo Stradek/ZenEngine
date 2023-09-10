@@ -1,4 +1,9 @@
 # Zen Engine
+[![license](https://badgen.net/github/license/stradek/ZenEngine?color=blue)](https://github.com/Stradek/ZenEngine/blob/main/LICENSE)
+[![commits](https://badgen.net/github/commits/stradek/ZenEngine?color=238636&icon=git)](https://github.com/Stradek/ZenEngine/commits/main)
+[![last commit](https://badgen.net/github/last-commit/stradek/ZenEngine?color=238636&icon=github)](https://github.com/Stradek/ZenEngine/commits/main)
+[![Build Status](https://badgen.net/github/checks/stradek/ZenEngine/main/build-windows)](https://github.com/stradek/ZenEngine/actions/workflows/build-windows.yml)
+
 Zen Engine is still work in progress. A lot of systems are subject to change in the future.
 
 # Objectives and features
