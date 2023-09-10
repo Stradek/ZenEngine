@@ -13,7 +13,7 @@ Zen Engine is still work in progress. A lot of systems are subject to change in 
 1. Game Genre: I want to develop a simple 2D platformer game.
 2. Game Mechanics: I want to implement core mechanics such as jumping, running with one default speed, collecting points. I would like to have also moving platforms that maintain the player's relative position while standing on them.
 3. Level Design: I want to create levels with simple platforms. The levels will consist of both horizontal and vertical parts, with a simplified layout and clear path indicators. I want to keep it simple as in good, old days of arcade gaming.
-4. Engine main goals:
+4. Zen Engine main goals:
    - (In Progress) memory management with custom allocators 
    - multithreaded job system
 
