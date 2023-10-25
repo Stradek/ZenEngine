@@ -22,16 +22,16 @@ class IEngineApplication;
 namespace Engine 
 {
 	class GameEngine;
-	using GameEngineRef = Core::Memory::ObjectPtr<GameEngine>&;
+	using GameEngineRef = GameEngine&;
 
-	using EngineApplicationRef = Core::Memory::ObjectPtr<IEngineApplication>&;
+	using EngineApplicationRef = IEngineApplication&;
 
-	using WindowManagerRef = Core::Memory::ObjectPtr<Window::WindowManager>&;
-	using EventManagerRef = Core::Memory::ObjectPtr<EventSystem::EventManager>&;
-	using GraphicsManagerRef = Core::Memory::ObjectPtr<Graphics::GraphicsManager>&;
+	using WindowManagerRef = Window::WindowManager&;
+	using EventManagerRef = EventSystem::EventManager&;
+	using GraphicsManagerRef = Graphics::GraphicsManager&;
 
 #ifdef _DEBUG
-	using DebugManagerRef = Core::Memory::ObjectPtr<Debug::DebugManager>&;
+	using DebugManagerRef = Debug::DebugManager&;
 #endif
 
 	class GameEngine
@@ -57,15 +57,15 @@ namespace Engine
 		void Close();
 
 	private:
-		static Core::Memory::ObjectPtr<GameEngine> instance;
+		static GameEngine* m_instance;
 
-		Core::Memory::ObjectPtr<IEngineApplication>			m_appInstance;
+		IEngineApplication*	m_appInstance;
 		
-		Core::Memory::ObjectPtr<Window::WindowManager>		m_windowManager;
-		Core::Memory::ObjectPtr<EventSystem::EventManager>	m_eventManager;
-		Core::Memory::ObjectPtr<Graphics::GraphicsManager>	m_graphicsManager;
+		Window::WindowManager		m_windowManager;
+		EventSystem::EventManager	m_eventManager;
+		Graphics::GraphicsManager	m_graphicsManager;
 #ifdef _DEBUG
-		Core::Memory::ObjectPtr<Debug::DebugManager>			m_debugManager;
+		Debug::DebugManager			m_debugManager;
 #endif
 
 		Common::DateTime::Clock m_timeSinceUpdateClock;

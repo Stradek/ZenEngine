@@ -15,7 +15,7 @@
 
 namespace Engine
 {
-	Core::Memory::ObjectPtr<GameEngine> GameEngine::instance;
+	GameEngine* GameEngine::m_instance;
 
 	void GameEngine::Run(EngineApplicationRef appInstance)
 	{
@@ -24,8 +24,8 @@ namespace Engine
 		{
 			GameEngineRef engineInstance = GameEngine::getInstance();
 
-			engineInstance->SetEngineApplication(appInstance);
-			engineInstance->EngineRun();
+			engineInstance.SetEngineApplication(appInstance);
+			engineInstance.EngineRun();
 		}
 
 		GameEngine::DestroyInstance();
@@ -35,50 +35,43 @@ namespace Engine
 
 	GameEngineRef GameEngine::getInstance()
 	{
-		if (!instance)
+		if (!m_instance)
 		{
-			instance = Core::Memory::GeneralAllocator::Allocate<GameEngine>();
-			ENGINE_ASSERT(instance, "Failed to allocate engine instance.");
+			m_instance = new GameEngine();
+			ENGINE_ASSERT(m_instance, "Failed to allocate engine instance.");
 		}
-		return instance;
+		return *m_instance;
 	}
 
 	void GameEngine::DestroyInstance()
 	{
-		ENGINE_FATAL_ASSERT(instance, "There is no engine instance.");
+		ENGINE_FATAL_ASSERT(m_instance, "There is no engine instance.");
 		// This handle should count references to it and ensure it has only one reference `instance` !!!
 		// ENGINE_FATAL_ASSERT(instance.Get().use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
 
-		instance.Free();
+		delete m_instance;
 	}
 
 	GameEngine::GameEngine() :
 		m_deltaTime(Core::Config::m_targetRenderFrameFrequency),
 		m_shutDown(false)
 	{
-#ifdef _DEBUG
-		m_debugManager = Core::Memory::GeneralAllocator::Allocate<Debug::DebugManager>();
-#endif
-
-		m_windowManager = Core::Memory::GeneralAllocator::Allocate<Window::WindowManager>();
-		m_eventManager = Core::Memory::GeneralAllocator::Allocate<EventSystem::EventManager>();
-		m_graphicsManager = Core::Memory::GeneralAllocator::Allocate<Graphics::GraphicsManager>();
 	}
 
 	void GameEngine::SetEngineApplication(EngineApplicationRef appInstance)
 	{
-		m_appInstance = appInstance;
+		m_appInstance = &appInstance;
 	}
 
 	void GameEngine::StartUp()
 	{
 #ifdef _DEBUG
-		m_debugManager->StartUp();
+		m_debugManager.StartUp();
 #endif
 
-		m_windowManager->StartUp();
-		m_eventManager->StartUp();
-		m_graphicsManager->StartUp();
+		m_windowManager.StartUp();
+		m_eventManager.StartUp();
+		m_graphicsManager.StartUp();
 
 		m_appInstance->StartUp();
 	}
@@ -86,12 +79,12 @@ namespace Engine
 	void GameEngine::ShutDown()
 	{
 		m_appInstance->ShutDown();
-		m_graphicsManager->ShutDown();
-		m_eventManager->ShutDown();
-		m_windowManager->ShutDown();
+		m_graphicsManager.ShutDown();
+		m_eventManager.ShutDown();
+		m_windowManager.ShutDown();
 
 #ifdef _DEBUG
-		m_debugManager->ShutDown();
+		m_debugManager.ShutDown();
 #endif
 	}
 
@@ -99,9 +92,9 @@ namespace Engine
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
-		m_eventManager->Update();
+		m_eventManager.Update();
 #ifdef _DEBUG
-		m_debugManager->Update(deltaTime);
+		m_debugManager.Update(deltaTime);
 #endif
 
 		m_appInstance->Update(deltaTime);
@@ -126,7 +119,7 @@ namespace Engine
 		StartUp();
 
 #ifdef _DEBUG
-		m_debugManager->StartPerformanceProfiler();
+		m_debugManager.StartDebugManagerClock();
 #endif
 		m_timeSinceUpdateClock.Start();
 		m_timeSinceRenderFrameClock.Start();

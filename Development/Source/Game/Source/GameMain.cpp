@@ -6,16 +6,15 @@
 #include <Game.h>
 
 #include <Engine/GameEngine.h>
-#include <Engine/Core/Memory.h>
 
-using GameHandle = Engine::Core::Memory::ObjectHandle<Game>;
-using EngineAppHandle = Engine::Core::Memory::ObjectHandle<IEngineApplication>;
+using GameHandle = Game;
+using EngineAppHandle = IEngineApplication;
 
 int main(int argc, char* argv[])
 {
 	{
-		Engine::Core::Memory::ScopedObjectPtr<IEngineApplication> gameInstance = Engine::Core::Memory::GeneralAllocator::Allocate<Game>();
-		Engine::GameEngine::Run(gameInstance);
+		IEngineApplication* gameInstance = new Game();
+		Engine::GameEngine::Run(*gameInstance);
 	}
 
 	return 0;

@@ -29,7 +29,7 @@ void Engine::EventSystem::EventManager::Update()
 			switch (event.window.event)
 			{
 			case SDL_WINDOWEVENT_CLOSE:
-				GameEngine::getInstance()->Close();
+				GameEngine::getInstance().Close();
 				break;
 			}
 		}

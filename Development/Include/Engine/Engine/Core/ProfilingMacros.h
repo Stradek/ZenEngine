@@ -14,16 +14,16 @@
 #include <tracy/Tracy.hpp>
 
 #define ENGINE_INCREMENT_COUNTER(name) {																\
-	GameEngine::getInstance()->GetDebugManager()->GetPerformanceProfiler().IncrementCounter(name, 1);	\
+	ENGINE_WARN("ENGINE_INCREMENT_COUNTER not implemented.");											\
 }
 
 #define ENGINE_FRAME_MARK_START(name) {																	\
-	GameEngine::getInstance()->GetDebugManager()->GetPerformanceProfiler().FrameProfilingStart(name);	\
+	ENGINE_WARN("ENGINE_FRAME_MARK_START is not calling Frame Profiling Start.");						\
 	FrameMarkStart(name);																				\
 }
 
 #define ENGINE_FRAME_MARK_END(name) {																	\
-	GameEngine::getInstance()->GetDebugManager()->GetPerformanceProfiler().FrameProfilingEnd(name);	\
+	ENGINE_WARN("ENGINE_FRAME_MARK_START is not calling Frame Profiling End.");							\
 	FrameMarkEnd(name);																					\
 	ENGINE_INCREMENT_COUNTER(name);																		\
 }
