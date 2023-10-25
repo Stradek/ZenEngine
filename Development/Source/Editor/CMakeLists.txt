@@ -38,7 +38,7 @@ target_link_libraries(Editor PRIVATE
 #
 
 add_custom_command(TARGET Editor POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:Editor> ${SDL_DLL}
+    COMMAND ${CMAKE_COMMAND} -E copy ${SDL_DLL} ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}
 )
 
 #

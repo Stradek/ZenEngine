@@ -16,7 +16,7 @@ include(CMake/CMakeShared.cmake)
 # Project
 #
 
-project(SDLEngineTest)
+project(ZenEngine)
 
 # Setting up custom properties and functions from "CMakeShared.cmake" file
 custom_cmake_setup()
