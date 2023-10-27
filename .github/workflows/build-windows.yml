@@ -18,7 +18,7 @@ jobs:
         submodules: true
 
     - name: Remove build directory files
-      run: rmdir build -Recurse -Force
+      run: rmdir build -Recurse -Force 2> $null
 
     - name: Configure CMake
       run: cmake -G "Visual Studio 17 2022" -B build
