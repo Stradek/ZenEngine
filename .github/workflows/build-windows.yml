@@ -1,5 +1,8 @@
 name: Build Windows
 
+env:
+  BUILD_DIR: "build/"
+
 on: 
   pull_request:
     branches:
@@ -18,21 +21,21 @@ jobs:
         submodules: true
 
     - name: Remove build directory files
-      run: 
-        $buildDir = "build"
-        if (Test-Path $buildDir) 
-        {
-          Remove-Item $buildDir -Recurse -Force
+      run: |
+        $buildDir = $BUILD_DIR                  \
+        if (Test-Path $buildDir)                \
+        {                                       \
+          Remove-Item $buildDir -Recurse -Force \
         }
 
     - name: Configure CMake
-      run: cmake -G "Visual Studio 17 2022" -B build
+      run: cmake -G "Visual Studio 17 2022" -B $BUILD_DIR
 
     - name: Save build directory
       uses: actions/upload-artifact@v3
       with:
         name: build
-        path: build
+        path: $BUILD_DIR
         
   build:
     needs: configure
@@ -48,18 +51,18 @@ jobs:
         submodules: true
 
     - name: Remove build directory files
-      run: 
-        $buildDir = "build"
-        if (Test-Path $buildDir) 
-        {
-          Remove-Item $buildDir -Recurse -Force
+      run: |
+        $buildDir = $BUILD_DIR                  \
+        if (Test-Path $buildDir)                \
+        {                                       \
+          Remove-Item $buildDir -Recurse -Force \
         }
 
     - name: Retrieve build directory
       uses: actions/download-artifact@v3
       with:
         name: build
-        path: build
+        path: $BUILD_DIR
 
     - name: Build ${{matrix.target}} (${{matrix.configuration}})
-      run: cmake --build build --config ${{matrix.configuration}} --target ${{matrix.target}}
+      run: cmake --build $BUILD_DIR --config ${{matrix.configuration}} --target ${{matrix.target}}
