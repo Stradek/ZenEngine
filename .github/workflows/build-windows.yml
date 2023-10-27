@@ -22,9 +22,10 @@ jobs:
 
     - name: Remove build directory files
       run: |
-        if (Test-Path $BUILD_DIR)
+        $buildDir = $env:BUILD_DIR
+        if (Test-Path $buildDir)
         {
-          Remove-Item $BUILD_DIR -Recurse -Force
+          Remove-Item $buildDir -Recurse -Force
         }
 
     - name: Configure CMake
@@ -51,9 +52,10 @@ jobs:
 
     - name: Remove build directory files
       run: |
-        if (Test-Path $BUILD_DIR)
+        $buildDir = $env:BUILD_DIR
+        if (Test-Path $buildDir)
         {
-          Remove-Item $BUILD_DIR -Recurse -Force
+          Remove-Item $buildDir -Recurse -Force
         }
 
     - name: Retrieve build directory
