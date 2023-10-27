@@ -17,8 +17,11 @@ jobs:
       with:
         submodules: true
 
+    - name: Remove build directory files
+      run: rmdir /s /q build 2>nul
+
     - name: Configure CMake
-      run: cmake -G "Visual Studio 17" -B build
+      run: cmake -G "Visual Studio 17 2022" -B build
 
     - name: Save build directory
       uses: actions/upload-artifact@v3
