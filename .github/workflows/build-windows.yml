@@ -18,7 +18,12 @@ jobs:
         submodules: true
 
     - name: Remove build directory files
-      run: rmdir build -Recurse -Force 2> $null
+      run: 
+        $buildDir = "build"
+        if (Test-Path $buildDir) 
+        {
+          Remove-Item $buildDir -Recurse -Force
+        }
 
     - name: Configure CMake
       run: cmake -G "Visual Studio 17 2022" -B build
@@ -41,6 +46,14 @@ jobs:
       uses: actions/checkout@v3
       with:
         submodules: true
+
+    - name: Remove build directory files
+      run: 
+        $buildDir = "build"
+        if (Test-Path $buildDir) 
+        {
+          Remove-Item $buildDir -Recurse -Force
+        }
 
     - name: Retrieve build directory
       uses: actions/download-artifact@v3
