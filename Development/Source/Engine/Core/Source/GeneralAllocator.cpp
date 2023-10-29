@@ -6,13 +6,13 @@
 #include "GeneralAllocator.h"
 #include "MemoryConfig.h"
 
-namespace Engine::Memory 
+namespace Engine::Core::Memory
 {
 	/*
 	* Allocated memory consists of:
-	* 1. (optionally) Unaligned memory - buffer used to align memory after allocation	[size: alignment - 1]
-	* 2. Pointer to unalignedPtr - used to free whole memory block						[size: sizeof(void*)]
-	* 3. Aligned memory - memory aligned to alignment									[size: size]
+	* 1. (optionally) Unaligned memory - buffer used to align memory after allocation	| size: [min: 0; max: alignment - 1]
+	* 2. Pointer to unalignedPtr - used to free whole memory block						| size: sizeof(void*)
+	* 3. Aligned memory - memory aligned to alignment									| size: size
 	* 
 	* Returned pointer points to 3
 	* During Free() we need to retrieve pointer to 1 to free full memory block.
@@ -24,7 +24,7 @@ namespace Engine::Memory
 		if (unalignedPtr == nullptr)
 		{
 			ENGINE_ERROR("Failed to allocate memory.");
-			return nullptr; // Return nullptr if allocation fails
+			return nullptr;
 		}
 
 		void* alignedPtrAddr = (void*) (((size_t)unalignedPtr + alignment + sizeof(void*) - 1) & ~(alignment - 1));

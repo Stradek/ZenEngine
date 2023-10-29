@@ -11,33 +11,37 @@
 
 namespace Engine::Debug
 {
-	enum CounterType
-	{
-		CounterRaw,
-		CounterPerSecond
-	};
-
 	namespace Performance
 	{
-		struct StartFrameData
+		struct Counter
 		{
-			uint32 startTime;
-			bool isFinished = false;
+			Counter() : value(0) {};
+			uint32 value;
 		};
 
 		struct FrameData
 		{
-			FrameData() : startTime(0), endTime(0), duration(0) {};
+			FrameData() : startTime(0), endTime(0){};
 
 			uint32 startTime;
 			uint32 endTime;
-			uint32 duration;
 		};
 		
 		class PerformanceProfiler
 		{
+		private:
+			std::unordered_map<std::string, std::vector<FrameData>> m_frameData;
+			std::unordered_map<std::string, Counter> m_counters;
+
 		public:
 			PerformanceProfiler() {};
+			
+			void AddFrameStart(const char* const name, uint32 startTime);
+			void AddFrameEnd(const char* const name, uint32 endTime);
+
+			void IncreaseCounter(const char* const name);
+
+			void Reset();
 		};
 	}
 

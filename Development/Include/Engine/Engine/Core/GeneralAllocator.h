@@ -7,7 +7,7 @@
 
 #include "MemoryConfig.h"
 
-namespace Engine::Memory
+namespace Engine::Core::Memory
 {
 	class GeneralAllocator
 	{

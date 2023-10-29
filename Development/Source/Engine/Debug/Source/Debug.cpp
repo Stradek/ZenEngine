@@ -14,6 +14,27 @@ namespace Engine::Debug
 	namespace Performance
 	{
 
+		void PerformanceProfiler::AddFrameStart(const char* const name, uint32 startTime)
+		{
+			m_frameData[name].push_back(FrameData());
+			m_frameData[name].back().startTime = startTime;
+		}
+
+		void PerformanceProfiler::AddFrameEnd(const char* const name, uint32 endTime)
+		{
+			m_frameData[name].back().endTime = endTime;
+		}
+
+		void PerformanceProfiler::IncreaseCounter(const char* const name)
+		{
+			m_counters[name].value++;
+		}
+
+		void PerformanceProfiler::Reset()
+		{
+			m_frameData.clear();
+			m_counters.clear();
+		}
 	}
 
 	DebugManager::DebugManager() :
@@ -51,7 +72,6 @@ namespace Engine::Debug
 	{
 		if(m_shouldLogStats)
 		{
-			
 			LogProfilingInfo(deltaTime);
 			LogMemoryInfo();
 

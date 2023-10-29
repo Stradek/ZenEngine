@@ -7,8 +7,9 @@
 
 #include "MemoryConfig.h"
 
-namespace Engine::Memory
+namespace Engine::Core::Memory
 {
+	template <typename Type>
 	class IAllocator
 	{
 	protected:
@@ -20,7 +21,9 @@ namespace Engine::Memory
 
 		virtual void Init() = 0;
 
-		virtual void* Allocate(const size_t size, const size_t alignment = MemoryConfig::DEFAULT_ALIGNMENT) = 0;
+		virtual void* Allocate(const size_t size);
+
 		virtual void Free(void* ptr) = 0;
+		virtual void Reset();
 	};
 }

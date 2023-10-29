@@ -4,19 +4,12 @@
 */
 
 #pragma once
-
 #include "IAllocator.h"
 
 namespace Engine::Core::Memory
 {
 	template <typename Type>
-	class PoolAllocator : public IAllocator<Type>
+	class LinearAllocator : IAllocator<Type>
 	{
-	private:
-		const size_t m_chunkSize = 16;
-		void* m_basePtr = nullptr;
-
-	public:
-		PoolAllocator(const size_t totalSize) : IAllocator(totalSize) {};
 	};
 }

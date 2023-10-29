@@ -5,20 +5,7 @@
 
 #include "PoolAllocator.h"
 
-namespace Engine::Memory
+namespace Engine::Core::Memory
 {
-	void PoolAllocator::Init()
-	{
-		m_basePtr = malloc(totalSize);
-	}
 
-	void* PoolAllocator::Allocate(const size_t size, const size_t alignment)
-	{
-		return nullptr;
-	}
-
-	void PoolAllocator::Free(void* ptr)
-	{
-
-	}
 }

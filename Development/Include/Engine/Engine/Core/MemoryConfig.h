@@ -5,7 +5,7 @@
 
 #pragma once
 
-namespace Engine::Memory
+namespace Engine::Core::Memory
 {
 	class MemoryConfig
 	{

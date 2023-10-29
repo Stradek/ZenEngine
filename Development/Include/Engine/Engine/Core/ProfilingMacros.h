@@ -23,7 +23,7 @@
 }
 
 #define ENGINE_FRAME_MARK_END(name) {																	\
-	ENGINE_WARN("ENGINE_FRAME_MARK_START is not calling Frame Profiling End.");							\
+	ENGINE_WARN("ENGINE_FRAME_MARK_END is not calling Frame Profiling End.");							\
 	FrameMarkEnd(name);																					\
 	ENGINE_INCREMENT_COUNTER(name);																		\
 }
