@@ -61,7 +61,6 @@ namespace Engine::Debug
 
 	DebugManager::DebugManager() :
 		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECONDS),
-		m_shouldLogStats(false),
 		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
 
@@ -115,17 +114,11 @@ namespace Engine::Debug
 
 	void DebugManager::Update(const double deltaTime)
 	{
-		if(m_shouldLogStats)
+		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
 		{
 			LogPerformanceInfo(deltaTime);
 			LogMemoryInfo();
 
-			m_shouldLogStats = false;
-		}
-
-		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
-		{
-			m_shouldLogStats = true;
 			m_debugUpdateClock.Reset();
 		}
 	}

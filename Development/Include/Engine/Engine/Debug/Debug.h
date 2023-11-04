@@ -65,7 +65,6 @@ namespace Engine::Debug
 
 		const Common::Time m_debugInfoRefreshTime;
 		Common::Clock m_debugUpdateClock;
-		bool m_shouldLogStats;
 
 		void LogPerformanceInfo(const double deltaTime);
 		void LogMemoryInfo();
