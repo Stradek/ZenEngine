@@ -120,6 +120,8 @@ namespace Engine
 
 	void GameEngine::EngineRun(IEngineApplication& appInstance)
 	{
+		SetEngineApplication(appInstance);
+
 		StartUp();
 
 		while (!m_shutDown)
