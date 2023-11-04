@@ -6,9 +6,6 @@
 #include "Game.h"
 #include "Engine/GameEngine.h"
 
-using GameHandle = Game;
-using EngineAppHandle = IEngineApplication;
-
 int main(int argc, char* argv[])
 {
 	{

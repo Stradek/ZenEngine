@@ -6,7 +6,7 @@
 #include "Engine/GameEngine.h"
 
 #include "Engine/IEngineApplication.h"
-
+#include "Engine/Core/Config.h"
 #include "Engine/Core/ProfilingMacros.h"
 
 #ifdef _DEBUG
@@ -17,23 +17,20 @@ namespace Engine
 {
 	GameEngine* GameEngine::m_instance;
 
-	void GameEngine::Run(EngineApplicationRef appInstance)
+	void GameEngine::Run(IEngineApplication& appInstance)
 	{
 		Core::Log::Init();
 
 		{
-			GameEngineRef engineInstance = GameEngine::getInstance();
-
-			engineInstance.SetEngineApplication(appInstance);
-			engineInstance.EngineRun();
+			GameEngine& engineInstance = GameEngine::GetInstance();
+			engineInstance.EngineRun(appInstance);
 		}
 
 		GameEngine::DestroyInstance();
-
 		Core::Log::Close();
 	}
 
-	GameEngineRef GameEngine::getInstance()
+	GameEngine& GameEngine::GetInstance()
 	{
 		if (!m_instance)
 		{
@@ -46,25 +43,25 @@ namespace Engine
 	void GameEngine::DestroyInstance()
 	{
 		ENGINE_FATAL_ASSERT(m_instance, "There is no engine instance.");
-		// This handle should count references to it and ensure it has only one reference `instance` !!!
-		// ENGINE_FATAL_ASSERT(instance.Get().use_count() == 1, "There is too much references to instance. Ref count: {}.", instance.use_count());
-
+		
 		delete m_instance;
 	}
 
 	GameEngine::GameEngine() :
+		m_appInstance(nullptr),
 		m_deltaTime(Core::Config::m_targetRenderFrameFrequency),
 		m_shutDown(false)
 	{
 	}
 
-	void GameEngine::SetEngineApplication(EngineApplicationRef appInstance)
+	void GameEngine::SetEngineApplication(IEngineApplication& appInstance)
 	{
 		m_appInstance = &appInstance;
 	}
 
 	void GameEngine::StartUp()
 	{
+		// StartUp engine systems
 #ifdef _DEBUG
 		m_debugManager.StartUp();
 #endif
@@ -74,6 +71,13 @@ namespace Engine
 		m_graphicsManager.StartUp();
 
 		m_appInstance->StartUp();
+
+		// StartUp engine clocks
+#ifdef _DEBUG
+		m_debugManager.StartDebugManagerClock();
+#endif
+		m_timeSinceUpdateClock.Start();
+		m_timeSinceRenderFrameClock.Start();
 	}
 
 	void GameEngine::ShutDown()
@@ -114,15 +118,10 @@ namespace Engine
 		m_shutDown = true;
 	}
 
-	void GameEngine::EngineRun()
+	void GameEngine::EngineRun(IEngineApplication& appInstance)
 	{
 		StartUp();
 
-#ifdef _DEBUG
-		m_debugManager.StartDebugManagerClock();
-#endif
-		m_timeSinceUpdateClock.Start();
-		m_timeSinceRenderFrameClock.Start();
 		while (!m_shutDown)
 		{
 			if (m_timeSinceUpdateClock.GetDuration().GetSeconds() >= Core::Config::m_targetUpdateFrequency)

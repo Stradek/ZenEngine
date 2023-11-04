@@ -5,8 +5,6 @@
 
 #pragma once
 
-#include "Engine/Core/Config.h"
-
 #ifdef _DEBUG
 #include "Engine/Debug/Debug.h"
 #endif // _DEBUG
@@ -15,25 +13,10 @@
 #include "Engine/Graphics/GraphicsManager.h"
 #include "Engine/EventSystem/EventManager.h"
 
-
-class ISystem;
 class IEngineApplication;
 
 namespace Engine 
 {
-	class GameEngine;
-	using GameEngineRef = GameEngine&;
-
-	using EngineApplicationRef = IEngineApplication&;
-
-	using WindowManagerRef = Window::WindowManager&;
-	using EventManagerRef = EventSystem::EventManager&;
-	using GraphicsManagerRef = Graphics::GraphicsManager&;
-
-#ifdef _DEBUG
-	using DebugManagerRef = Debug::DebugManager&;
-#endif
-
 	class GameEngine
 	{
 	public:
@@ -42,16 +25,16 @@ namespace Engine
 
 		GameEngine();
 
-		static GameEngineRef getInstance();
+		static GameEngine& GetInstance();
 		static void DestroyInstance();
 
-		static void Run(EngineApplicationRef appInstanceRef);
+		static void Run(IEngineApplication& appInstanceRef);
 
-		WindowManagerRef GetWindowManager() { return m_windowManager; }
-		EventManagerRef GetEventManager() { return m_eventManager; }
-		GraphicsManagerRef GetGraphicsManager() { return m_graphicsManager; }
+		Window::WindowManager& GetWindowManager() { return m_windowManager; }
+		EventSystem::EventManager& GetEventManager() { return m_eventManager; }
+		Graphics::GraphicsManager& GetGraphicsManager() { return m_graphicsManager; }
 #ifdef _DEBUG
-		DebugManagerRef GetDebugManager() { return m_debugManager; }
+		Debug::DebugManager& GetDebugManager() { return m_debugManager; }
 #endif
 
 		void Close();
@@ -74,12 +57,12 @@ namespace Engine
 		double m_deltaTime;
 		bool m_shutDown;
 
-		void SetEngineApplication(EngineApplicationRef appInstanceRef);
+		void SetEngineApplication(IEngineApplication& appInstanceRef);
 
 		void StartUp();
 		void ShutDown();
 
-		void EngineRun();
+		void EngineRun(IEngineApplication& appInstance);
 
 		void Update(const double deltaTime);
 		void RenderFrame();

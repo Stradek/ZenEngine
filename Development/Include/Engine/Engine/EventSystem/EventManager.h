@@ -7,8 +7,6 @@
 
 #include "Engine/Core/ISystem.h"
 
-#include <SDL.h>
-
 namespace Engine::EventSystem 
 {
 	class EventManager : Core::ISystem

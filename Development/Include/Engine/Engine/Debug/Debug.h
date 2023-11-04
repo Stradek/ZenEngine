@@ -32,38 +32,34 @@ namespace Engine::Debug
 		
 		class PerformanceProfiler
 		{
-		private:
-			PerformanceData m_performanceData;
-
-			void ResetData();
 		public:
 			PerformanceProfiler() {};
 			
 			void AddFrameStart(const char* const name);
 			void AddFrameEnd(const char* const name);
-
 			void IncreaseCounter(const char* const name);
 
 			PerformanceData PopData();
+		private:
+			PerformanceData m_performanceData;
+			
+			void ResetData();
 		};
 	}
-
-	using PerformanceProfilerRef = Performance::PerformanceProfiler&;
 
 	class DebugManager : Engine::Core::ISystem
 	{
 	public:
 		DebugManager();
 
-		void StartUp() override;
-		void ShutDown() override;
-
 		Performance::PerformanceProfiler& GetPerformanceProfiler() { return m_performanceProfiler; };
 
-		void StartDebugManagerClock();
-
+		void StartUp() override;
+		void ShutDown() override;
+		
 		void Update(const double deltaTime) override;
-
+		
+		void StartDebugManagerClock();
 	private:
 		Performance::PerformanceProfiler m_performanceProfiler;
 
