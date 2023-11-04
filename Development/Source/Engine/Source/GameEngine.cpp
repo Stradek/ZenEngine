@@ -5,12 +5,12 @@
 
 #include "Engine/GameEngine.h"
 
-#include <Engine/IEngineApplication.h>
+#include "Engine/IEngineApplication.h"
 
-#include <Engine/Core/ProfilingMacros.h>
+#include "Engine/Core/ProfilingMacros.h"
 
 #ifdef _DEBUG
-#include <Engine/Debug/Debug.h>
+#include "Engine/Debug/Debug.h"
 #endif
 
 namespace Engine

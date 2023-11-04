@@ -5,15 +5,15 @@
 
 #pragma once
 
-#include <Engine/Core/Config.h>
+#include "Engine/Core/Config.h"
 
 #ifdef _DEBUG
-#include <Engine/Debug/Debug.h>
+#include "Engine/Debug/Debug.h"
 #endif // _DEBUG
 
-#include <Engine/WindowManagement/WindowManager.h>
-#include <Engine/Graphics/GraphicsManager.h>
-#include <Engine/EventSystem/EventManager.h>
+#include "Engine/WindowManagement/WindowManager.h"
+#include "Engine/Graphics/GraphicsManager.h"
+#include "Engine/EventSystem/EventManager.h"
 
 
 class ISystem;

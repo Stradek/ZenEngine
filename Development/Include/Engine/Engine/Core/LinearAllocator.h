@@ -4,6 +4,7 @@
 */
 
 #pragma once
+
 #include "IAllocator.h"
 
 namespace Engine::Core::Memory

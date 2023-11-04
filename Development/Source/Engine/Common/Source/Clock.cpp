@@ -3,8 +3,8 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include <Clock.h>
-#include <CommonTime.h>
+#include "Clock.h"
+#include "CommonTime.h"
 
 #include <assert.h>
 
