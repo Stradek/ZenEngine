@@ -15,33 +15,36 @@ namespace Engine::Debug
 	{
 		struct Counter
 		{
-			Counter() : value(0) {};
-			uint32 value;
+			size_t value = 0;
 		};
 
 		struct FrameData
 		{
-			FrameData() : startTime(0), endTime(0){};
+			Common::Time startTime = 0;
+			Common::Time endTime = 0;
+		};
 
-			uint32 startTime;
-			uint32 endTime;
+		struct PerformanceData
+		{
+			std::unordered_map<std::string, std::vector<FrameData>> frameData;
+			std::unordered_map<std::string, Counter> frameCounters;
 		};
 		
 		class PerformanceProfiler
 		{
 		private:
-			std::unordered_map<std::string, std::vector<FrameData>> m_frameData;
-			std::unordered_map<std::string, Counter> m_counters;
+			PerformanceData m_performanceData;
 
+			void ResetData();
 		public:
 			PerformanceProfiler() {};
 			
-			void AddFrameStart(const char* const name, uint32 startTime);
-			void AddFrameEnd(const char* const name, uint32 endTime);
+			void AddFrameStart(const char* const name);
+			void AddFrameEnd(const char* const name);
 
 			void IncreaseCounter(const char* const name);
 
-			void Reset();
+			PerformanceData PopData();
 		};
 	}
 
@@ -59,17 +62,19 @@ namespace Engine::Debug
 
 		void StartDebugManagerClock();
 
-		void Update(const uint32 deltaTime) override;
+		void Update(const double deltaTime) override;
 
 	private:
 		Performance::PerformanceProfiler m_performanceProfiler;
 
-		const Common::DateTime::Time m_debugInfoUpdateFrequency;
-		Common::DateTime::Clock m_debugUpdateClock;
+		const Common::Time m_debugInfoRefreshTime;
+		Common::Clock m_debugUpdateClock;
 		bool m_shouldLogStats;
 
-		void LogProfilingInfo(const uint32 deltaTime);
+		void LogPerformanceInfo(const double deltaTime);
 		void LogMemoryInfo();
+
+		Common::Time CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter);
 	};
 }
 

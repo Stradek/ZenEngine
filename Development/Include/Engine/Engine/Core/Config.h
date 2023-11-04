@@ -10,10 +10,10 @@ namespace Engine::Core
 	class Config
 	{
 	public:
-		static constexpr uint m_targetUpdatesPerSecond = 20;
-		static constexpr uint m_targetLockedFramesPerSecond = 60;
+		static constexpr size_t m_targetUpdatesPerSecond = 20;
+		static constexpr size_t m_targetLockedFramesPerSecond = 60;
 
-		static constexpr uint32 m_targetUpdateFrequency = static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
-		static constexpr uint32 m_targetRenderFrameFrequency = static_cast<uint32>(Common::DateTime::SECOND_TO_NANOSECONDS / m_targetLockedFramesPerSecond);
+		static constexpr double m_targetUpdateFrequency = 1.0 / m_targetUpdatesPerSecond;
+		static constexpr double m_targetRenderFrameFrequency = 1.0 / m_targetLockedFramesPerSecond;
 	};
 }

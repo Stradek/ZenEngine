@@ -8,7 +8,7 @@
 #include "Defines.h"
 #include "CommonTime.h"
 
-namespace Engine::Common::DateTime
+namespace Engine::Common
 {
 	class Clock
 	{
@@ -18,20 +18,18 @@ namespace Engine::Common::DateTime
 
 		bool IsRunning();
 
-		uint32 GetDuration();
-		double GetDurationAsDouble();
-
 		void Start();
 		void Stop();
 		void Reset();
 
+		Time GetStartTime();
+		Time GetEndTime();
 
-		uint32 GetStartTime();
-		uint32 GetEndTime();
+		Time GetDuration();
 
 	private:
-		uint32 m_startTime;
-		uint32 m_endTime;
+		Time m_startTime;
+		Time m_endTime;
 
 		bool m_isRunning = false;
 	};

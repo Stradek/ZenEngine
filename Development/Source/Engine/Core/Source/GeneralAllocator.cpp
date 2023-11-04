@@ -19,7 +19,7 @@ namespace Engine::Core::Memory
 	*/
 	void* GeneralAllocator::Allocate(const size_t size, const size_t alignment)
 	{
-		uint fullAllocationSize = size + alignment + sizeof(void*);
+		size_t fullAllocationSize = size + alignment + sizeof(void*);
 		void* unalignedPtr = malloc(fullAllocationSize);
 		if (unalignedPtr == nullptr)
 		{

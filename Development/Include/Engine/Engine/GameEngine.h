@@ -68,10 +68,10 @@ namespace Engine
 		Debug::DebugManager			m_debugManager;
 #endif
 
-		Common::DateTime::Clock m_timeSinceUpdateClock;
-		Common::DateTime::Clock m_timeSinceRenderFrameClock;
+		Common::Clock m_timeSinceUpdateClock;
+		Common::Clock m_timeSinceRenderFrameClock;
 
-		uint32 m_deltaTime;
+		double m_deltaTime;
 		bool m_shutDown;
 
 		void SetEngineApplication(EngineApplicationRef appInstanceRef);
@@ -81,7 +81,7 @@ namespace Engine
 
 		void EngineRun();
 
-		void Update(const uint32 deltaTime);
+		void Update(const double deltaTime);
 		void RenderFrame();
 	};
 }

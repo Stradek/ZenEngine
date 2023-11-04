@@ -7,7 +7,7 @@
 
 #include "Defines.h"
 
-namespace Engine::Common::DateTime
+namespace Engine::Common
 {
 	using high_res_clock	= std::chrono::high_resolution_clock;
 	using system_clock		= std::chrono::system_clock;
@@ -20,7 +20,4 @@ namespace Engine::Common::DateTime
 	using seconds		= std::chrono::seconds;
 	using milliseconds	= std::chrono::milliseconds;
 	using nanoseconds	= std::chrono::nanoseconds;
-
-	using seconds_duration_from_double		= std::chrono::duration<double, std::ratio<1, 1>>;
-	using nanoseconds_duration_from_uint32	= std::chrono::duration<uint32, std::nano>;
 }

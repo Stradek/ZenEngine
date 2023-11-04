@@ -14,31 +14,53 @@ namespace Engine::Debug
 	namespace Performance
 	{
 
-		void PerformanceProfiler::AddFrameStart(const char* const name, uint32 startTime)
+		void PerformanceProfiler::AddFrameStart(const char* const name)
 		{
-			m_frameData[name].push_back(FrameData());
-			m_frameData[name].back().startTime = startTime;
+			m_performanceData.frameData[name].push_back(FrameData());
+			m_performanceData.frameData[name].back().startTime = Common::GetTimeNow();
 		}
 
-		void PerformanceProfiler::AddFrameEnd(const char* const name, uint32 endTime)
+		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
-			m_frameData[name].back().endTime = endTime;
+			m_performanceData.frameData[name].back().endTime = Common::GetTimeNow();
 		}
 
 		void PerformanceProfiler::IncreaseCounter(const char* const name)
 		{
-			m_counters[name].value++;
+			m_performanceData.frameCounters[name].value++;
 		}
 
-		void PerformanceProfiler::Reset()
+		Engine::Debug::Performance::PerformanceData PerformanceProfiler::PopData()
 		{
-			m_frameData.clear();
-			m_counters.clear();
+			PerformanceData poppedData = m_performanceData;
+			
+			ResetData();
+
+			return poppedData;
+		}
+
+		void PerformanceProfiler::ResetData()
+		{
+			// remove all finished frames
+			auto isFrameFinished = [](const FrameData& frameData) {
+				return frameData.endTime.GetRawTime() != 0;
+			};
+
+			for (auto& frameNameToFrameData : m_performanceData.frameData)
+			{
+				auto& frameDataList = frameNameToFrameData.second;
+
+				auto finishedFrames = std::remove_if(frameDataList.begin(), frameDataList.end(), isFrameFinished);
+				frameDataList.erase(finishedFrames, frameDataList.end());
+			}
+
+			// reset counters
+			m_performanceData.frameCounters.clear();
 		}
 	}
 
 	DebugManager::DebugManager() :
-		m_debugInfoUpdateFrequency(Common::DateTime::Time(Common::DateTime::SECOND_TO_NANOSECONDS)),
+		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECONDS),
 		m_shouldLogStats(false),
 		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
@@ -55,30 +77,53 @@ namespace Engine::Debug
 		m_debugUpdateClock.Start();
 	}
 
-	void DebugManager::LogProfilingInfo(const uint32 deltaTime)
+
+	Common::Time DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
 	{
-		// TODO: 
-		// - Get Counters value from Performance Profiler (RenderFrame, Update, etc.)
-		// - Get Average Duration from Performance Profiler (RenderFrame, Update, etc.)
+		if (frameCounter < 1)
+		{
+			ENGINE_WARN("Engine Update Counter is less than 1. Cannot calculate average duration.");
+			return Common::Time(0);
+		}
 
-		double deltaTimeMiliseconds = deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
+		size_t frameDurationSum = 0;
+		for (const Performance::FrameData frameData : frameDataList)
+		{
+			frameDurationSum += (frameData.endTime - frameData.startTime).GetRawTime();
+		}
 
-		ENGINE_LOG("[FPS: {}] Game Update ms: {}; Render ms: {}; DeltaTime ms: {:.4f}", -1, -1, -1, deltaTimeMiliseconds);
-		ENGINE_LOG("          Game Updates per Second: {}", -1);
-		ENGINE_WARN("Counters and average duration for Profiling Info not implemented.");
+		return Common::Time(frameDurationSum / frameCounter);
 	}
 
-	void DebugManager::Update(const uint32 deltaTime)
+	void DebugManager::LogPerformanceInfo(const double deltaTime)
+	{
+		Performance::PerformanceData performanceData = GetPerformanceProfiler().PopData();
+
+		const size_t engineUpdateCounter = performanceData.frameCounters[sl_Engine_Update].value;
+		const size_t renderFrameCounter = performanceData.frameCounters[sl_Engine_RenderFrame].value;
+
+		const std::vector<Performance::FrameData> engineUpdateData = performanceData.frameData[sl_Engine_Update];
+		const std::vector<Performance::FrameData> engineRenderFrameData = performanceData.frameData[sl_Engine_RenderFrame];
+
+		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
+		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
+		
+		ENGINE_LOG("Frames per Second(FPS): {};\tEngine Updates per Second: {}", renderFrameCounter, engineUpdateCounter);
+		ENGINE_LOG("Engine Update ms: {};\t\tRenderFrame ms: {}", engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
+		ENGINE_LOG("DeltaTime (seconds): {:.4f}", deltaTime);
+	}
+
+	void DebugManager::Update(const double deltaTime)
 	{
 		if(m_shouldLogStats)
 		{
-			LogProfilingInfo(deltaTime);
+			LogPerformanceInfo(deltaTime);
 			LogMemoryInfo();
 
 			m_shouldLogStats = false;
 		}
 
-		if (m_debugUpdateClock.GetDuration() >= m_debugInfoUpdateFrequency.GetTimeRaw())
+		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
 		{
 			m_shouldLogStats = true;
 			m_debugUpdateClock.Reset();
@@ -94,7 +139,6 @@ namespace Engine::Debug
 	{
 
 	}
-
 }
 
 #endif // _DEBUG

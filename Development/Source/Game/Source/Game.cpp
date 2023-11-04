@@ -11,7 +11,7 @@ void Game::StartUp()
 {
 }
 
-void Game::Update(const uint32 deltaTime)
+void Game::Update(const double deltaTime)
 {
 }
 

@@ -88,7 +88,7 @@ namespace Engine
 #endif
 	}
 
-	void GameEngine::Update(const uint32 deltaTime)
+	void GameEngine::Update(const double deltaTime)
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
@@ -125,16 +125,16 @@ namespace Engine
 		m_timeSinceRenderFrameClock.Start();
 		while (!m_shutDown)
 		{
-			if (m_timeSinceUpdateClock.GetDuration() >= Core::Config::m_targetUpdateFrequency)
+			if (m_timeSinceUpdateClock.GetDuration().GetSeconds() >= Core::Config::m_targetUpdateFrequency)
 			{
-				Update(m_deltaTime);
+ 				Update(m_deltaTime);
 
 				m_timeSinceUpdateClock.Reset();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration() >= Core::Config::m_targetRenderFrameFrequency)
+			if (m_timeSinceRenderFrameClock.GetDuration().GetSeconds() >= Core::Config::m_targetRenderFrameFrequency)
 			{
-				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
+				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration().GetSeconds();
 
 				RenderFrame();
 				ENGINE_FRAME_MARK();

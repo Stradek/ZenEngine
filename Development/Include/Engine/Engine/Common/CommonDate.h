@@ -5,13 +5,18 @@
 
 #pragma once
 
-namespace Engine::Common::DateTime
+namespace Engine::Common
 {
-	struct Date
+	class Date
 	{
-		int year;
-		int month;
-		int day;
+	public:
+		Date(std::time_t timeNow);
+
+		size_t GetYear() const;
+		size_t GetMonth() const;
+		size_t GetDay() const;
+	private:
+		tm m_timeInfo;
 	};
 
 	extern Date GetCurrentDate();
