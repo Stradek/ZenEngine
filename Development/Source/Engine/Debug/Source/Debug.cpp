@@ -16,13 +16,23 @@ namespace Engine::Debug
 
 		void PerformanceProfiler::AddFrameStart(const char* const name)
 		{
-			m_performanceData.frameData[name].push_back(FrameData());
-			m_performanceData.frameData[name].back().startTime = Common::GetTimeNow();
+			assert(m_frameDataInProgress[name].IsValid() == false);
+
+			FrameData newFrameData;
+			newFrameData.startTime = Common::GetTimeNow();
+
+			m_frameDataInProgress[name] = newFrameData;
 		}
 
 		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
-			m_performanceData.frameData[name].back().endTime = Common::GetTimeNow();
+			FrameData& frameDataToFinish = m_frameDataInProgress.at(name);
+			frameDataToFinish.endTime = Common::GetTimeNow();
+
+			m_performanceData.frameData[name].push_back(frameDataToFinish);
+
+			// reset frame data
+			frameDataToFinish = FrameData();
 		}
 
 		void PerformanceProfiler::IncreaseCounter(const char* const name)
@@ -30,32 +40,31 @@ namespace Engine::Debug
 			m_performanceData.frameCounters[name].value++;
 		}
 
-		Engine::Debug::Performance::PerformanceData PerformanceProfiler::PopData()
+		bool PerformanceProfiler::IsFrameFinished(const FrameData& frameData) const
 		{
-			PerformanceData poppedData = m_performanceData;
-			
-			ResetData();
-
-			return poppedData;
+			return frameData.endTime.GetRawTime() != 0;
 		}
 
-		void PerformanceProfiler::ResetData()
+		Engine::Debug::Performance::PerformanceData PerformanceProfiler::GetPerformanceData()
+		{
+			return m_performanceData;
+		}
+
+		void PerformanceProfiler::ResetFinishedData()
 		{
 			// remove all finished frames
-			auto isFrameFinished = [](const FrameData& frameData) {
-				return frameData.endTime.GetRawTime() != 0;
-			};
-
-			for (auto& frameNameToFrameData : m_performanceData.frameData)
-			{
-				auto& frameDataList = frameNameToFrameData.second;
-
-				auto finishedFrames = std::remove_if(frameDataList.begin(), frameDataList.end(), isFrameFinished);
-				frameDataList.erase(finishedFrames, frameDataList.end());
-			}
+			m_performanceData = PerformanceData();
 
 			// reset counters
 			m_performanceData.frameCounters.clear();
+		}
+
+		Engine::Debug::Performance::PerformanceData PerformanceProfiler::PopData()
+		{
+			PerformanceData finishedData = GetPerformanceData();
+			ResetFinishedData();
+
+			return finishedData;
 		}
 	}
 
@@ -86,9 +95,9 @@ namespace Engine::Debug
 		}
 
 		size_t frameDurationSum = 0;
-		for (const Performance::FrameData frameData : frameDataList)
+		for (const Performance::FrameData& frameData : frameDataList)
 		{
-			frameDurationSum += (frameData.endTime - frameData.startTime).GetRawTime();
+			frameDurationSum += Common::Time::Duration(frameData.startTime, frameData.endTime).GetRawTime();
 		}
 
 		return Common::Time(frameDurationSum / frameCounter);

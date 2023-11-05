@@ -22,6 +22,8 @@ namespace Engine::Debug
 		{
 			Common::Time startTime = 0;
 			Common::Time endTime = 0;
+
+			bool IsValid() const { return startTime.GetRawTime() != 0; };
 		};
 
 		struct PerformanceData
@@ -42,8 +44,12 @@ namespace Engine::Debug
 			PerformanceData PopData();
 		private:
 			PerformanceData m_performanceData;
+			std::unordered_map<std::string, FrameData> m_frameDataInProgress;
 			
-			void ResetData();
+			bool IsFrameFinished(const FrameData& frameData) const;
+
+			PerformanceData GetPerformanceData();
+			void ResetFinishedData();
 		};
 	}
 

@@ -25,7 +25,7 @@ namespace Engine::Common
 		assert(m_isRunning);
 		
 		m_endTime = GetTimeNow();
-		return Time(m_endTime - m_startTime);
+		return Time::Duration(m_startTime, m_endTime);
 	}
 
 	void Clock::Start()

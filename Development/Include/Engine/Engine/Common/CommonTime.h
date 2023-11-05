@@ -32,12 +32,13 @@ namespace Engine::Common
 	public:
 		Time(size_t timeInNanoseconds) : m_nanosecondsTime(timeInNanoseconds) {}
 
-		inline Time operator-(const Time& other) const { return m_nanosecondsTime.count() - other.m_nanosecondsTime.count(); }
+		static Time Duration(const Time& start, const Time& end) { return Time(end.GetNanoseconds() - start.GetNanoseconds()); }
 
 		inline bool operator<(const Time& other) const { return m_nanosecondsTime < other.m_nanosecondsTime; }
 		inline bool operator>(const Time& other) const { return m_nanosecondsTime > other.m_nanosecondsTime; }
 		inline bool operator<=(const Time& other) const { return m_nanosecondsTime <= other.m_nanosecondsTime; }
 		inline bool operator>=(const Time& other) const { return m_nanosecondsTime >= other.m_nanosecondsTime; }
+
 
 		size_t GetRawTime() const { return GetNanoseconds(); }
 
