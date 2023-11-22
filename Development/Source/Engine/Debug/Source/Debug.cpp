@@ -116,9 +116,20 @@ namespace Engine::Debug
 		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
 		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
 		
-		ENGINE_LOG("Frames per Second(FPS): {};\tEngine Updates per Second: {}", renderFrameCounter, engineUpdateCounter);
-		ENGINE_LOG("Engine Update ms: {};\t\tRenderFrame ms: {}", engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
-		ENGINE_LOG("DeltaTime (seconds): {:.4f}", deltaTime);
+		const char* performanceLoggingInfoString =	
+			"Counters:\n"
+			"Frames per Second(FPS): \t\t{}\n"
+			"Engine Updates per Second: \t\t{}\n"
+			"===========================================\n"
+			"Timers (ms):\n"
+			"Delta Time: \t\t\t{:.4f}\n"
+			"Engine Update: \t\t\t{:.4f}\n"
+			"Render Frame: \t\t\t{:.4f}\n"
+			"===========================================\n";
+
+		ENGINE_LOG(performanceLoggingInfoString,
+			renderFrameCounter, engineUpdateCounter,
+			deltaTime * 1000, engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
 	}
 
 	void DebugManager::Update(const double deltaTime)
