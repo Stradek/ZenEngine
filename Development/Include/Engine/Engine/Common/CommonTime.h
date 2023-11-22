@@ -15,61 +15,43 @@
 	UInt32 is raw representation of Nanoseconds.
 */
 
-namespace Engine::Common::DateTime
+namespace Engine::Common
 {
-	struct TimeDetails
-	{
-		uint32 hours;
-		uint32 minutes;
-		uint32 seconds;
-		uint32 miliseconds;
-		uint32 nanoseconds;
-	};
+	static constexpr size_t HOUR_TO_NANOSECONDS = nanoseconds(hours(1)).count();
+	static constexpr size_t MINUTE_TO_NANOSECONDS = nanoseconds(minutes(1)).count();
+	static constexpr size_t SECOND_TO_NANOSECONDS = nanoseconds(seconds(1)).count();
+	static constexpr size_t MILISECOND_TO_NANOSECONDS = nanoseconds(milliseconds(1)).count();
+
+	static constexpr double NANOSECOND_TO_HOUR = 1.0 / HOUR_TO_NANOSECONDS;
+	static constexpr double NANOSECOND_TO_MINUTE = 1.0 / MINUTE_TO_NANOSECONDS;
+	static constexpr double NANOSECOND_TO_SECOND = 1.0 / SECOND_TO_NANOSECONDS;
+	static constexpr double NANOSECOND_TO_MILLISECOND = 1.0 / MILISECOND_TO_NANOSECONDS;
 
 	class Time
 	{
 	public:
-		Time(uint32 rawTime) : m_rawTime(rawTime) {}
+		Time(size_t timeInNanoseconds) : m_nanosecondsTime(timeInNanoseconds) {}
 
-		TimeDetails GetTimeDetails() const;
-		uint32 GetTimeRaw() const;
+		static Time Duration(const Time& start, const Time& end) { return Time(end.GetNanoseconds() - start.GetNanoseconds()); }
+
+		inline bool operator<(const Time& other) const { return m_nanosecondsTime < other.m_nanosecondsTime; }
+		inline bool operator>(const Time& other) const { return m_nanosecondsTime > other.m_nanosecondsTime; }
+		inline bool operator<=(const Time& other) const { return m_nanosecondsTime <= other.m_nanosecondsTime; }
+		inline bool operator>=(const Time& other) const { return m_nanosecondsTime >= other.m_nanosecondsTime; }
+
+
+		size_t GetRawTime() const { return GetNanoseconds(); }
+
+		double GetHours() const;
+		double GetMinutes() const;
+		double GetSeconds() const;
+		double GetMilliseconds() const;
+
+		size_t GetNanoseconds() const;
 
 	private:
-		uint32 m_rawTime;
+		nanoseconds m_nanosecondsTime;
 	};
 
-	static constexpr uint32 HOUR_TO_NANOSECONDS = static_cast<uint32>(
-		nanoseconds(hours(1)).count()
-	);
-
-	static constexpr uint32 MINUTE_TO_NANOSECONDS = static_cast<uint32>(
-		nanoseconds(minutes(1)).count()
-	);
-
-	static constexpr uint32 SECOND_TO_NANOSECONDS = static_cast<uint32>(
-		nanoseconds(seconds(1)).count()
-	);
-	static constexpr uint32 MILISECOND_TO_NANOSECONDS = static_cast<uint32>(
-		nanoseconds(milliseconds(1)).count()
-	);
-	static constexpr double NANOSECOND_TO_SECONDS = static_cast<double>(
-		(double)nanoseconds(1).count() / SECOND_TO_NANOSECONDS
-	);
-	static constexpr double NANOSECOND_TO_MILISECONDS = static_cast<double>(
-		(double)nanoseconds(1).count() / MILISECOND_TO_NANOSECONDS
-	);
-
-	extern Time GetTime();
-	extern uint32 GetTimeRaw();
-
-	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime);
-
-	extern double NanosecondsToDouble(const nanoseconds durationInNanoseconds);
-	extern double UInt32ToDouble(const uint32 durationInNanoseconds);
-
-	extern nanoseconds DoubleToNanoseconds(const double durationInSeconds);
-	extern nanoseconds UInt32ToNanoseconds(const uint32 durationInNanoseconds);
-	
-	extern uint32 DoubleToUInt32(const double durationInSeconds);
-	extern uint32 NanosecondsToUInt32(const nanoseconds durationInNanoseconds);
+	extern Time GetTimeNow();
 }

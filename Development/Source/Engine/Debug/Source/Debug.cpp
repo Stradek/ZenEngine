@@ -7,150 +7,69 @@
 
 #include "Debug.h"
 
-#include <TracingFunctionNames.h>
+#include "TracingFunctionNames.h"
 
 namespace Engine::Debug
 {
 	namespace Performance
 	{
-		PerformanceProfiler::PerformanceProfiler() :
-			m_nameToStartFrameData(std::make_unique<NameToStartFrameData>()), 
-			m_nameToFrameDataCircularBuffer(std::make_unique<NameToFrameDataCircularBuffer>()),
-			m_nameToCounterRaw(std::make_shared<NameToCounter>()),
-			m_nameToCounterLastSecond(std::make_shared<NameToCounter>()),
-			m_nameToCounterPerSecond(std::make_shared<NameToCounter>())
-		{
 
+		void PerformanceProfiler::AddFrameStart(const char* const name)
+		{
+			assert(m_frameDataInProgress[name].IsValid() == false);
+
+			FrameData newFrameData;
+			newFrameData.startTime = Common::GetTimeNow();
+
+			m_frameDataInProgress[name] = newFrameData;
 		}
 
-		void PerformanceProfiler::UpdateCounterPerSecond()
+		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
-			for (auto& counterEntryIt : *m_nameToCounterRaw)
-			{
-				auto& counterName = counterEntryIt.first;
-				auto& counterValue = counterEntryIt.second;
+			FrameData& frameDataToFinish = m_frameDataInProgress.at(name);
+			frameDataToFinish.endTime = Common::GetTimeNow();
 
-				(*m_nameToCounterPerSecond)[counterName] = counterValue - (*m_nameToCounterLastSecond)[counterName];
-				(*m_nameToCounterLastSecond)[counterName] = counterValue;
-			}
+			m_performanceData.frameData[name].push_back(frameDataToFinish);
+
+			// reset frame data
+			frameDataToFinish = FrameData();
 		}
 
-		void PerformanceProfiler::IncrementCounter(std::string functionName, uint32 count)
+		void PerformanceProfiler::IncreaseCounter(const char* const name)
 		{
-			(*m_nameToCounterRaw)[functionName] += count;
+			m_performanceData.frameCounters[name].value++;
 		}
 
-		uint32 PerformanceProfiler::GetCounterValue(CounterType counterType, std::string functionName)
+		bool PerformanceProfiler::IsFrameFinished(const FrameData& frameData) const
 		{
-			std::unique_ptr<std::shared_ptr<NameToCounter>> counterPtr;
-			switch (counterType)
-			{
-			case CounterRaw:
-				counterPtr = std::make_unique<std::shared_ptr<NameToCounter>>(m_nameToCounterRaw);
-				break;
-			case CounterPerSecond:
-				counterPtr = std::make_unique<std::shared_ptr<NameToCounter>>(m_nameToCounterPerSecond);
-				break;
-			}
-
-			uint32 counterInstances = (*counterPtr)->count(functionName);
-			bool counterExists = counterInstances > 0;
-			ENGINE_ASSERT(counterExists, "Counter for given function name doesn't exist.");
-
-			if (counterExists)
-			{
-				return (*counterPtr)->at(functionName);
-			}
-			else
-			{
-				return -1;
-			}
+			return frameData.endTime.GetRawTime() != 0;
 		}
 
-		void PerformanceProfiler::FrameProfilingStart(std::string functionName)
+		Engine::Debug::Performance::PerformanceData PerformanceProfiler::GetPerformanceData()
 		{
-			ENGINE_ASSERT(m_nameToStartFrameData->count(functionName) == 0, "Frame {} didn't finish and still exists as startFrameData entry. Missing FrameProfilingEnd call.", functionName)
-
-			uint32 timeNow = Common::DateTime::GetTimeRaw();
-			StartFrameData frameData{ timeNow, false };
-
-			(*m_nameToStartFrameData)[functionName] = frameData;
+			return m_performanceData;
 		}
 
-		void PerformanceProfiler::FrameProfilingEnd(std::string functionName)
+		void PerformanceProfiler::ResetFinishedData()
 		{
-			uint32 frameFinishTime = Common::DateTime::GetTimeRaw();
-			uint32 frameStartTime = (*m_nameToStartFrameData)[functionName].startTime;
-			uint32 frameDuration = frameFinishTime - frameStartTime;
+			// remove all finished frames
+			m_performanceData = PerformanceData();
 
-			FrameData finishedFrameData;
-			finishedFrameData.startTime = frameStartTime;
-			finishedFrameData.endTime = frameFinishTime;
-			finishedFrameData.duration = frameDuration;
-
-			m_nameToStartFrameData->erase(functionName);
-
-			// create new buffer, if there is none for this function name
-			(*m_nameToFrameDataCircularBuffer)[functionName].EmplaceBack(finishedFrameData);
+			// reset counters
+			m_performanceData.frameCounters.clear();
 		}
 
-		NameToFrameDataBuffer PerformanceProfiler::GetFrameProfilingData()
+		Engine::Debug::Performance::PerformanceData PerformanceProfiler::PopData()
 		{
-			NameToFrameDataBuffer framesDone;
+			PerformanceData finishedData = GetPerformanceData();
+			ResetFinishedData();
 
-			for (auto& frameDataCircularBufferIt : *m_nameToFrameDataCircularBuffer)
-			{
-				auto& frameDataName = frameDataCircularBufferIt.first;
-				auto& frameDataValue = frameDataCircularBufferIt.second;
-
-				FrameDataBuffer frameDataBuffer = frameDataValue.GetAll();
-
-				std::sort(frameDataBuffer.begin(),
-					frameDataBuffer.end(),
-					[](const FrameData& a, const FrameData& b) {
-						return a.startTime > b.startTime;
-					}
-				);
-
-				framesDone[frameDataName] = frameDataBuffer;
-			}
-
-			return framesDone;
-		}
-
-		NameToRawTime PerformanceProfiler::GetAvgFrameTimingData()
-		{
-			NameToRawTime nameToAverageTime;
-			
-			NameToFrameDataBuffer nameToFrameDataBuffer = GetFrameProfilingData();
-			for (auto frameDataBufferIt : nameToFrameDataBuffer)
-			{
-				auto& frameDataBufferName = frameDataBufferIt.first;
-				auto& frameDataBufferValue = frameDataBufferIt.second;
-
-				FrameDataBuffer frameDataBuffer = frameDataBufferValue;
-				const uint framesCount = frameDataBuffer.size();
-				const uint lastElementIndex = framesCount - 1;
-
-				uint32 framesAccumulatedDuration = std::accumulate(frameDataBuffer.begin(), frameDataBuffer.end(), 0.0,
-					[](uint32 accumulator, const FrameData& frameData)
-					{
-						return accumulator + frameData.duration;
-					}
-				);
-
-				uint32 averageFrameTime = framesAccumulatedDuration / framesCount;
-
-				nameToAverageTime[frameDataBufferName] = averageFrameTime;
-			}
-
-			return nameToAverageTime;
+			return finishedData;
 		}
 	}
 
 	DebugManager::DebugManager() :
-		m_debugInfoUpdateFrequency(Common::DateTime::Time(Common::DateTime::SECOND_TO_NANOSECONDS)),
-		m_shouldLogStats(false),
+		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECONDS),
 		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
 
@@ -161,49 +80,67 @@ namespace Engine::Debug
 		
 	}
 
-	void DebugManager::StartPerformanceProfiler()
+	void DebugManager::StartDebugManagerClock()
 	{
 		m_debugUpdateClock.Start();
 	}
 
-	void DebugManager::LogProfilingInfo(const uint32 deltaTime)
+
+	Common::Time DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
 	{
-		Performance::NameToRawTime m_profiledFunctionNameToAvgDuration = GetPerformanceProfiler().GetAvgFrameTimingData();
-
-		uint32 renderedFramesPerSecond = GetPerformanceProfiler().GetCounterValue(CounterType::CounterPerSecond, sl_Engine_RenderFrame);
-		uint32 engineUpdatesPerSecond = GetPerformanceProfiler().GetCounterValue(CounterType::CounterPerSecond, sl_Engine_Update);
-
-		uint32 engineUpdateTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_Update];
-		uint32 engineRenderFrameTimeRaw = m_profiledFunctionNameToAvgDuration[sl_Engine_RenderFrame];
-
-		double engineUpdateTime = Common::DateTime::UInt32ToDouble(engineUpdateTimeRaw);
-		double engineRenderFrameTime = Common::DateTime::UInt32ToDouble(engineRenderFrameTimeRaw);
-
-		double deltaTimeMiliseconds = deltaTime * Common::DateTime::NANOSECOND_TO_MILISECONDS;
-
-		ENGINE_LOG("[FPS: {}] Game Update ms: {:.4f}; Render ms: {:.4f}; DeltaTime ms: {:.4f}", renderedFramesPerSecond, engineUpdateTime, engineRenderFrameTime, deltaTimeMiliseconds);
-		ENGINE_LOG("          Game Updates per Second: {}", engineUpdatesPerSecond);
-	}
-
-	void DebugManager::Update(const uint32 deltaTime)
-	{
-		if(m_shouldLogStats)
+		if (frameCounter < 1)
 		{
-			
-			LogProfilingInfo(deltaTime);
-			LogMemoryInfo();
-
-			m_shouldLogStats = false;
+			ENGINE_WARN("Engine Update Counter is less than 1. Cannot calculate average duration.");
+			return Common::Time(0);
 		}
 
-		if (m_debugUpdateClock.GetDuration() >= m_debugInfoUpdateFrequency.GetTimeRaw())
+		size_t frameDurationSum = 0;
+		for (const Performance::FrameData& frameData : frameDataList)
 		{
-			GetPerformanceProfiler().UpdateCounterPerSecond();
-			m_shouldLogStats = true;
+			frameDurationSum += Common::Time::Duration(frameData.startTime, frameData.endTime).GetRawTime();
+		}
+
+		return Common::Time(frameDurationSum / frameCounter);
+	}
+
+	void DebugManager::LogPerformanceInfo(const double deltaTime)
+	{
+		Performance::PerformanceData performanceData = GetPerformanceProfiler().PopData();
+
+		const size_t engineUpdateCounter = performanceData.frameCounters[sl_Engine_Update].value;
+		const size_t renderFrameCounter = performanceData.frameCounters[sl_Engine_RenderFrame].value;
+
+		const std::vector<Performance::FrameData> engineUpdateData = performanceData.frameData[sl_Engine_Update];
+		const std::vector<Performance::FrameData> engineRenderFrameData = performanceData.frameData[sl_Engine_RenderFrame];
+
+		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
+		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
+		
+		const char* performanceLoggingInfoString =	
+			"Counters:\n"
+			"Frames per Second(FPS): \t\t{}\n"
+			"Engine Updates per Second: \t\t{}\n"
+			"===========================================\n"
+			"Timers (ms):\n"
+			"Delta Time: \t\t\t{:.4f}\n"
+			"Engine Update: \t\t\t{:.4f}\n"
+			"Render Frame: \t\t\t{:.4f}\n"
+			"===========================================\n";
+
+		ENGINE_LOG(performanceLoggingInfoString,
+			renderFrameCounter, engineUpdateCounter,
+			deltaTime * 1000, engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
+	}
+
+	void DebugManager::Update(const double deltaTime)
+	{
+		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
+		{
+			LogPerformanceInfo(deltaTime);
+			LogMemoryInfo();
 
 			m_debugUpdateClock.Reset();
 		}
-
 	}
 
 	void DebugManager::ShutDown()
@@ -215,7 +152,6 @@ namespace Engine::Debug
 	{
 
 	}
-
 }
 
 #endif // _DEBUG

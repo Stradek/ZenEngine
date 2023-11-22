@@ -5,8 +5,8 @@
 
 #include "EventManager.h"
 
-#include <Engine/GameEngine.h>
-#include <Engine/WindowManagement/WindowManager.h>
+#include "Engine/GameEngine.h"
+#include "Engine/WindowManagement/WindowManager.h"
 
 #include <SDL.h>
 
@@ -29,7 +29,7 @@ void Engine::EventSystem::EventManager::Update()
 			switch (event.window.event)
 			{
 			case SDL_WINDOWEVENT_CLOSE:
-				GameEngine::getInstance()->Close();
+				GameEngine::GetInstance().Close();
 				break;
 			}
 		}

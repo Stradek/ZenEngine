@@ -5,36 +5,18 @@
 
 #pragma once
 
-#include <Engine/Core/Config.h>
-#include <Engine/Core/Memory.h>
-
 #ifdef _DEBUG
-#include <Engine/Debug/Debug.h>
+#include "Engine/Debug/Debug.h"
 #endif // _DEBUG
 
-#include <Engine/WindowManagement/WindowManager.h>
-#include <Engine/Graphics/GraphicsManager.h>
-#include <Engine/EventSystem/EventManager.h>
+#include "Engine/WindowManagement/WindowManager.h"
+#include "Engine/Graphics/GraphicsManager.h"
+#include "Engine/EventSystem/EventManager.h"
 
-
-class ISystem;
 class IEngineApplication;
 
 namespace Engine 
 {
-	class GameEngine;
-	using GameEngineRef = Core::Memory::ObjectPtr<GameEngine>&;
-
-	using EngineApplicationRef = Core::Memory::ObjectPtr<IEngineApplication>&;
-
-	using WindowManagerRef = Core::Memory::ObjectPtr<Window::WindowManager>&;
-	using EventManagerRef = Core::Memory::ObjectPtr<EventSystem::EventManager>&;
-	using GraphicsManagerRef = Core::Memory::ObjectPtr<Graphics::GraphicsManager>&;
-
-#ifdef _DEBUG
-	using DebugManagerRef = Core::Memory::ObjectPtr<Debug::DebugManager>&;
-#endif
-
 	class GameEngine
 	{
 	public:
@@ -43,46 +25,46 @@ namespace Engine
 
 		GameEngine();
 
-		static GameEngineRef getInstance();
+		static GameEngine& GetInstance();
 		static void DestroyInstance();
 
-		static void Run(EngineApplicationRef appInstanceRef);
+		static void Run(IEngineApplication& appInstanceRef);
 
-		WindowManagerRef GetWindowManager() { return m_windowManager; }
-		EventManagerRef GetEventManager() { return m_eventManager; }
-		GraphicsManagerRef GetGraphicsManager() { return m_graphicsManager; }
+		Window::WindowManager& GetWindowManager() { return m_windowManager; }
+		EventSystem::EventManager& GetEventManager() { return m_eventManager; }
+		Graphics::GraphicsManager& GetGraphicsManager() { return m_graphicsManager; }
 #ifdef _DEBUG
-		DebugManagerRef GetDebugManager() { return m_debugManager; }
+		Debug::DebugManager& GetDebugManager() { return m_debugManager; }
 #endif
 
 		void Close();
 
 	private:
-		static Core::Memory::ObjectPtr<GameEngine> instance;
+		static GameEngine* m_instance;
 
-		Core::Memory::ObjectPtr<IEngineApplication>			m_appInstance;
+		IEngineApplication*	m_appInstance;
 		
-		Core::Memory::ObjectPtr<Window::WindowManager>		m_windowManager;
-		Core::Memory::ObjectPtr<EventSystem::EventManager>	m_eventManager;
-		Core::Memory::ObjectPtr<Graphics::GraphicsManager>	m_graphicsManager;
+		Window::WindowManager		m_windowManager;
+		EventSystem::EventManager	m_eventManager;
+		Graphics::GraphicsManager	m_graphicsManager;
 #ifdef _DEBUG
-		Core::Memory::ObjectPtr<Debug::DebugManager>			m_debugManager;
+		Debug::DebugManager			m_debugManager;
 #endif
 
-		Common::DateTime::Clock m_timeSinceUpdateClock;
-		Common::DateTime::Clock m_timeSinceRenderFrameClock;
+		Common::Clock m_timeSinceUpdateClock;
+		Common::Clock m_timeSinceRenderFrameClock;
 
-		uint32 m_deltaTime;
+		double m_deltaTime;
 		bool m_shutDown;
 
-		void SetEngineApplication(EngineApplicationRef appInstanceRef);
+		void SetEngineApplication(IEngineApplication& appInstanceRef);
 
 		void StartUp();
 		void ShutDown();
 
-		void EngineRun();
+		void EngineRun(IEngineApplication& appInstance);
 
-		void Update(const uint32 deltaTime);
+		void Update(const double deltaTime);
 		void RenderFrame();
 	};
 }

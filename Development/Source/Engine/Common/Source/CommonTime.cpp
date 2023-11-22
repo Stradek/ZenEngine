@@ -22,122 +22,38 @@ using std::chrono::duration_cast;
 	UInt32 is raw representation of Nanoseconds.
 */
 
-namespace Engine::Common::DateTime
+namespace Engine::Common
 {
-	TimeDetails Time::GetTimeDetails() const
+	double Time::GetHours() const
 	{
-		const uint32 rawTime = GetTimeRaw();
-		const TimeDetails timeDetails = RawTimeToTimeDetails(rawTime);
-
-		return timeDetails;
+		return GetNanoseconds() * NANOSECOND_TO_HOUR;
 	}
 
-	uint32 Time::GetTimeRaw() const
+	double Time::GetMinutes() const
 	{
-		return m_rawTime;
-	};
-
-
-	Time GetTime()
-	{
-		uint32 rawTime = GetTimeRaw();
-
-		Time currentTime = Time(rawTime);
-		return currentTime;
+		return GetNanoseconds() * NANOSECOND_TO_MINUTE;
 	}
 
-	extern uint32 GetTimeRaw()
+	double Time::GetSeconds() const
 	{
-		uint32 rawTimeNow = static_cast<uint32>(high_res_clock::now().time_since_epoch().count());
-		return rawTimeNow;
+		return GetNanoseconds() * NANOSECOND_TO_SECOND;
 	}
 
-
-	extern TimeDetails RawTimeToTimeDetails(const uint32& rawTime)
+	double Time::GetMilliseconds() const
 	{
-		uint32 rawTimeToMove = const_cast<uint32&>(rawTime);
-		TimeDetails timeDetails;
-
-		uint32 hoursInRawTime = static_cast<uint32>(rawTimeToMove / HOUR_TO_NANOSECONDS);
-		rawTimeToMove -= hoursInRawTime * HOUR_TO_NANOSECONDS;
-
-		uint32 minutesInRawTime = static_cast<uint32>(rawTimeToMove / MINUTE_TO_NANOSECONDS);
-		rawTimeToMove -= minutesInRawTime * MINUTE_TO_NANOSECONDS;
-
-		uint32 secondsInRawTime = static_cast<uint32>(rawTimeToMove / SECOND_TO_NANOSECONDS);
-		rawTimeToMove -= secondsInRawTime * SECOND_TO_NANOSECONDS;
-
-		uint32 milisecondsInRawTime = static_cast<uint32>(rawTimeToMove / MILISECOND_TO_NANOSECONDS);
-		rawTimeToMove -= milisecondsInRawTime * MILISECOND_TO_NANOSECONDS;
-
-		uint32 nanosecondsInRawTime = rawTimeToMove;
-
-		timeDetails.hours = hoursInRawTime;
-		timeDetails.minutes = minutesInRawTime;
-		timeDetails.seconds = secondsInRawTime;
-		timeDetails.miliseconds = milisecondsInRawTime;
-		timeDetails.nanoseconds = nanosecondsInRawTime;
-
-		return timeDetails;
+		return GetNanoseconds() * NANOSECOND_TO_MILLISECOND;
 	}
 
-	/*
-		To Double
-	*/
-
-	double NanosecondsToDouble(const nanoseconds durationInNanoseconds)
+	size_t Time::GetNanoseconds() const
 	{
-		const uint32 durationInNanoseconds_uint32 = NanosecondsToUInt32(durationInNanoseconds);
-		const double durationInSeconds = UInt32ToDouble(durationInNanoseconds_uint32);
-		return durationInSeconds;
+		return m_nanosecondsTime.count();
 	}
 
-	double UInt32ToDouble(const uint32 durationInNanoseconds)
+	Time GetTimeNow()
 	{
-		const double durationInSeconds = static_cast<double>(
-			durationInNanoseconds * NANOSECOND_TO_SECONDS
-		);
+		size_t timeSinceEpoch = high_res_clock::now().time_since_epoch().count();
 
-		return durationInSeconds;
-	}
-
-	/*
-		To Nanoseconds
-	*/
-
-	nanoseconds DoubleToNanoseconds(const double durationInSeconds)
-	{
-		const uint32 durationInUInt32 = DoubleToUInt32(durationInSeconds);
-		const nanoseconds durationInNanoseconds = UInt32ToNanoseconds(durationInUInt32);
-		return durationInNanoseconds;
-	}
-
-	nanoseconds UInt32ToNanoseconds(const uint32 durationInUInt32)
-	{
-		const nanoseconds durationInNanoseconds = nanoseconds_duration_from_uint32(
-			durationInUInt32
-		);
-
-		return durationInNanoseconds;
-	}
-
-	/*
-		To UInt32
-	*/
-
-	uint32 DoubleToUInt32(const double durationInSeconds)
-	{
-		const nanoseconds durationInNanoseconds = duration_cast<nanoseconds>(
-			seconds_duration_from_double(durationInSeconds)
-		);
-
-		const auto duration = NanosecondsToUInt32(durationInNanoseconds);
-		return static_cast<uint32>(duration);
-	}
-
-	uint32 NanosecondsToUInt32(const nanoseconds durationInNanoseconds)
-	{
-		const auto duration = durationInNanoseconds.count();
-		return static_cast<uint32>(duration);
+		Time timeNow = Time(timeSinceEpoch);
+		return timeNow;
 	}
 }

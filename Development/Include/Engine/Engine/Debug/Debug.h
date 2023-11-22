@@ -7,101 +7,75 @@
 
 #ifdef _DEBUG
 
-#include <Engine/Core/ISystem.h>
-#include <Engine/Core/Memory.h>
+#include "Engine/Core/ISystem.h"
 
 namespace Engine::Debug
 {
-	enum CounterType
-	{
-		CounterRaw,
-		CounterPerSecond
-	};
-
 	namespace Performance
 	{
-		struct StartFrameData
+		struct Counter
 		{
-			uint32 startTime;
-			bool isFinished = false;
+			size_t value = 0;
 		};
-
-		using NameToStartFrameData = std::unordered_map<std::string, StartFrameData>;
 
 		struct FrameData
 		{
-			FrameData() : startTime(0), endTime(0), duration(0) {};
+			Common::Time startTime = 0;
+			Common::Time endTime = 0;
 
-			uint32 startTime;
-			uint32 endTime;
-			uint32 duration;
+			bool IsValid() const { return startTime.GetRawTime() != 0; };
 		};
-		static constexpr size_t s_frameDataCircularBufferSize = 256;
+
+		struct PerformanceData
+		{
+			std::unordered_map<std::string, std::vector<FrameData>> frameData;
+			std::unordered_map<std::string, Counter> frameCounters;
+		};
 		
-		using FrameDataCircularBuffer = Core::Memory::CircularBuffer<FrameData, s_frameDataCircularBufferSize>;
-		using NameToFrameDataCircularBuffer = std::unordered_map<std::string, FrameDataCircularBuffer>;
-
-		using FrameDataBuffer = std::vector<FrameData>;
-		using NameToFrameDataBuffer = std::unordered_map<std::string, FrameDataBuffer>;
-
-		using NameToFrameData = std::unordered_map<std::string, FrameData>;
-		using NameToRawTime = std::unordered_map<std::string, uint32>;
-
-		using NameToCounter = std::unordered_map<std::string, uint32>;
-
 		class PerformanceProfiler
 		{
 		public:
-			PerformanceProfiler();
-
-			void UpdateCounterPerSecond();
-
-			void FrameProfilingStart(std::string functionName);
-			void FrameProfilingEnd(std::string functionName);
-
-			void IncrementCounter(std::string functionName, uint32 count);
-
-			NameToRawTime GetAvgFrameTimingData();
-			uint32 GetCounterValue(CounterType counterType, std::string functionName);
-
-		private:
-			std::unique_ptr<NameToStartFrameData> m_nameToStartFrameData;
-			std::unique_ptr<NameToFrameDataCircularBuffer> m_nameToFrameDataCircularBuffer;
-
-			std::shared_ptr<NameToCounter> m_nameToCounterRaw;
-			std::shared_ptr<NameToCounter> m_nameToCounterPerSecond;
+			PerformanceProfiler() {};
 			
-			std::shared_ptr<NameToCounter> m_nameToCounterLastSecond;
+			void AddFrameStart(const char* const name);
+			void AddFrameEnd(const char* const name);
+			void IncreaseCounter(const char* const name);
 
-			NameToFrameDataBuffer GetFrameProfilingData();
+			PerformanceData PopData();
+		private:
+			PerformanceData m_performanceData;
+			std::unordered_map<std::string, FrameData> m_frameDataInProgress;
+			
+			bool IsFrameFinished(const FrameData& frameData) const;
+
+			PerformanceData GetPerformanceData();
+			void ResetFinishedData();
 		};
 	}
-
-	using PerformanceProfilerRef = Core::Memory::ScopedObjectPtr<Performance::PerformanceProfiler>&;
 
 	class DebugManager : Engine::Core::ISystem
 	{
 	public:
 		DebugManager();
 
-		void StartUp() override;
-		void ShutDown() override;
-
 		Performance::PerformanceProfiler& GetPerformanceProfiler() { return m_performanceProfiler; };
 
-		void StartPerformanceProfiler();
-
-		void Update(const uint32 deltaTime) override;
-
+		void StartUp() override;
+		void ShutDown() override;
+		
+		void Update(const double deltaTime) override;
+		
+		void StartDebugManagerClock();
 	private:
 		Performance::PerformanceProfiler m_performanceProfiler;
 
-		const Common::DateTime::Time m_debugInfoUpdateFrequency;
-		Common::DateTime::Clock m_debugUpdateClock;
-		bool m_shouldLogStats;
+		const Common::Time m_debugInfoRefreshTime;
+		Common::Clock m_debugUpdateClock;
 
-		void LogProfilingInfo(const uint32 deltaTime);
+		void LogPerformanceInfo(const double deltaTime);
 		void LogMemoryInfo();
+
+		Common::Time CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter);
 	};
 }
 

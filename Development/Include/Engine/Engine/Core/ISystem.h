@@ -15,7 +15,7 @@ namespace Engine::Core
 		ISystem() {}
 		virtual void StartUp() = 0;
 
-		virtual void Update(const uint32 deltaTime) {};
+		virtual void Update(const double deltaTime) {};
 		virtual void Render() {};
 
 		virtual void ShutDown() = 0;

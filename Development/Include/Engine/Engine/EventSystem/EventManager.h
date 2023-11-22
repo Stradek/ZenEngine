@@ -5,9 +5,7 @@
 
 #pragma once
 
-#include <Engine/Core/ISystem.h>
-
-#include <SDL.h>
+#include "Engine/Core/ISystem.h"
 
 namespace Engine::EventSystem 
 {
