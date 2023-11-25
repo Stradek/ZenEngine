@@ -3,14 +3,14 @@
 	Software distributed under the permissive MIT License.
 */
 
-#include "Engine/GameEngine.h"
+#include "GameEngine.h"
 
-#include "Engine/IEngineApplication.h"
-#include "Engine/Core/Config.h"
-#include "Engine/Core/ProfilingMacros.h"
+#include "IEngineApplication.h"
+#include "Core/Config.h"
+#include "Core/ProfilingMacros.h"
 
 #ifdef _DEBUG
-#include "Engine/Debug/Debug.h"
+#include "Debug/Debug.h"
 #endif
 
 namespace Engine

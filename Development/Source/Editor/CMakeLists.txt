@@ -9,9 +9,7 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Editor)
-
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Executable
@@ -22,7 +20,8 @@ add_executable(Editor
 )
 
 target_include_directories(Editor PRIVATE
-    ${INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
 #

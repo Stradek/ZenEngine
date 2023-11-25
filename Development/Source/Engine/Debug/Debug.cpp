@@ -7,7 +7,7 @@
 
 #include "Debug.h"
 
-#include "TracingFunctionNames.h"
+#include "Common/TracingFunctionNames.h"
 
 namespace Engine::Debug
 {

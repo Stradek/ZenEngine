@@ -6,12 +6,12 @@
 #pragma once
 
 #ifdef _DEBUG
-#include "Engine/Debug/Debug.h"
+#include "Debug/Debug.h"
 #endif // _DEBUG
 
-#include "Engine/WindowManagement/WindowManager.h"
-#include "Engine/Graphics/GraphicsManager.h"
-#include "Engine/EventSystem/EventManager.h"
+#include "WindowManagement/WindowManager.h"
+#include "Graphics/GraphicsManager.h"
+#include "EventSystem/EventManager.h"
 
 class IEngineApplication;
 

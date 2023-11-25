@@ -7,7 +7,7 @@
 
 #ifdef _DEBUG
 
-#include "Engine/Core/ISystem.h"
+#include "Core/ISystem.h"
 
 namespace Engine::Debug
 {

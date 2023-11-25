@@ -5,16 +5,14 @@
 
 #pragma once
 
-#include "Engine/Core/ISystem.h"
+#include "Core/ISystem.h"
 
-namespace Engine::EventSystem 
+namespace Engine::Graphics
 {
-	class EventManager : Core::ISystem
+	class GraphicsManager : Core::ISystem
 	{
 	public:
 		void StartUp() override;
 		void ShutDown() override;
-
-		void Update();
 	};
 }

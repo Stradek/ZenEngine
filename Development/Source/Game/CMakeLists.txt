@@ -18,9 +18,7 @@ include_guard(GLOBAL)
 # In case I will change my mind it's worth looking into.    #
 #############################################################
 
-set(INCLUDE_DIR ${MAIN_INCLUDE_DIR}/Game)
-
-get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 1 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Executable
@@ -31,7 +29,7 @@ add_executable(Game
 )
 
 target_include_directories(Game PRIVATE
-    ${INCLUDE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
 #
