@@ -5,7 +5,7 @@
 
 #pragma once
 
-#include "Engine/Core/ISystem.h"
+#include "Core/ISystem.h"
 
 #include <SDL.h>
 

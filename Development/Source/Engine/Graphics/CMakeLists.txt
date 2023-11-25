@@ -9,9 +9,7 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Graphics)
-
-get_all_target_files(TARGET_FILES 1 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 1 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Library
@@ -22,7 +20,7 @@ add_library(Graphics STATIC
 )
 
 target_include_directories(Graphics PRIVATE
-    ${INCLUDE_DIR}
+    ${ENGINE_SOURCE_DIR}
 )
 
 #

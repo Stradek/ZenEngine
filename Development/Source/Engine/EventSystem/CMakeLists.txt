@@ -9,9 +9,7 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/EventSystem)
-
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Library
@@ -22,7 +20,7 @@ add_library(EventSystem STATIC
 )
 
 target_include_directories(EventSystem PRIVATE
-    ${INCLUDE_DIR}
+    ${ENGINE_SOURCE_DIR}
 )
 
 #

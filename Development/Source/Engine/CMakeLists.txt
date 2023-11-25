@@ -13,18 +13,10 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(INCLUDE_DIR
-    ${MAIN_INCLUDE_DIR}/Engine
-)
+set(ENGINE_PRECOMPILED_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h")
+set(ENGINE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}")
 
-# This one is needed for Core subsystem to link it to every other subsystem
-# then every linked project include in engine systems needs start with <Engine/...>
-set(ENGINE_INCLUDE_DIR_CORE ${INCLUDE_DIR})
-
-set(ENGINE_INTERNAL_INCLUDE_DIR ${INCLUDE_DIR}/Engine)
-
-get_all_target_files(TARGET_FILES 0 ${ENGINE_INTERNAL_INCLUDE_DIR})
-
+get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Include Dependencies
@@ -45,8 +37,8 @@ add_library(Engine STATIC
     "${TARGET_FILES}"
 )
 
-target_include_directories(Engine PUBLIC
-    ${INCLUDE_DIR}
+target_include_directories(Engine PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(Engine PUBLIC 

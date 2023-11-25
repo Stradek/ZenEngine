@@ -154,9 +154,9 @@ function(custom_cmake_setup)
     endfunction()
 
     # Search source and header files in given directory
-    function(get_all_target_files RESULT_VAR USE_RECURSE INCLUDE_DIR)
-        get_source_files(TARGET_SOURCE_FILES ${USE_RECURSE} "${CMAKE_CURRENT_SOURCE_DIR}/Source")
-        get_header_files(TARGET_HEADER_FILES ${USE_RECURSE} "${INCLUDE_DIR}")
+    function(get_all_target_files RESULT_VAR USE_RECURSE DIRECTORY)
+        get_source_files(TARGET_SOURCE_FILES ${USE_RECURSE} "${DIRECTORY}")
+        get_header_files(TARGET_HEADER_FILES ${USE_RECURSE} "${DIRECTORY}")
 
         set(${RESULT_VAR} 
             "${TARGET_SOURCE_FILES}"
