@@ -9,9 +9,7 @@ include_guard(GLOBAL)
 # Files
 #
 
-set(INCLUDE_DIR ${ENGINE_INTERNAL_INCLUDE_DIR}/Debug)
-
-get_all_target_files(TARGET_FILES 0 ${INCLUDE_DIR})
+get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Library
@@ -22,7 +20,7 @@ add_library(Debug STATIC
 )
 
 target_include_directories(Debug PRIVATE
-    ${INCLUDE_DIR}
+    ${ENGINE_SOURCE_DIR}
 )
 
 #

@@ -9,7 +9,7 @@ include_guard(GLOBAL)
 # Configuration
 #
 
-set(ENGINE_PRECOMILED_HEADER ${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h)
+set(PROJECT_SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
 # Engine Library

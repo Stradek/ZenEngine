@@ -5,8 +5,8 @@
 
 #include "EventManager.h"
 
-#include "Engine/GameEngine.h"
-#include "Engine/WindowManagement/WindowManager.h"
+#include "GameEngine.h"
+#include "WindowManagement/WindowManager.h"
 
 #include <SDL.h>
 

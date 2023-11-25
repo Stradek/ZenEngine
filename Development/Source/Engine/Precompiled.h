@@ -39,5 +39,5 @@
 	Common Precompiled Headers
 */
 
-#include <Common.h>
-#include <Engine/Core/Log.h>
+#include "Common/Common.h"
+#include "Core/Log.h"
