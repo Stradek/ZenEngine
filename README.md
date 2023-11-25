@@ -10,8 +10,8 @@ Zen Engine is my hobbyist long-term C++ game engine project, a testament to my p
 All systems are subject to change in the future.
 
 # Key Features
-  - custom memory allocation management
-  - decoupled game, editor, and engine projects and systems
+  - custom memory allocators
+  - decoupled game and editor projects, as well as engine and it's systems
   - custom, in-engine runtime performance measurement system
   - simple cmake setup
   - tracy integration
@@ -19,7 +19,7 @@ All systems are subject to change in the future.
 
 # Project Objectives
   - (In Progress) Memory Management: Implement memory management with custom memory allocators: GeneralAllocator, SlabAllocator, PoolAllocator...
-  - Multithreading: Develop a sophisticated multithreaded job system.
+  - Multithreading: Develop simple job system.
   - Game Genre: Create a 2D platformer game.
   - Core Game Mechanics: Implement jumping, running at constant speed, and collecting points.
   - Game Level Design: Design levels with straightforward platform layouts, combining horizontal and vertical segments. Emulate classic arcade gaming simplicity.
@@ -38,11 +38,10 @@ All systems are subject to change in the future.
 
 # Repositiory Directory Structure
 * Binaries/ - compilation artifacts(libraries and symbolos) and executables
-* Build/CMake-*/ - project build directory
+* Build/ - project build directory
 * Development/ - Zen Engine and Game development related directory
 * Development/External - external libraries
 * Development/Internal - internal libraries and tools
-* Development/Include - Zen Engine and Game headers code
 * Development/Scripts - automation scripts supporting development process
 * Development/Source - Zen Engine and Game source code
 
