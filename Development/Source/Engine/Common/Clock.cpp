@@ -24,24 +24,24 @@ namespace Engine::Common
 	{
 		assert(m_isRunning);
 		
-		m_endTime = GetTimeNow();
+		m_endTime = Time::GetTimeNow();
 		return Time::Duration(m_startTime, m_endTime);
 	}
 
 	void Clock::Start()
 	{
-		m_startTime = GetTimeNow();
+		m_startTime = Time::GetTimeNow();
 		m_isRunning = true;
 	}
 	void Clock::Stop()
 	{
-		m_endTime = GetTimeNow();
+		m_endTime = Time::GetTimeNow();
 		m_isRunning = false;
 	}
 
 	void Clock::Reset()
 	{
-		m_startTime = GetTimeNow();
+		m_startTime = Time::GetTimeNow();
 	}
 
 	Time Clock::GetStartTime()

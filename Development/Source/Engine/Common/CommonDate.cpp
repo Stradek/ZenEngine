@@ -7,6 +7,15 @@
 
 namespace Engine::Common
 {
+	Date Date::GetCurrentDate()
+	{
+		auto now = std::chrono::system_clock::now();
+		std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
+
+		Date date(timeNow);
+		return date;
+	}
+
 	Date::Date(std::time_t timeNow)
 	{
 		localtime_s(&m_timeInfo, &timeNow);
@@ -25,14 +34,5 @@ namespace Engine::Common
 	size_t Date::GetDay() const
 	{
 		return m_timeInfo.tm_mday;
-	}
-
-	Date GetCurrentDate()
-	{
-		auto now = std::chrono::system_clock::now();
-		std::time_t timeNow = std::chrono::system_clock::to_time_t(now);
-
-		Date date(timeNow);
-		return date;
 	}
 }

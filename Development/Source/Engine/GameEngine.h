@@ -29,6 +29,7 @@ namespace Engine
 		static void DestroyInstance();
 
 		static void Run(IEngineApplication& appInstanceRef);
+		void Close();
 
 		Window::WindowManager& GetWindowManager() { return m_windowManager; }
 		EventSystem::EventManager& GetEventManager() { return m_eventManager; }
@@ -36,8 +37,6 @@ namespace Engine
 #ifdef _DEBUG
 		Debug::DebugManager& GetDebugManager() { return m_debugManager; }
 #endif
-
-		void Close();
 
 	private:
 		static GameEngine* m_instance;

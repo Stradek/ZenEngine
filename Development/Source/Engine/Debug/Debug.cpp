@@ -19,7 +19,7 @@ namespace Engine::Debug
 			assert(m_frameDataInProgress[name].IsValid() == false);
 
 			FrameData newFrameData;
-			newFrameData.startTime = Common::GetTimeNow();
+			newFrameData.startTime = Common::Time::GetTimeNow();
 
 			m_frameDataInProgress[name] = newFrameData;
 		}
@@ -27,7 +27,7 @@ namespace Engine::Debug
 		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
 			FrameData& frameDataToFinish = m_frameDataInProgress.at(name);
-			frameDataToFinish.endTime = Common::GetTimeNow();
+			frameDataToFinish.endTime = Common::Time::GetTimeNow();
 
 			m_performanceData.frameData[name].push_back(frameDataToFinish);
 
@@ -69,7 +69,7 @@ namespace Engine::Debug
 	}
 
 	DebugManager::DebugManager() :
-		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECONDS),
+		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECOND),
 		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
 

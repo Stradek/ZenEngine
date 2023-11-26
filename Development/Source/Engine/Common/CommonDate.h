@@ -12,6 +12,8 @@ namespace Engine::Common
 	public:
 		Date(std::time_t timeNow);
 
+		static Date GetCurrentDate();
+
 		size_t GetYear() const;
 		size_t GetMonth() const;
 		size_t GetDay() const;
@@ -19,5 +21,4 @@ namespace Engine::Common
 		tm m_timeInfo;
 	};
 
-	extern Date GetCurrentDate();
 }
