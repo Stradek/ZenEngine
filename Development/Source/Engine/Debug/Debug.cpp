@@ -116,7 +116,7 @@ namespace Engine::Debug
 		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
 		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
 		
-		const char* performanceLoggingInfoString =	
+		const char* performanceLoggingInfoString =	"\n"
 			"Counters:\n"
 			"Frames per Second(FPS): \t\t{}\n"
 			"Engine Updates per Second: \t\t{}\n"
