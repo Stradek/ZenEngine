@@ -12,12 +12,13 @@ namespace Engine::Common
 	public:
 		Date(std::time_t timeNow);
 
+		static Date GetCurrentDate();
+
 		size_t GetYear() const;
 		size_t GetMonth() const;
 		size_t GetDay() const;
 	private:
-		tm m_timeInfo;
+		tm m_dateTimeInfo;
 	};
 
-	extern Date GetCurrentDate();
 }

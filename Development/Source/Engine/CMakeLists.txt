@@ -24,6 +24,8 @@ get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 add_subdirectory("Common")
 add_subdirectory("Core")
+
+add_subdirectory("Memory")
 add_subdirectory("Debug")
 add_subdirectory("WindowManagement")
 add_subdirectory("Graphics")

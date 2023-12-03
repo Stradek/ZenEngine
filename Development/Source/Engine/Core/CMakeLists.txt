@@ -12,11 +12,15 @@ include_guard(GLOBAL)
 get_all_target_files(TARGET_FILES 0 ${CMAKE_CURRENT_SOURCE_DIR})
 
 #
+# Include Dependencies
+#
+
+
+#
 # Library
 #
 
-add_library(Core
-    STATIC
+add_library(Core STATIC
     "${TARGET_FILES}"
 )
 
