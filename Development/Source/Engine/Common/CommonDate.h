@@ -18,7 +18,7 @@ namespace Engine::Common
 		size_t GetMonth() const;
 		size_t GetDay() const;
 	private:
-		tm m_timeInfo;
+		tm m_dateTimeInfo;
 	};
 
 }

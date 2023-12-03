@@ -16,23 +16,23 @@ namespace Engine::Common
 		return date;
 	}
 
-	Date::Date(std::time_t timeNow)
+	Date::Date(tm dateTimeInfo)
 	{
-		localtime_s(&m_timeInfo, &timeNow);
+		m_dateTimeInfo = dateTimeInfo;
 	}
 
 	size_t Date::GetYear() const
 	{
-		return m_timeInfo.tm_year + 1900;
+		return m_dateTimeInfo.tm_year + 1900;
 	}
 
 	size_t Date::GetMonth() const
 	{
-		return m_timeInfo.tm_mon + 1;
+		return m_dateTimeInfo.tm_mon + 1;
 	}
 
 	size_t Date::GetDay() const
 	{
-		return m_timeInfo.tm_mday;
+		return m_dateTimeInfo.tm_mday;
 	}
 }
