@@ -19,8 +19,8 @@ namespace Engine::Core
 		static void Init();
 		static void Close();
 
-		inline static LoggerRef Log::GetEngineLogger() { return s_engineLogger; }
-		inline static LoggerRef Log::GetGameLogger() { return s_gameLogger; }
+		inline static LoggerRef GetEngineLogger() { return s_engineLogger; }
+		inline static LoggerRef GetGameLogger() { return s_gameLogger; }
 
 		using OutputSink = spdlog::sinks::stdout_color_sink_mt;
 		using FileSink = spdlog::sinks::basic_file_sink_mt;

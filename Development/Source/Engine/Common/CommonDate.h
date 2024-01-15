@@ -5,20 +5,13 @@
 
 #pragma once
 
+#include <chrono>
+
 namespace Engine::Common
 {
-	class Date
-	{
-	public:
-		Date(std::time_t timeNow);
-
-		static Date GetCurrentDate();
-
-		size_t GetYear() const;
-		size_t GetMonth() const;
-		size_t GetDay() const;
-	private:
-		tm m_dateTimeInfo;
-	};
-
+    class Date
+    {
+    public:
+        static tm GetLocalTime();
+    };
 }

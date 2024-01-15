@@ -4,7 +4,6 @@
 */
 
 #include "Clock.h"
-#include "CommonTime.h"
 
 #include <assert.h>
 
@@ -12,44 +11,41 @@ using std::chrono::duration_cast;
 
 namespace Engine::Common
 {
-	Clock::Clock() : m_startTime(0), m_endTime(0), m_isRunning(false) {}
+	Clock::Clock() : m_startTime(), m_endTime(), m_isRunning(false) {}
 	Clock::~Clock() {}
 
 	bool Clock::IsRunning()
 	{
 		return m_isRunning;
 	}
-
-	Time Clock::GetDuration()
-	{
-		assert(m_isRunning);
 		
-		m_endTime = Time::GetTimeNow();
-		return Time::Duration(m_startTime, m_endTime);
-	}
-
 	void Clock::Start()
 	{
 		m_startTime = Time::GetTimeNow();
 		m_isRunning = true;
 	}
+
 	void Clock::Stop()
 	{
 		m_endTime = Time::GetTimeNow();
 		m_isRunning = false;
 	}
 
-	void Clock::Reset()
+	Time::Duration Clock::GetDuration()
 	{
-		m_startTime = Time::GetTimeNow();
+		assert(!m_isRunning);
+		assert(m_startTime != Time::TimePoint::min());
+		assert(m_endTime != Time::TimePoint::min());
+		
+		return m_endTime - m_startTime;
 	}
 
-	Time Clock::GetStartTime()
+	Time::TimePoint Clock::GetStartTime()
 	{
 		return m_startTime;
 	}
 
-	Time Clock::GetEndTime()
+	Time::TimePoint Clock::GetEndTime()
 	{
 		return m_endTime;
 	}

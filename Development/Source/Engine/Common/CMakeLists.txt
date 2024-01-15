@@ -24,14 +24,6 @@ target_include_directories(Common PUBLIC
 )
 
 #
-# Precompiled Headers
-#
-
-target_precompile_headers(Common PRIVATE
-    "${CMAKE_CURRENT_SOURCE_DIR}/Precompiled.h"
-)
-
-#
 # Visual Studio Configuration
 #
 

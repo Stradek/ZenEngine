@@ -20,10 +20,10 @@ namespace Engine::Debug
 
 		struct FrameData
 		{
-			Common::Time startTime = 0;
-			Common::Time endTime = 0;
+			Engine::Common::Time::TimePoint startTime{};
+			Engine::Common::Time::TimePoint endTime{};
 
-			bool IsValid() const { return startTime.GetRawTime() != 0; };
+			bool IsValid() const { return startTime != Engine::Common::Time::TimePoint::min(); };
 		};
 
 		struct PerformanceData
@@ -69,13 +69,13 @@ namespace Engine::Debug
 	private:
 		Performance::PerformanceProfiler m_performanceProfiler;
 
-		const Common::Time m_debugInfoRefreshTime;
+		const std::chrono::high_resolution_clock::duration m_debugInfoRefreshTime;
 		Common::Clock m_debugUpdateClock;
 
 		void LogPerformanceInfo(const double deltaTime);
 		void LogMemoryInfo();
 
-		Common::Time CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter);
+		Common::Time::Duration CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter);
 	};
 }
 

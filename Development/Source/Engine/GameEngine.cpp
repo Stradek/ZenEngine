@@ -126,21 +126,27 @@ namespace Engine
 
 		while (!m_shutDown)
 		{
-			if (m_timeSinceUpdateClock.GetDuration().GetSeconds() >= Core::Config::m_targetUpdateFrequency)
+			m_timeSinceUpdateClock.Stop();
+
+			float secondsSinceUpdate = Common::Time::DurationCast<float, Common::Time::Miliseconds>(m_timeSinceUpdateClock.GetDuration());
+			if (secondsSinceUpdate >= Core::Config::m_targetUpdateFrequency)
 			{
  				Update(m_deltaTime);
 
-				m_timeSinceUpdateClock.Reset();
+				m_timeSinceUpdateClock.Start();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration().GetSeconds() >= Core::Config::m_targetRenderFrameFrequency)
+			m_timeSinceRenderFrameClock.Stop();
+
+			float secondsSinceRenderFrame = Common::Time::DurationCast<float, Common::Time::Miliseconds>(m_timeSinceRenderFrameClock.GetDuration());
+			if (secondsSinceRenderFrame >= Core::Config::m_targetRenderFrameFrequency)
 			{
-				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration().GetSeconds();
+				m_deltaTime = secondsSinceRenderFrame;
 
 				RenderFrame();
 				ENGINE_FRAME_MARK();
 				
-				m_timeSinceRenderFrameClock.Reset();
+				m_timeSinceRenderFrameClock.Start();
 			}
 		}
 

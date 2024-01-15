@@ -25,10 +25,10 @@ namespace Engine::Core
 
 	void Log::Init()
 	{
-		const Common::Date currentDate = Common::Date::GetCurrentDate();
-		const Common::Time currentTime = Common::Time::GetTimeNow();
+		const tm localtime = Common::Date::GetLocalTime();
+		const std::chrono::high_resolution_clock::time_point currentTime = Common::Time::GetTimeNow();
 
-		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", currentDate.GetYear(), currentDate.GetMonth(), currentDate.GetDay(), currentTime.GetHours(), currentTime.GetMinutes(), currentTime.GetSeconds());
+		const std::string datetimeString = fmt::format("{}-{}-{}-{}-{}-{}", localtime.tm_year, localtime.tm_mon, localtime.tm_mday, localtime.tm_hour, localtime.tm_min, localtime.tm_sec);
 
 		const std::string engineLogFilename = fmt::format("engine-{}.log", datetimeString);
 		const std::filesystem::path engineLogPath = engineLogDirectoryPath / engineLogFilename;
