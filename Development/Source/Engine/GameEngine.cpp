@@ -5,7 +5,6 @@
 
 #include "GameEngine.h"
 
-#include "IEngineApplication.h"
 #include "Core/Config.h"
 #include "Core/ProfilingMacros.h"
 
@@ -49,7 +48,7 @@ namespace Engine
 
 	GameEngine::GameEngine() :
 		m_appInstance(nullptr),
-		m_deltaTime(Core::Config::m_targetRenderFrameFrequency),
+		m_deltaTime(Core::Config::m_targetRenderingFrameFrequency),
 		m_shutDown(false)
 	{
 	}
@@ -92,7 +91,7 @@ namespace Engine
 #endif
 	}
 
-	void GameEngine::Update(const double deltaTime)
+	void GameEngine::Update(const Common::Time::Duration deltaTime)
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
@@ -128,7 +127,7 @@ namespace Engine
 		{
 			m_timeSinceUpdateClock.Stop();
 
-			float secondsSinceUpdate = Common::Time::DurationCast<float, Common::Time::Miliseconds>(m_timeSinceUpdateClock.GetDuration());
+			Common::Time::Duration secondsSinceUpdate = m_timeSinceUpdateClock.GetDuration();
 			if (secondsSinceUpdate >= Core::Config::m_targetUpdateFrequency)
 			{
  				Update(m_deltaTime);
@@ -138,8 +137,8 @@ namespace Engine
 
 			m_timeSinceRenderFrameClock.Stop();
 
-			float secondsSinceRenderFrame = Common::Time::DurationCast<float, Common::Time::Miliseconds>(m_timeSinceRenderFrameClock.GetDuration());
-			if (secondsSinceRenderFrame >= Core::Config::m_targetRenderFrameFrequency)
+			Common::Time::Duration secondsSinceRenderFrame = m_timeSinceRenderFrameClock.GetDuration();
+			if (secondsSinceRenderFrame >= Core::Config::m_targetRenderingFrameFrequency)
 			{
 				m_deltaTime = secondsSinceRenderFrame;
 

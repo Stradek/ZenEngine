@@ -7,8 +7,23 @@
 
 namespace Engine::Common
 {
-    Time::TimePoint Time::GetTimeNow()
+    TimePoint TimePoint::GetTimeNow()
     {
-        return Clock::now();
+        TimePoint timeStruct();
+        return ChronoHighResClock::now();
+    }
+    
+    uint Duration::GetSeconds()
+    {
+        return m_duration.count() / 1,000,000,000;
+    }
+
+    uint Duration::GetMilliseconds()
+    {
+        return m_duration.count() / 1,000,000;
+    }
+    uint Duration::GetNanoseconds()
+    {
+        return m_duration.count();
     }
 }

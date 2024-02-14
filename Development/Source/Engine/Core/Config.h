@@ -7,13 +7,12 @@
 
 namespace Engine::Core
 {
-	class Config
+	struct Config
 	{
-	public:
-		static constexpr size_t Config::m_targetUpdatesPerSecond = 20;
-		static constexpr size_t Config::m_targetLockedFramesPerSecond = 60;
+		static constexpr size_t m_targetUpdatesPerSecond = 20;
+		static constexpr size_t m_targetRenderedFramesPerSecond = 60;
 
-		static constexpr double Config::m_targetUpdateFrequency = 1.0 / m_targetUpdatesPerSecond;
-		static constexpr double Config::m_targetRenderFrameFrequency = 1.0 / m_targetLockedFramesPerSecond;
+		static constexpr Common::Time::Duration m_targetUpdateFrequency(Common::Time::Seconds(1).count() / m_targetRenderedFramesPerSecond);
+		static constexpr Common::Time::Duration m_targetRenderingFrameFrequency(Common::Time::Seconds(1).count() / m_targetRenderedFramesPerSecond);
 	};
 }

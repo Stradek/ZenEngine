@@ -20,10 +20,10 @@ namespace Engine::Debug
 
 		struct FrameData
 		{
-			Engine::Common::Time::TimePoint startTime{};
-			Engine::Common::Time::TimePoint endTime{};
+			Engine::Common::Time::TimePoint startTime;
+			Engine::Common::Time::TimePoint endTime;
 
-			bool IsValid() const { return startTime != Engine::Common::Time::TimePoint::min(); };
+			bool IsValid() const { return startTime.time_since_epoch() != Engine::Common::Time::Duration::zero(); };
 		};
 
 		struct PerformanceData
@@ -63,7 +63,7 @@ namespace Engine::Debug
 		void StartUp() override;
 		void ShutDown() override;
 		
-		void Update(const double deltaTime) override;
+		void Update(const Common::Time::Duration deltaTime) override;
 		
 		void StartDebugManagerClock();
 	private:
@@ -72,7 +72,7 @@ namespace Engine::Debug
 		const std::chrono::high_resolution_clock::duration m_debugInfoRefreshTime;
 		Common::Clock m_debugUpdateClock;
 
-		void LogPerformanceInfo(const double deltaTime);
+		void LogPerformanceInfo(const Common::Time::Duration deltaTime);
 		void LogMemoryInfo();
 
 		Common::Time::Duration CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter);

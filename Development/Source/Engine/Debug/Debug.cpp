@@ -16,7 +16,7 @@ namespace Engine::Debug
 
 		void PerformanceProfiler::AddFrameStart(const char* const name)
 		{
-			assert(m_frameDataInProgress[name].IsValid() == false);
+			assert(!m_frameDataInProgress[name].IsValid());
 
 			FrameData newFrameData;
 			newFrameData.startTime = Common::Time::GetTimeNow();
@@ -97,13 +97,13 @@ namespace Engine::Debug
 		Common::Time::Duration frameDurationSum{};
 		for (const Performance::FrameData& frameData : frameDataList)
 		{
-			frameDurationSum += frameData.startTime - frameData.endTime;
+			frameDurationSum += frameData.endTime - frameData.startTime;
 		}
 
 		return frameDurationSum / frameCounter;
 	}
 
-	void DebugManager::LogPerformanceInfo(const double deltaTime)
+	void DebugManager::LogPerformanceInfo(const Common::Time::Duration deltaTime)
 	{
 		Performance::PerformanceData performanceData = GetPerformanceProfiler().PopData();
 
@@ -128,16 +128,18 @@ namespace Engine::Debug
 			"Render Frame: \t\t\t{:.4f}\n"
 			"===========================================\n";
 
-		float engineUpdateAvgDurationMilliseconds = Common::Time::DurationCast<float, Common::Time::Miliseconds>(engineUpdateAvgDuration);
-		float renderFrameAvgDurationMilliseconds = Common::Time::DurationCast<float, Common::Time::Miliseconds>(renderFrameAvgDuration);
+		const double deltaTimeMiliseconds = Common::Time::CastDurationToDouble<std::milli>(deltaTime);
 
-		ENGINE_LOG(performanceLoggingInfoString,
-			renderFrameCounter, engineUpdateCounter,
-			deltaTime * 1000, engineUpdateAvgDurationMilliseconds, renderFrameAvgDurationMilliseconds);
+		const double engineUpdateAvgDurationMilliseconds = Common::Time::CastDurationToDouble<std::milli>(engineUpdateAvgDuration);
+		const double renderFrameAvgDurationMilliseconds = Common::Time::CastDurationToDouble<std::milli>(renderFrameAvgDuration);
+
+		ENGINE_LOG(performanceLoggingInfoString,renderFrameCounter, engineUpdateCounter, 
+			deltaTimeMiliseconds, engineUpdateAvgDurationMilliseconds, renderFrameAvgDurationMilliseconds);
 	}
 
-	void DebugManager::Update(const double deltaTime)
+	void DebugManager::Update(const Common::Time::Duration deltaTime)
 	{
+		m_debugUpdateClock.Stop();
 		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
 		{
 			LogPerformanceInfo(deltaTime);

@@ -9,15 +9,16 @@
 #include "Debug/Debug.h"
 #endif // _DEBUG
 
+#include "IEngineApplication.h"
+
 #include "WindowManagement/WindowManager.h"
 #include "Graphics/GraphicsManager.h"
 #include "EventSystem/EventManager.h"
 
-class IEngineApplication;
 
 namespace Engine 
 {
-	class GameEngine
+	class GameEngine : Core::ISystem
 	{
 	public:
 		GameEngine(GameEngine& m_gameEngine) = delete;
@@ -53,7 +54,7 @@ namespace Engine
 		Common::Clock m_timeSinceUpdateClock;
 		Common::Clock m_timeSinceRenderFrameClock;
 
-		double m_deltaTime;
+		Common::Time::Duration m_deltaTime;
 		bool m_shutDown;
 
 		void SetEngineApplication(IEngineApplication& appInstanceRef);
@@ -63,7 +64,7 @@ namespace Engine
 
 		void EngineRun(IEngineApplication& appInstance);
 
-		void Update(const double deltaTime);
+		void Update(const Common::Time::Duration deltaTime);
 		void RenderFrame();
 	};
 }

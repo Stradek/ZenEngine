@@ -34,8 +34,8 @@ namespace Engine::Common
 	Time::Duration Clock::GetDuration()
 	{
 		assert(!m_isRunning);
-		assert(m_startTime != Time::TimePoint::min());
-		assert(m_endTime != Time::TimePoint::min());
+		assert(!m_startTime.IsZero());
+		assert(!m_endTime.IsZero());
 		
 		return m_endTime - m_startTime;
 	}

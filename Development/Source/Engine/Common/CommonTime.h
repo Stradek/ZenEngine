@@ -5,34 +5,48 @@
 
 #pragma once
 
+#include "Defines.h"
+
 #include <chrono>
 
 namespace Engine::Common
 {
-    struct Time
+    using ChronoHighResClock = std::chrono::high_resolution_clock;
+    using ChronoTimePoint = std::chrono::time_point<ChronoHighResClock>;
+    using ChronoDuration = std::chrono::duration<uint64_t, std::nano>;
+
+    namespace Time
     {
-        using Clock = std::chrono::high_resolution_clock;
-        using Duration = Clock::duration;
-        using TimePoint = Clock::time_point;
-
-        using Seconds = std::chrono::seconds;
-        using Miliseconds = std::chrono::milliseconds;
-        using Microseconds = std::chrono::microseconds;
-        using Nanoseconds = std::chrono::nanoseconds;
-        
-        template<class DurationUnit>
-        static DurationUnit DurationCast(const Duration& d)
+        class Duration
         {
-            return std::chrono::duration_cast<DurationUnit>(d);
-        }
+        public:
+            Duration() = default;
+            Duration(const Duration& d) = default;
+            Duration(const ChronoDuration& duration) : m_duration(duration) {}
 
-        template<typename ReturnType, class DurationUnit>
-        static ReturnType DurationCast(const Duration& d)
+            uint GetSeconds();
+            uint GetMilliseconds();
+            uint GetNanoseconds();
+
+        private:
+            ChronoDuration m_duration;
+        };
+
+        struct TimePoint
         {
-            DurationUnit duration = std::chrono::duration_cast<DurationUnit>(d);
-            return duration.count();
-        }
+        public:
+            TimePoint() = default;
+            TimePoint(const TimePoint& t) = default;
+            TimePoint(const ChronoTimePoint& timepoint) : m_timepoint(timepoint) {}
+
+            Duration operator-(const TimePoint& t) const { return Duration(m_timepoint - t.m_timepoint); }
+
+            bool IsZero() const { return m_timepoint.time_since_epoch() == ChronoDuration::zero(); }
+            
+        private:
+            ChronoTimePoint m_timepoint;
+        };
 
         static TimePoint GetTimeNow();
-    };
+    }
 }
