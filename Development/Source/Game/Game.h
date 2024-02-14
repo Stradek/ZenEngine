@@ -7,10 +7,10 @@
 
 #include "Engine/IEngineApplication.h"
 
-class Game : public IEngineApplication
+class Game : public Engine::IEngineApplication
 {
 public:
 	void StartUp() override;
-	void Update(const double deltaTime) override;
+	void Update(const Engine::Common::Time::Duration deltaTime) override;
 	void ShutDown() override;
 };

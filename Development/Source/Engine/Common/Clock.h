@@ -20,17 +20,15 @@ namespace Engine::Common
 
 		void Start();
 		void Stop();
-		void Reset();
 
-		Time GetStartTime();
-		Time GetEndTime();
-
-		Time GetDuration();
+		Time::Duration GetDuration();
+		Time::TimePoint GetStartTime();
+		Time::TimePoint GetEndTime();
 
 	private:
-		Time m_startTime;
-		Time m_endTime;
-
 		bool m_isRunning = false;
+
+		Time::TimePoint m_startTime;
+		Time::TimePoint m_endTime;
 	};
 }

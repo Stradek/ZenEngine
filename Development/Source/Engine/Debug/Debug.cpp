@@ -16,10 +16,10 @@ namespace Engine::Debug
 
 		void PerformanceProfiler::AddFrameStart(const char* const name)
 		{
-			assert(m_frameDataInProgress[name].IsValid() == false);
+			assert(!m_frameDataInProgress[name].IsValid());
 
 			FrameData newFrameData;
-			newFrameData.startTime = Common::GetTimeNow();
+			newFrameData.startTime = Common::Time::GetTimeNow();
 
 			m_frameDataInProgress[name] = newFrameData;
 		}
@@ -27,7 +27,7 @@ namespace Engine::Debug
 		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
 			FrameData& frameDataToFinish = m_frameDataInProgress.at(name);
-			frameDataToFinish.endTime = Common::GetTimeNow();
+			frameDataToFinish.endTime = Common::Time::GetTimeNow();
 
 			m_performanceData.frameData[name].push_back(frameDataToFinish);
 
@@ -42,7 +42,7 @@ namespace Engine::Debug
 
 		bool PerformanceProfiler::IsFrameFinished(const FrameData& frameData) const
 		{
-			return frameData.endTime.GetRawTime() != 0;
+			return frameData.endTime != std::chrono::high_resolution_clock::time_point::min();
 		}
 
 		Engine::Debug::Performance::PerformanceData PerformanceProfiler::GetPerformanceData()
@@ -69,7 +69,7 @@ namespace Engine::Debug
 	}
 
 	DebugManager::DebugManager() :
-		m_debugInfoRefreshTime(Common::SECOND_TO_NANOSECONDS),
+		m_debugInfoRefreshTime(std::chrono::seconds(1)),
 		m_performanceProfiler(Performance::PerformanceProfiler())
 	{
 
@@ -86,24 +86,24 @@ namespace Engine::Debug
 	}
 
 
-	Common::Time DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
+	Common::Time::Duration DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
 	{
 		if (frameCounter < 1)
 		{
 			ENGINE_WARN("Engine Update Counter is less than 1. Cannot calculate average duration.");
-			return Common::Time(0);
+			return Common::Time::Duration::min();
 		}
 
-		size_t frameDurationSum = 0;
+		Common::Time::Duration frameDurationSum{};
 		for (const Performance::FrameData& frameData : frameDataList)
 		{
-			frameDurationSum += Common::Time::Duration(frameData.startTime, frameData.endTime).GetRawTime();
+			frameDurationSum += frameData.endTime - frameData.startTime;
 		}
 
-		return Common::Time(frameDurationSum / frameCounter);
+		return frameDurationSum / frameCounter;
 	}
 
-	void DebugManager::LogPerformanceInfo(const double deltaTime)
+	void DebugManager::LogPerformanceInfo(const Common::Time::Duration deltaTime)
 	{
 		Performance::PerformanceData performanceData = GetPerformanceProfiler().PopData();
 
@@ -113,10 +113,11 @@ namespace Engine::Debug
 		const std::vector<Performance::FrameData> engineUpdateData = performanceData.frameData[sl_Engine_Update];
 		const std::vector<Performance::FrameData> engineRenderFrameData = performanceData.frameData[sl_Engine_RenderFrame];
 
-		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
-		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
+		Common::Time::Duration engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
+		Common::Time::Duration renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
 		
-		const char* performanceLoggingInfoString =	
+		const char* performanceLoggingInfoString =
+			"\n"
 			"Counters:\n"
 			"Frames per Second(FPS): \t\t{}\n"
 			"Engine Updates per Second: \t\t{}\n"
@@ -127,19 +128,24 @@ namespace Engine::Debug
 			"Render Frame: \t\t\t{:.4f}\n"
 			"===========================================\n";
 
-		ENGINE_LOG(performanceLoggingInfoString,
-			renderFrameCounter, engineUpdateCounter,
-			deltaTime * 1000, engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
+		const double deltaTimeMiliseconds = Common::Time::CastDurationToDouble<std::milli>(deltaTime);
+
+		const double engineUpdateAvgDurationMilliseconds = Common::Time::CastDurationToDouble<std::milli>(engineUpdateAvgDuration);
+		const double renderFrameAvgDurationMilliseconds = Common::Time::CastDurationToDouble<std::milli>(renderFrameAvgDuration);
+
+		ENGINE_LOG(performanceLoggingInfoString,renderFrameCounter, engineUpdateCounter, 
+			deltaTimeMiliseconds, engineUpdateAvgDurationMilliseconds, renderFrameAvgDurationMilliseconds);
 	}
 
-	void DebugManager::Update(const double deltaTime)
+	void DebugManager::Update(const Common::Time::Duration deltaTime)
 	{
+		m_debugUpdateClock.Stop();
 		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
 		{
 			LogPerformanceInfo(deltaTime);
 			LogMemoryInfo();
 
-			m_debugUpdateClock.Reset();
+			m_debugUpdateClock.Start();
 		}
 	}
 

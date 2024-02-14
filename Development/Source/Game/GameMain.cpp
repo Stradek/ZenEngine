@@ -9,7 +9,7 @@
 int main(int argc, char* argv[])
 {
 	{
-		IEngineApplication* gameInstance = new Game();
+		Engine::IEngineApplication* gameInstance = new Game();
 		Engine::GameEngine::Run(*gameInstance);
 	}
 

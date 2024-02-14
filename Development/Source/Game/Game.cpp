@@ -9,7 +9,7 @@ void Game::StartUp()
 {
 }
 
-void Game::Update(const double deltaTime)
+void Game::Update(const Engine::Common::Time::Duration deltaTime)
 {
 }
 

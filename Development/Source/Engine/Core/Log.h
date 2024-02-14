@@ -19,8 +19,8 @@ namespace Engine::Core
 		static void Init();
 		static void Close();
 
-		inline static LoggerRef Log::GetEngineLogger() { return s_engineLogger; }
-		inline static LoggerRef Log::GetGameLogger() { return s_gameLogger; }
+		inline static LoggerRef GetEngineLogger() { return s_engineLogger; }
+		inline static LoggerRef GetGameLogger() { return s_gameLogger; }
 
 		using OutputSink = spdlog::sinks::stdout_color_sink_mt;
 		using FileSink = spdlog::sinks::basic_file_sink_mt;
@@ -57,21 +57,23 @@ namespace Engine::Core
 
 #define ENGINE_STATIC_ASSERT(expression)			static_assert(expression)
 
-#define ENGINE_ASSERT(expression, ...)			if(!((bool) (expression)))															\
-													{																				\
-														std::string assertMsg = "ASSERT: {}, file {}, line {}, Message: ";			\
-														ENGINE_WARN(assertMsg, std::string(#expression), std::string(__FILE__),		\
-														(unsigned)(__LINE__));														\
-														ENGINE_WARN(__VA_ARGS__);													\
-														ENGINE_DEBUG_BREAK();														\
-													}
+#define ENGINE_ASSERT(expression, ...)											\
+	if(!((bool) (expression)))													\
+	{																			\
+		std::string assertMsg = "ASSERT: {}, file {}, line {}, Message: ";		\
+		ENGINE_WARN(assertMsg, std::string(#expression), std::string(__FILE__),	\
+		(unsigned)(__LINE__));													\
+		ENGINE_WARN(__VA_ARGS__);												\
+		ENGINE_DEBUG_BREAK();													\
+	}
 
-#define ENGINE_FATAL_ASSERT(expression, ...)	if(!((bool) (expression)))														\
-													{																				\
-														std::string assertMsg = "FATAL ASSERT: {}, file {}, line {}, Message: ";	\
-														ENGINE_WARN(assertMsg, std::string(#expression), std::string(__FILE__),		\
-														(unsigned)(__LINE__));														\
-														ENGINE_WARN(__VA_ARGS__);													\
-														ENGINE_DEBUG_BREAK();														\
-														abort();																	\
-													}
+#define ENGINE_FATAL_ASSERT(expression, ...)									\
+	if(!((bool) (expression)))													\
+	{																			\
+		std::string assertMsg = "FATAL ASSERT: {}, file {}, line {}, Message: ";\
+		ENGINE_WARN(assertMsg, std::string(#expression), std::string(__FILE__),	\
+		(unsigned)(__LINE__));													\
+		ENGINE_WARN(__VA_ARGS__);												\
+		ENGINE_DEBUG_BREAK();													\
+		abort();																\
+	}

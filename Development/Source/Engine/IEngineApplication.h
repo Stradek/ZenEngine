@@ -5,10 +5,9 @@
 
 #pragma once
 
-class IEngineApplication
+#include "Core/ISystem.h"
+
+namespace Engine
 {
-public:
-	virtual void StartUp() = 0;
-	virtual void Update(const double deltaTime) = 0;
-	virtual void ShutDown() = 0;
-};
+	using IEngineApplication = Core::ISystem;
+}

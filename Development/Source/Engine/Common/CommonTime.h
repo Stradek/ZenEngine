@@ -5,53 +5,48 @@
 
 #pragma once
 
-#include "TimeTypes.h"
 #include "Defines.h"
 
-/*
-	NOTE:
-	Seconds are used as a default value for double.
-	Nanoseconds are used as a default value for engine computations.
-	UInt32 is raw representation of Nanoseconds.
-*/
+#include <chrono>
 
 namespace Engine::Common
 {
-	static constexpr size_t HOUR_TO_NANOSECONDS = nanoseconds(hours(1)).count();
-	static constexpr size_t MINUTE_TO_NANOSECONDS = nanoseconds(minutes(1)).count();
-	static constexpr size_t SECOND_TO_NANOSECONDS = nanoseconds(seconds(1)).count();
-	static constexpr size_t MILISECOND_TO_NANOSECONDS = nanoseconds(milliseconds(1)).count();
+    using ChronoHighResClock = std::chrono::high_resolution_clock;
+    using ChronoTimePoint = std::chrono::time_point<ChronoHighResClock>;
+    using ChronoDuration = std::chrono::duration<uint64_t, std::nano>;
 
-	static constexpr double NANOSECOND_TO_HOUR = 1.0 / HOUR_TO_NANOSECONDS;
-	static constexpr double NANOSECOND_TO_MINUTE = 1.0 / MINUTE_TO_NANOSECONDS;
-	static constexpr double NANOSECOND_TO_SECOND = 1.0 / SECOND_TO_NANOSECONDS;
-	static constexpr double NANOSECOND_TO_MILLISECOND = 1.0 / MILISECOND_TO_NANOSECONDS;
+    namespace Time
+    {
+        class Duration
+        {
+        public:
+            Duration() = default;
+            Duration(const Duration& d) = default;
+            Duration(const ChronoDuration& duration) : m_duration(duration) {}
 
-	class Time
-	{
-	public:
-		Time(size_t timeInNanoseconds) : m_nanosecondsTime(timeInNanoseconds) {}
+            uint GetSeconds();
+            uint GetMilliseconds();
+            uint GetNanoseconds();
 
-		static Time Duration(const Time& start, const Time& end) { return Time(end.GetNanoseconds() - start.GetNanoseconds()); }
+        private:
+            ChronoDuration m_duration;
+        };
 
-		inline bool operator<(const Time& other) const { return m_nanosecondsTime < other.m_nanosecondsTime; }
-		inline bool operator>(const Time& other) const { return m_nanosecondsTime > other.m_nanosecondsTime; }
-		inline bool operator<=(const Time& other) const { return m_nanosecondsTime <= other.m_nanosecondsTime; }
-		inline bool operator>=(const Time& other) const { return m_nanosecondsTime >= other.m_nanosecondsTime; }
+        struct TimePoint
+        {
+        public:
+            TimePoint() = default;
+            TimePoint(const TimePoint& t) = default;
+            TimePoint(const ChronoTimePoint& timepoint) : m_timepoint(timepoint) {}
 
+            Duration operator-(const TimePoint& t) const { return Duration(m_timepoint - t.m_timepoint); }
 
-		size_t GetRawTime() const { return GetNanoseconds(); }
+            bool IsZero() const { return m_timepoint.time_since_epoch() == ChronoDuration::zero(); }
+            
+        private:
+            ChronoTimePoint m_timepoint;
+        };
 
-		double GetHours() const;
-		double GetMinutes() const;
-		double GetSeconds() const;
-		double GetMilliseconds() const;
-
-		size_t GetNanoseconds() const;
-
-	private:
-		nanoseconds m_nanosecondsTime;
-	};
-
-	extern Time GetTimeNow();
+        static TimePoint GetTimeNow();
+    }
 }
