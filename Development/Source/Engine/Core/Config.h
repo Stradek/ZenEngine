@@ -13,7 +13,7 @@ namespace Engine::Core
 		static constexpr size_t Config::m_targetUpdatesPerSecond = 20;
 		static constexpr size_t Config::m_targetLockedFramesPerSecond = 60;
 
-		static constexpr double Config::m_targetUpdateFrequency = 1.0 / m_targetUpdatesPerSecond;
-		static constexpr double Config::m_targetRenderFrameFrequency = 1.0 / m_targetLockedFramesPerSecond;
+		static constexpr std::chrono::high_resolution_clock::duration Config::m_targetUpdateFrequency = std::chrono::high_resolution_clock::duration(1 * Common::SECOND_TO_NANOSECONDS / m_targetUpdatesPerSecond);
+		static constexpr std::chrono::high_resolution_clock::duration Config::m_targetRenderFrameFrequency = std::chrono::high_resolution_clock::duration(1 * Common::SECOND_TO_NANOSECONDS / m_targetLockedFramesPerSecond);
 	};
 }

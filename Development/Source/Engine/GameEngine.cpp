@@ -92,7 +92,7 @@ namespace Engine
 #endif
 	}
 
-	void GameEngine::Update(const double deltaTime)
+	void GameEngine::Update(const std::chrono::high_resolution_clock::duration deltaTime)
 	{
 		ENGINE_FRAME_MARK_START(sl_Engine_Update);
 
@@ -126,16 +126,16 @@ namespace Engine
 
 		while (!m_shutDown)
 		{
-			if (m_timeSinceUpdateClock.GetDuration().GetSeconds() >= Core::Config::m_targetUpdateFrequency)
+			if (m_timeSinceUpdateClock.GetDuration() >= Core::Config::m_targetUpdateFrequency)
 			{
  				Update(m_deltaTime);
 
 				m_timeSinceUpdateClock.Reset();
 			}
 
-			if (m_timeSinceRenderFrameClock.GetDuration().GetSeconds() >= Core::Config::m_targetRenderFrameFrequency)
+			if (m_timeSinceRenderFrameClock.GetDuration() >= Core::Config::m_targetRenderFrameFrequency)
 			{
-				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration().GetSeconds();
+				m_deltaTime = m_timeSinceRenderFrameClock.GetDuration();
 
 				RenderFrame();
 				ENGINE_FRAME_MARK();

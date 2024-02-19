@@ -6,7 +6,8 @@
 #pragma once
 
 #include "Defines.h"
-#include "CommonTime.h"
+
+#include <chrono>
 
 namespace Engine::Common
 {
@@ -22,14 +23,14 @@ namespace Engine::Common
 		void Stop();
 		void Reset();
 
-		Time GetStartTime();
-		Time GetEndTime();
+		std::chrono::high_resolution_clock::time_point GetStartTime();
+		std::chrono::high_resolution_clock::time_point GetEndTime();
 
-		Time GetDuration();
+		std::chrono::high_resolution_clock::duration GetDuration();
 
 	private:
-		Time m_startTime;
-		Time m_endTime;
+		std::chrono::high_resolution_clock::time_point m_startTime;
+		std::chrono::high_resolution_clock::time_point m_endTime;
 
 		bool m_isRunning = false;
 	};

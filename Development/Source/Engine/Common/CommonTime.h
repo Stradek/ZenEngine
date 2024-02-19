@@ -26,32 +26,4 @@ namespace Engine::Common
 	static constexpr double NANOSECOND_TO_MINUTE = 1.0 / MINUTE_TO_NANOSECONDS;
 	static constexpr double NANOSECOND_TO_SECOND = 1.0 / SECOND_TO_NANOSECONDS;
 	static constexpr double NANOSECOND_TO_MILLISECOND = 1.0 / MILISECOND_TO_NANOSECONDS;
-
-	class Time
-	{
-	public:
-		Time(size_t timeInNanoseconds) : m_nanosecondsTime(timeInNanoseconds) {}
-
-		static Time Duration(const Time& start, const Time& end) { return Time(end.GetNanoseconds() - start.GetNanoseconds()); }
-
-		inline bool operator<(const Time& other) const { return m_nanosecondsTime < other.m_nanosecondsTime; }
-		inline bool operator>(const Time& other) const { return m_nanosecondsTime > other.m_nanosecondsTime; }
-		inline bool operator<=(const Time& other) const { return m_nanosecondsTime <= other.m_nanosecondsTime; }
-		inline bool operator>=(const Time& other) const { return m_nanosecondsTime >= other.m_nanosecondsTime; }
-
-
-		size_t GetRawTime() const { return GetNanoseconds(); }
-
-		double GetHours() const;
-		double GetMinutes() const;
-		double GetSeconds() const;
-		double GetMilliseconds() const;
-
-		size_t GetNanoseconds() const;
-
-	private:
-		nanoseconds m_nanosecondsTime;
-	};
-
-	extern Time GetTimeNow();
 }

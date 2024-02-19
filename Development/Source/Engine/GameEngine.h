@@ -54,7 +54,7 @@ namespace Engine
 		Common::Clock m_timeSinceUpdateClock;
 		Common::Clock m_timeSinceRenderFrameClock;
 
-		double m_deltaTime;
+		std::chrono::high_resolution_clock::duration m_deltaTime;
 		bool m_shutDown;
 
 		void SetEngineApplication(IEngineApplication& appInstanceRef);
@@ -64,7 +64,7 @@ namespace Engine
 
 		void EngineRun(IEngineApplication& appInstance);
 
-		void Update(const double deltaTime);
+		void Update(const std::chrono::high_resolution_clock::duration deltaTime);
 		void RenderFrame();
 	};
 }

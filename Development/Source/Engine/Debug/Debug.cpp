@@ -19,7 +19,7 @@ namespace Engine::Debug
 			assert(m_frameDataInProgress[name].IsValid() == false);
 
 			FrameData newFrameData;
-			newFrameData.startTime = Common::GetTimeNow();
+			newFrameData.startTime = std::chrono::high_resolution_clock::now();
 
 			m_frameDataInProgress[name] = newFrameData;
 		}
@@ -27,7 +27,7 @@ namespace Engine::Debug
 		void PerformanceProfiler::AddFrameEnd(const char* const name)
 		{
 			FrameData& frameDataToFinish = m_frameDataInProgress.at(name);
-			frameDataToFinish.endTime = Common::GetTimeNow();
+			frameDataToFinish.endTime = std::chrono::high_resolution_clock::now();
 
 			m_performanceData.frameData[name].push_back(frameDataToFinish);
 
@@ -42,7 +42,7 @@ namespace Engine::Debug
 
 		bool PerformanceProfiler::IsFrameFinished(const FrameData& frameData) const
 		{
-			return frameData.endTime.GetRawTime() != 0;
+			return frameData.endTime != std::chrono::high_resolution_clock::time_point::min();
 		}
 
 		Engine::Debug::Performance::PerformanceData PerformanceProfiler::GetPerformanceData()
@@ -86,24 +86,24 @@ namespace Engine::Debug
 	}
 
 
-	Common::Time DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
+	std::chrono::high_resolution_clock::duration DebugManager::CalculateAverageFrameDuration(const std::vector<Performance::FrameData>& frameDataList, const size_t frameCounter)
 	{
 		if (frameCounter < 1)
 		{
 			ENGINE_WARN("Engine Update Counter is less than 1. Cannot calculate average duration.");
-			return Common::Time(0);
+			return std::chrono::high_resolution_clock::duration(0);
 		}
 
-		size_t frameDurationSum = 0;
+		std::chrono::high_resolution_clock::duration frameDurationSum{};
 		for (const Performance::FrameData& frameData : frameDataList)
 		{
-			frameDurationSum += Common::Time::Duration(frameData.startTime, frameData.endTime).GetRawTime();
+			frameDurationSum += std::chrono::high_resolution_clock::duration(frameData.startTime - frameData.endTime);
 		}
 
-		return Common::Time(frameDurationSum / frameCounter);
+		return std::chrono::high_resolution_clock::duration(frameDurationSum / frameCounter);
 	}
 
-	void DebugManager::LogPerformanceInfo(const double deltaTime)
+	void DebugManager::LogPerformanceInfo(const std::chrono::high_resolution_clock::duration deltaTime)
 	{
 		Performance::PerformanceData performanceData = GetPerformanceProfiler().PopData();
 
@@ -113,8 +113,9 @@ namespace Engine::Debug
 		const std::vector<Performance::FrameData> engineUpdateData = performanceData.frameData[sl_Engine_Update];
 		const std::vector<Performance::FrameData> engineRenderFrameData = performanceData.frameData[sl_Engine_RenderFrame];
 
-		Common::Time engineUpdateAvgDuration = CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter);
-		Common::Time renderFrameAvgDuration = CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter);
+		const std::chrono::milliseconds engineUpdateAvgDuration = std::chrono::duration_cast<std::chrono::milliseconds>(CalculateAverageFrameDuration(engineUpdateData, engineUpdateCounter));
+		const std::chrono::milliseconds renderFrameAvgDuration = std::chrono::duration_cast<std::chrono::milliseconds>(CalculateAverageFrameDuration(engineRenderFrameData, renderFrameCounter));
+
 		
 		const char* performanceLoggingInfoString =	
 			"Counters:\n"
@@ -129,10 +130,10 @@ namespace Engine::Debug
 
 		ENGINE_LOG(performanceLoggingInfoString,
 			renderFrameCounter, engineUpdateCounter,
-			deltaTime * 1000, engineUpdateAvgDuration.GetMilliseconds(), renderFrameAvgDuration.GetMilliseconds());
+			deltaTime * 1000, engineUpdateAvgDuration.count(), renderFrameAvgDuration.count());
 	}
 
-	void DebugManager::Update(const double deltaTime)
+	void DebugManager::Update(const std::chrono::high_resolution_clock::duration deltaTime)
 	{
 		if (m_debugUpdateClock.GetDuration() >= m_debugInfoRefreshTime)
 		{
