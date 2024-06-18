@@ -19,7 +19,7 @@ All systems are subject to change in the future.
 
 # Project Objectives
   - (In Progress) Memory Management: Implement memory management with custom memory allocators: GeneralAllocator, SlabAllocator, PoolAllocator...
-  - Multithreading: Develop simple job system.
+  - (In Progress) Multithreading: Develop simple job system. NOTE: Would like to integrate the one I developed in CoreMatrixToolkit.
   - Game Genre: Create a 2D platformer game.
   - Core Game Mechanics: Implement jumping, running at constant speed, and collecting points.
   - Game Level Design: Design levels with straightforward platform layouts, combining horizontal and vertical segments. Emulate classic arcade gaming simplicity.
